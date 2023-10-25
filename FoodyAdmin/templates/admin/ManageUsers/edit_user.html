@@ -1,0 +1,144 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+ویرایش مشخصات کاربر {{form.username}}
+{%  endblock %}
+
+{%  block admin_style %}
+{%  endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+        <div class="col-11">
+            <h4 class="text-center my-2 mt-4" dir="rtl">ویرایش مشخصات کاربر {{form.username}}</h4>
+        </div>
+        <div class="col-11">
+            <form action="{{ url_for('admin.edit_user_post', userKey=form.user.PublicKey) }}" method="POST" dir="rtl">
+                {{ form.hidden_tag() }}
+
+                  <div class="my-3">
+                        <label for="FirstName">نام کاربر را وارد نمایید:</label>
+                        {{ form.FirstName(id="FirstName", class="form-control", placeholder="نام کاربر: ") }}
+                        {% if form.FirstName.errors%}
+                            <ul>
+                                {% for err in form.FirstName.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+                <div class="my-3">
+                        <label for="LastName">نام خانوادگی کاربر را وارد نمایید</label>
+                        {{ form.LastName(id="LastName", class="form-control", placeholder="نام خانوادگی: ") }}
+                        {% if form.LastName.errors%}
+                            <ul>
+                                {% for err in form.LastName.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+
+                  <div class="my-3">
+                        <label for="Username">نام کاربری، کاربر را وارد نمایید</label>
+                        {{ form.Username(id="Username", class="form-control", placeholder="نام کاربری: ") }}
+                        <p class="m-0 text-center text-muted">این همان username کاربر برای ورود به حساب کاربری می باشد - بهتر است برای اولین بار با کد ملی کاربر یکسان باشد</p>
+                        {% if form.Username.errors%}
+                            <ul>
+                                {% for err in form.Username.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+                <div class="my-3">
+                        <label for="Password">گذرواژه حساب کاربری کاربر را وارد نمایید</label>
+                        {{ form.Password(id="Password", class="form-control", placeholder="گذرواژه: ") }}
+                        {% if form.Password.errors%}
+                            <ul>
+                                {% for err in form.Password.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+                <div class="my-3">
+                        <label for="NationalCode">کد ملی کاربر را وارد نمایید</label>
+                        {{ form.NationalCode(id="NationalCode", class="form-control", placeholder="کد ملی: ") }}
+                        {% if form.NationalCode.errors%}
+                            <ul>
+                                {% for err in form.NationalCode.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+                 <div class="my-3">
+                        <label for="PhoneNumber">شماره تماس کاربر را وارد نمایید</label>
+                        {{ form.PhoneNumber(id="PhoneNumber", class="form-control", placeholder="شماره تماس: ") }}
+                        {% if form.PhoneNumber.errors%}
+                            <ul>
+                                {% for err in form.PhoneNumber.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+
+                <div class="my-3">
+                        <label for="SectionID">گروه کاری کارمند را وارد نمایید</label>
+                        {{ form.SectionID(id="SectionID", class="form-control", placeholder="گروه کاری: ") }}
+                        {% if form.SectionID.errors%}
+                            <ul>
+                                {% for err in form.SectionID.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+
+
+                 <div class="my-3">
+                        <label for="EmployeeCode">کد کارمند را وارد نمایید</label>
+                        {{ form.EmployeeCode(id="EmployeeCode", class="form-control", placeholder="کد کارمندی: ") }}
+                        {% if form.EmployeeCode.errors%}
+                            <ul>
+                                {% for err in form.EmployeeCode.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+
+
+                 <div class="my-3">
+                        <label for="Email">ایمیل کارمند را وارد نمایید</label>
+                        {{ form.Email(id="Email", class="form-control", placeholder="ایمیل کارمند: ") }}
+                        <p class="text-center m-0 text-info">* غیر اجباری *</p>
+                        <p class="text-center m-0 text-muted">از ایمیل برای ارسال خودکار فاکتور ماهیانه کاربران استفاده می شود و بهتر است برای کاربران همین ابتدا وارد شود</p>
+                        {% if form.Email.errors%}
+                            <ul>
+                                {% for err in form.Email.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+
+
+
+
+                <div class="col-12">
+                    {{ form.Submit(class="btn btn-success w-100 my-2 shadow", value="بروزرسانی") }}
+                </div>
+
+            </form>
+        </div>
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+{% endblock %}
+
+
+

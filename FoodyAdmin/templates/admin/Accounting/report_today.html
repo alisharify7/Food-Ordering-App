@@ -1,0 +1,133 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+گزارش امروز سفارشات
+{% endblock %}
+
+{% block admin_style %}
+    <style>
+        @media print {
+            #sidebar-menu, body > section > div > div > div.ms-auto.col-lg-10.col-md-10.col-sm-10.col-10.bg-dark.shadow.border-start.py-2.position-fixed.top-0.end-0{
+                display: none;
+            }
+            body > section > div > div > div.ms-auto.col-lg-10.col-md-10.col-sm-10.col-10.mt-5.pt-3{
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .print_hidden, .delete-button-order-parent {
+                display: none;
+            }
+            span, td, th, tr{
+                color: black !important;
+            }
+        }
+
+        @media(max-width: 870px){
+            .responsive-mobile{
+                display: none;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+
+    <div class="col-11 my-3">
+          <h4 class="text-center my-2 mt-4">گزارش امروز سفارشات سامانه</h4>
+          <div class="d-flex justify-content-between align-items-center my-4">
+              <p class="m-0">تعداد کل سفارشات : {{ ctx.total_orders }}</p>
+              <button class="btn btn-primary print_hidden" onclick="print();">چاپ</button>
+          </div>
+      </div>
+
+        <div class="col-lg-10 col-12">
+            <h3 class="text-center print_hidden">آمار کلی بر اساس بخش ها</h3>
+
+            <div dir="rtl" class="accordion my-3 shadow" id="accordionContainer">
+
+                {% for record in ctx.sections_order %}
+
+                    {% with id = uuid4() %}
+                    <div class="accordion-item ">
+                        <h2 class="accordion-header">
+                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ID{{ id }}"
+                          aria-expanded="true" aria-controls="collapseOne">
+                             [{{ ctx.sections_order[record] | length }}] - {{ record }}
+                          </button>
+                        </h2>
+                        <div id="ID{{ id }}" class="accordion-collapse collapse" data-bs-parent="#accordionContainer">
+                            <table class="table table-responsive table-dark table-bordered table-hover m-0 p-0">
+                                  <div class="accordion-body p-0 m-0">
+                                        <tbody>
+                                            {% for inner_Record in ctx.sections_order[record] %}
+                                                        <tr>
+                                                            <td>{{ loop.index }}</td>
+                                                            <td>{{ inner_Record.UserID  | GetUserName }} -  {{ getuser(inner_Record.UserID).EmployeeCode }}</td>
+                                                            <td>{{ inner_Record.FoodID | GetFoodName }}</td>
+                                                            <td class="delete-button-order-parent"><button class="btn btn-danger w-100 delete-order-button" data-delete="{{ url_for('order.delete_order_post', orderKey=inner_Record.PublicKey) }}">حذف سفارش</button></td>
+                                                        </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                  </div>
+                            </table>
+                        </div>
+                    </div>
+                    {% endwith %}
+
+                {% endfor %}
+
+
+
+            </div>
+
+        </div>
+
+
+
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+
+    <script>
+        window.addEventListener("beforeprint", (event)=>{
+            document.querySelectorAll(".accordion-collapse").forEach(each=>{
+                each.classList.add("show")
+            })
+        })
+        window.addEventListener("afterprint", (event)=>{
+            document.querySelectorAll(".accordion-collapse").forEach(each=>{
+                each.classList.remove("show")
+            })
+        })
+
+        const buttons = document.querySelectorAll(".delete-order-button")
+        buttons.forEach((each)=>{
+            each.addEventListener("click", event =>{
+                const Url = (each.dataset.delete)
+                const EmployeeName = (each.parentElement.previousElementSibling.previousElementSibling.textContent)
+                Swal.fire(
+                    {
+                        title:"حذف سفارش",
+                        text: `آیا از حذف سفارش کاربر ${EmployeeName} اطمینان دارید`,
+                        icon:"warning",
+                        confirmButtonText:"بله",
+                        showCancelButton:true,
+                        cancelButtonText:"خبر"
+                    }
+                ).then( async(result)=>{
+                    if(result.isConfirmed){
+                        window.location.href = Url
+                    }
+                })
+
+            })
+        })
+    </script>
+{% endblock %}
+
+
+

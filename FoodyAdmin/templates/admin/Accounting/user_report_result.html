@@ -1,0 +1,100 @@
+
+{% extends "admin/base.html" %}
+
+
+{% block title %}
+نتیجه جستجوی کاربر {{ ctx.user.GetUserName() }}
+{% endblock %}
+
+
+{% block admin_style %}
+        <style>
+        @media print {
+            #sidebar-menu, body > section > div > div > div.ms-auto.col-lg-10.col-md-10.col-sm-10.col-10.bg-dark.shadow.border-start.py-2.position-fixed.top-0.end-0{
+                display: none;
+            }
+            body > section > div > div > div.ms-auto.col-lg-10.col-md-10.col-sm-10.col-10.mt-5.pt-3{
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .print_hidden{
+                display: none;
+            }
+            span, td, th, tr{
+                color: black !important;
+            }
+            .mobile-responsive{
+                display: none;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+
+    <div class="col-11 my-3">
+          <h4 class="text-center my-2 mt-4" dir="rtl">نتیجه جستجوی کاربر {{ ctx.user.GetUserName() }}</h4>
+          <div class="d-flex justify-content-between align-items-center my-4">
+              <p class="m-0">تعداد کل سفارشات : {{ ctx.total_orders }}</p>
+              <button class="btn btn-primary print_hidden" onclick="print();">چاپ</button>
+          </div>
+        <div class="d-flex justify-content-between align-items-center">
+             <p>تا تاریخ: {{ ctx.end }}</p>
+             <p>از تاریخ: {{ ctx.from }}</p>
+        </div>
+      </div>
+
+        <div class="col-lg-11 col-12">
+
+            <table dir="rtl" class="table table-responsive table-dark table-bordered table-hover">
+
+                {% if ctx.orders %}
+                    <thead>
+                        <tr>
+                            <th>نام</th>
+                            <th>غذا</th>
+                            <th>تاریخ سفارش</th>
+                            <th class="mobile-responsive">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for order in ctx.orders %}
+                            <tr>
+                                <td><span>{{ order.UserID | GetUserName }}</span></td>
+                                <td><span>{{ order.FoodID | GetFoodName }}</span></td>
+                                <td class="SectionWork"><span> {{ order.OrderDate | GetPersianDate }}</span></td>
+                                <td class="mobile-responsive">
+                                        <div class="btn-group dropdown w-100">
+                                          <button type="button" class="btn btn-primary w-100 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            عملیات
+                                          </button>
+                                          <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{{ url_for('order.delete_order_post', orderKey=order.PublicKey) }}">حذف سفارش</a></li>
+                                          </ul>
+                                        </div>
+                                </td>
+                            </tr>
+                    {% endfor %}
+                    </tbody>
+
+                {% else %}
+                    <h2 class="my-2 text-center">نتیجه ای یافت نشد</h2>
+                {% endif %}
+
+            </table>
+
+        </div>
+
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+
+{% endblock %}
+
+
+

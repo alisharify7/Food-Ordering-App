@@ -1,0 +1,233 @@
+{% extends "web/base.html" %}
+
+
+{% block title %}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('admin.AdminStatic', filename='css/index.css') }}">
+    {% block admin_style %}
+    {% endblock admin_style %}
+{% endblock %}
+
+{% block content %}
+    <section class="w-100">
+        <div class="container-fluid">
+            <div class="row">
+
+                <div style="z-index: 100" class="ms-auto col-lg-10 col-md-10 col-sm-10 col-10 bg-dark shadow border-start py-2 position-fixed top-0 end-0">
+                    <div class="w-100 d-flex justify-content-between align-items-center">
+                        <button id="burger" class="d-none btn">
+                            <i class="bi bi-list fs-3 text-white" ></i>
+                        </button>
+                        <a data-bs-toggle="modal" role="button" href ="#exit-modal">
+                            <i class="bi bi-box-arrow-right text-danger fs-3 fw-bold" id="exit"></i>
+                        </a>
+                        <p class="text-white m-0">
+                            <span id="today-date"></span> - <span id="today-time"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="ms-auto col-lg-10 col-md-10 col-sm-10 col-10  mt-5 pt-3">
+                    <div class="container-fluid">
+                        {% block main_content %}
+                        {% endblock %}
+                    </div>
+                </div>
+
+                 <div class="col-lg-2 col-md-2 col-sm-2 col-2 bg-dark position-fixed top-0 bottom-0 start-0" id="sidebar-menu"
+                      style="z-index: 1000 !important;">
+                    <div class="row my-2">
+
+                        <div class="col-12 d-flex justify-content-center align-items-center flex-column mt-3">
+                            <a href="{{url_for('admin.index')}}" class="d-flex flex-column justify-content-center align-items-center">
+                                <img class="img-fluid rounded-circle app-logo" src="{{ serve_app_logo() }}" width="80px">
+                                <h6 class="my-2 text-white english-font text-center">{{ GetAdmin.Username | truncate(15, True, "...") }}</h6>
+                            </a>
+                        </div>
+                        <div class="line-divider w-100 mt-4"  style="height: 2px; background-color: rgba(255,255,255,0.75)"> ></div>
+                        <div class="col-12 p-0" dir="rtl" >
+                            <div class="accordion accordion-flush" id="sode-bar-menu-accordian">
+
+                                <div class="accordion-item bg-dark">
+                                    <h2 class="accordion-header">
+                                      <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        <i class="bi bi-person text-info fs-5"></i>
+                                        <span class="mx-2">مدیریت کاربران</span>
+                                      </button>
+                                    </h2>
+                                    <div id="flush-collapseOne" class="accordion-collapse collapse {{ ctx.manage_users}}" data-bs-parent="#sode-bar-menu-accordian">
+                                        <div class="border-start ms-3">
+                                            <a href="{{ url_for('admin.manage_users_all') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.manage_users_all }} ">
+                                                <i class="bi bi-people mx-2 text-warning fs-5"></i>
+                                                <span>مشاهده کاربران</span>
+                                            </a>
+                                            <a href="{{ url_for('admin.add_new_users') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.add_new_user }}">
+                                                <i class="bi bi-person-add mx-2 text-warning fs-5"></i>
+                                                <span>اضافه کردن کاربر</span>
+                                            </a>
+                                            <a href="{{url_for('admin.search_in_users')}}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.search_in_users }}">
+                                                <i class="bi bi-person-bounding-box mx-2 text-warning fs-5"></i>
+                                                <span>جستجوی کاربران</span>
+                                            </a>
+                                            <a href="{{ url_for('admin.manage_users_orders_get') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.manage_users_order }}">
+                                                <i class="bi bi-bag-plus-fill mx-2 text-warning fs-5"></i>
+                                                <span>مدیریت سفارش کاربران</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                              </div>
+                                <div class="table-group-divider"></div>
+
+                                <div class="accordion-item bg-dark">
+                                    <h2 class="accordion-header">
+                                      <button class="accordion-button collapsed bg-dark text-white"  type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseOne">
+                                            <i class="bi bi-calendar-check-fill text-info"></i>
+                                            <span class="mx-2">مدیریت منوی غذایی</span>
+                                      </button>
+                                    </h2>
+                                    <div id="flush-collapseTwo" class="accordion-collapse collapse {{ ctx.manage_foods }}" data-bs-parent="#sode-bar-menu-accordian">
+                                        <div class="border-start ms-3">
+                                            <a href="{{url_for('admin.manage_foods_all')}}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ctx.manage_foods_all}}">
+                                                <i class="bi bi-eye-fill fs-5 mx-2 text-warning"></i>
+                                                <span>لیست غذا ها</span>
+                                            </a>
+                                            <a href="{{url_for('admin.add_new_food')}}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ctx.add_new_food}}">
+                                                <i class="bi bi-card-list mx-2 text-warning fs-5"></i>
+                                                <span>اضافه کردن غذا</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                              </div>
+
+                                <div class="table-group-divider"></div>
+
+                                <div class="accordion-item bg-dark">
+                                    <h2 class="accordion-header">
+                                      <button class="accordion-button collapsed bg-dark text-white"  type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThere" aria-expanded="false" aria-controls="flush-collapseOne">
+                                            <i class="bi bi-wallet2 text-info"></i>
+                                            <span class="mx-2">حسابرسی کارمندان</span>
+                                      </button>
+                                    </h2>
+                                    <div id="flush-collapseThere" class="accordion-collapse collapse {{ ctx.accounting }}" data-bs-parent="#sode-bar-menu-accordian">
+                                        <div class="border-start ms-3">
+                                            <a href="{{url_for('admin.report_today_get')}}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.report_today }}">
+                                                <i class="bi bi-people-fill fs-5 mx-2 text-warning"></i>
+                                                <span>گزارش امروز</span>
+                                            </a>
+                                            <a href="{{ url_for('admin.report_section_get') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.report_section }}">
+                                                <i class="bi bi-building mx-2 text-warning fs-5"></i>
+                                                <span>گزارش بخش به بخش</span>
+
+                                            </a>
+                                            <a href="{{ url_for('admin.report_user_get') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.user_report }}">
+                                                <i class="bi bi-binoculars-fill mx-2 text-warning fs-5"></i>
+                                                <span>گزارش منحصر به فرد</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                              </div>
+
+                                 <div class="table-group-divider"></div>
+
+                                 <div class="accordion-item bg-dark">
+                                    <h2 class="accordion-header">
+                                      <button class="accordion-button collapsed bg-dark text-white"  type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseOne">
+                                          <i class="bi bi-cloud-fog2 fs-5 text-info"></i>
+                                            <span class="mx-2">مدیریت پنل پیامکی</span>
+                                      </button>
+                                    </h2>
+                                    <div id="flush-collapseFour" class="accordion-collapse collapse {{ ctx.manage_sms }}" data-bs-parent="#sode-bar-menu-accordian">
+                                        <div class="border-start ms-3">
+                                            <a href="{{ url_for('admin.send_sms_get') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.send_sms }}">
+                                                <i class="bi bi-envelope-plus-fill mx-2 text-warning fs-5"></i>
+                                                <span>ارسال پیامک</span>
+                                            </a>
+                                            <a href="{{ url_for('admin.report_sms_today_get') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.report_today_send }}">
+                                                <i class="bi bi-calendar-check mx-2 text-warning fs-5"></i>
+                                                <span>گزارش ارسالی های امروز</span>
+
+                                            </a>
+                                            <a href="{{ url_for('admin.report_sms_between_get') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.report_between_date }}">
+                                                <i class="bi bi-clock-history mx-2 text-warning fs-5"></i>
+                                                <span>گزارش دوره ای</span>
+
+                                            </a>
+                                            <a href="{{ url_for('admin.send_to_all_sms_get') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.send_to_all }}">
+                                                <i class="bi bi-envelope-check-fill mx-2 text-warning fs-5"></i>
+                                                <span>ارسال همگانی</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                              </div>
+
+                                 <div class="table-group-divider"></div>
+
+                                 <div class="accordion-item bg-dark">
+                                    <h2 class="accordion-header">
+                                      <button class="accordion-button collapsed bg-dark text-white"  type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseOne">
+                                          <i class="bi bi-sliders fs-5 text-info"></i>
+                                            <span class="mx-2 fs-6">تنظیمات کلی</span>
+                                      </button>
+                                    </h2>
+                                    <div id="flush-collapseFive" class="accordion-collapse collapse {{ ctx.manage_admins }}" data-bs-parent="#sode-bar-menu-accordian">
+                                        <div class="border-start ms-3">
+                                            <a href="{{ url_for('admin.add_new_admin_get') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.add_new_admin }}">
+                                                <i class="bi bi-person-gear mx-2 text-warning fs-5"></i>
+                                                <span>اضافه کردن ادمین </span>
+                                            </a>
+                                            <a href="{{ url_for('admin.manage_admin_index') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.all_admins }}">
+                                                <i class="bi bi-person-up mx-2 text-warning fs-5"></i>
+                                                <span>مدیریت ادمین ها</span>
+                                            </a>
+                                            <a href="{{ url_for('admin.admin_logs_get') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.admin_logs }}">
+                                                <i class="bi bi-door-open-fill mx-2 text-warning fs-5"></i>
+                                                <span>ورود های امنیتی به سیستم</span>
+                                            </a>
+
+                                            <a href="{{ url_for('admin.setting_get') }}" class="d-block px-3 py-2 my-2 text-white text-decoration-underline hover-item {{ ctx.setting }}">
+                                                <i class="bi bi-gear mx-2 text-warning fs-5"></i>
+                                                <span>تنظیمات</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                              </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+<div class="modal fade" id="exit-modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="btn btn-close" data-bs-dismiss="modal"></button>
+                <p class="m-0">خروج از پنل</p>
+            </div>
+            <div class="modal-body text-center">
+                <p>توجه در صورت خروج از پنل برای دسترسی دوباره به پنل به حساب کاربری خود وارد شوید</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-danger">خروج</a>
+                <button class="btn btn-success" data-bs-dismiss="modal">می مانم</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('admin.AdminStatic', filename='js/public.js') }}"></script>
+    {% block admin_script %}
+    {% endblock admin_script %}
+{% endblock %}

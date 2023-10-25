@@ -1,0 +1,89 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+نتیجه جسجتو
+{%  endblock %}
+
+{%  block admin_style %}
+        <style>
+    @media (max-width:  1200px){
+        .hide-in-mobile{
+            display: none !important;
+        }
+    }
+    </style>
+{%  endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+      <div class="col-11">
+          <h4 class="text-center my-2 mt-4">کاربران یافت شده با موارد دریافتی</h4>
+      </div>
+      <div class="col-11">
+          <table class="table table-responsive table-dark table-bordered table-hover shadow" dir="rtl">
+            <thead>
+                <tr>
+<!--                    <th>#</th>-->
+                    <th class="hide-in-mobile">نام و نام خانوادگی</th>
+                    <th>نام کاربری</th>
+                    <th>شماره کارمندی</th>
+                    <th>وضعیت حساب کاربری</th>
+                    <th>بخش کاری</th>
+                    <th>شماره تماس</th>
+                    <th class="hide-in-mobile">تاریخ ساخت اکانت</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if ctx.result %}
+                    {% for user in ctx.result %}
+                        <tr class="text-center">
+<!--                            <td>#</td>-->
+                            <td class="hide-in-mobile">{{user.GetUserName()}}</td>
+                            <td>{{user.Username}}</td>
+                            <td>{{user.EmployeeCode}}</td>
+                            <td class="text-center">
+                                {% if user.Active %}
+<!--                                    <i class="bi bi-check-circle-fill text-success fs-3"></i>-->
+                                    <p  class="btn btn-outline-success w-100 m-0">فعال</p>
+                                {% else %}
+<!--                                    <i class="bi bi-exclamation-circle-fill text-danger fs-3"></i>-->
+                                    <p  class="btn btn-outline-danger w-100 m-0">غیرفعال</p>
+                                {% endif %}
+                            </td>
+                            <td> <button class="btn btn-outline-info w-100">{{ user.SectionID | SectionName }}</button> </td>
+                            <td>{{ user.PhoneNumber }}</td>
+                            <td class="hide-in-mobile">{{ user.CreatedTime | Convert2Persian }}</td>
+                            <td>
+                                <div class="btn-group dropdown w-100">
+                                  <button type="button" class="btn btn-primary w-100 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    عملیات
+                                  </button>
+                                  <ul class="dropdown-menu ">
+
+                                       <li><a class="dropdown-item" href="{{ url_for('admin.show_user_info', userKey=user.PublicKey) }}">مشاهده</a></li>
+                                      <li><hr class="dropdown-divider m-0 p-0"></li>
+                                      <li><a class="dropdown-item" href="{{url_for('admin.edit_user', userKey=user.PublicKey)}}">ویرایش</a></li>
+                                      <li><hr class="dropdown-divider p-0 m-0"></li>
+                                      <li><a class="dropdown-item" href="{{ url_for('admin.user_this_month_order', userKey=user.PublicKey) }}">سفارشات این ماه</a></li>
+                                  </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <p>موردی یافت نشد</p>
+                {% endif %}
+            </tbody>
+
+          </table>
+
+      </div>
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+{% endblock %}
+
+
+

@@ -1,0 +1,26 @@
+{% extends "web/base.html" %}
+
+{% block style %}
+{% endblock %}
+
+{% block title %}
+{% endblock %}
+
+
+{% block content %}
+    {% include "user/utils/user-header.html" %}
+
+    {% block user_content %}
+    {% endblock %}
+
+
+    {% block tag %}
+        {% include "web/utils/tags.html" %}
+    {% endblock %}
+
+{% endblock %}
+
+{% block script %}
+        {% block user_script %}
+        {% endblock %}
+{% endblock %}

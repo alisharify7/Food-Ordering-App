@@ -1,0 +1,57 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+    سفارشات این ماه کاربر {{ ctx.user.GetUserName() }}
+{%  endblock %}
+
+{%  block admin_style %}
+{%  endblock %}
+
+{% block main_content %}
+        <section class="">
+    <div class="container-fluid">
+        <div class="row my-5 justify-content-center ">
+            <p class="text-center m-0" dir="rtl">سفارشات این ماه کاربر {{ ctx.user.GetUserName() }}</p>
+            <p class="text-center">تعداد کل سفارشات: {{ ctx.total_orders_len }}</p>
+            <div class="d-flex justify-content-between align-items-center" dir="rtl">
+                <p>از تاریخ: <span dir="rtl">{{ ctx.from }}</span></p>
+                <p>تا تاریخ: <span dir="rtl">{{ ctx.to }}</span></p>
+            </div>
+            <div class="col-12">
+                <table dir="rtl" class="table table-bordered table-hover table-responsive table-dark">
+                    <thead>
+                        <tr>
+                            <th>تاریخ سفارش</th>
+                            <th>سفارش</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if ctx.this_month_orders %}
+                            {% for order in ctx.this_month_orders %}
+                                <tr>
+                                    <td>{{ order.OrderDate | GetPersianDate }} - {{ order.CreatedTime.time() }}</td>
+                                    <td>{{ order.FoodID | GetFoodName }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                    سفارشی یافت نشد
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock  %}
+
+{% block admin_script %}
+{% endblock %}
+
+
+

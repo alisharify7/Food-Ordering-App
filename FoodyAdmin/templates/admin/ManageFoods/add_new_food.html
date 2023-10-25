@@ -1,0 +1,85 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+اضافه کردن غذا به منوی غذایی
+{% endblock %}
+
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+      <div class="col-11 my-3">
+          <h4 class="text-center my-2 mt-4">اضافه کردن غذای جدید به سامامه</h4>
+      </div>
+
+        <div class="col-11">
+            <form enctype="multipart/form-data" action="{{ url_for('admin.add_new_food_post') }}"  dir="rtl" method="post">
+                {{ form.hidden_tag() }}
+                <div class="my-3">
+                    <label for="Name">نام غذا:</label>
+                    {{ form.Name() }}
+                    {% if form.Name.errors %}
+                        <ul>
+                            {% for err in form.Name.errors %}
+                                <li>{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="my-3">
+                    <label for="Description">توضیحات غذا:</label>
+                    {{ form.Description() }}
+                    {% if form.Description.errors %}
+                        <ul>
+                            {% for err in form.Description.errors %}
+                                <li>{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class="my-3">
+                    <label for="Images">تصاویر غذا:</label>
+                    {{ form.Images() }}
+                    {% if form.Images.errors %}
+                        <ul>
+                            {% for err in form.Images.errors %}
+                                <li>{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class="col-11">
+                    <div class="row preview_food_image">
+                    </div>
+                </div>
+                <div class="my-3 row">
+                    <label for="DayOfReserve">روز انتخاب:</label>
+                    {{ form.DayOfReserve(class="list-unstyled ") }}
+                </div>
+                <div class="my-3">
+                    <label for="Active">وضعیت غذا:</label>
+                    {{ form.Active(id="Active",class="list-unstyled d-flex justify-content-around align-items-center") }}
+                    {% if form.Active.errors %}
+                        <ul>
+                            {% for err in form.Active.errors %}
+                                <li>{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="my-5">
+                    {{ form.Submit(class="w-100 btn btn-success", value="ثبت") }}
+                </div>
+            </form>
+        </div>
+
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+    <script src="{{ url_for('admin.AdminStatic', filename='ManageFoods/js/add_new_food.js') }}"></script>
+{% endblock %}
+
+
+

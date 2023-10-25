@@ -1,0 +1,39 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+ارسال همگانی پیامک
+{% endblock %}
+
+{% block admin_style %}
+{% endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+
+        <div class="col-11 my-3">
+          <h4 class="text-center my-2 mt-4">ارسال همگانی پیامک</h4>
+       </div>
+
+        <div class="col-lg-10 col-md-11 col-12">
+            <form action="{{ url_for('admin.send_to_all_sms_post') }}" method="POST" dir="rtl">
+                <label class="w-100 my-2">
+                    بخش مورد نظر برای ارسال:
+                    {{ form.sections() }}
+                </label>
+                <label class="w-100 my-2">
+                    بخش مورد نظر برای ارسال:
+                    {{ form.Text() }}
+                </label>
+                {{ form.hidden_tag() }}
+                {{ form.Submit() }}
+            </form>
+        </div>
+
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+{% endblock %}
+
+
+

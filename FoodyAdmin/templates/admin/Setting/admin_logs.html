@@ -1,0 +1,112 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+ورود های ثبت شده به سیستم
+{%  endblock %}
+
+{%  block admin_style %}
+{%  endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+      <div class="col-11">
+          <h3 class="text-center my-4 mt-4">تمامی تلاش ها برای ورود به حساب کاربری مدیریت</h3>
+      </div>
+
+      <div class="col-lg-10 col-md-10 col-11" dir="ltr">
+        <table dir="rtl" class="table table-responsive table-hover table-dark table-bordered">
+            <thead>
+                <tr>
+                    <th>ادمین</th>
+                    <th>آدرس IP</th>
+                    <th>وضعیت</th>
+                    <th>ساعت ورود</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if ctx.data %}
+                {% for record in  ctx.data %}
+                    <tr class="text-center">
+                        <td>{{ (record.AdminID | getAdmin).Username }}</td>
+                        <td>{{ record.IpAddress }}</td>
+                        <td>
+                            {% if record.Action == "Login - Successful" %}
+                                <button class="w-100 m-0 btn-outline-success btn">موفق</button>
+                            {% else %}
+                                <button class="w-100 m-0 btn-outline-danger btn">ناموفق</button>
+                            {% endif %}
+                        </td>
+                        <td>{{ record.CreatedTime | GetPersianDate }} - {{ record.CreatedTime.time() }}</td>
+                    </tr>
+                {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">اطلاعاتی یافت نشد</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+
+
+           <nav dir="rtl"  class="d-flex justify-content-center align-items-center" aria-label="Page navigation "
+                     dir="ltr">
+                    <ul class="pagination">
+
+                        {% if ctx.data.pages - ctx.current_page  >= 0 and ctx.current_page != 1 %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ url_for('admin.admin_logs_get', page=ctx.current_page - 1) }}"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for page in ctx.data.iter_pages(right_edge=1, left_edge=1, right_current=1, left_current=1) %}
+                            {% if page %}
+                                {% if page == ctx.current_page %}
+                                    <li class="page-item">
+                                        <a class="page-link active"
+                                           href="{{ url_for('admin.admin_logs_get', page=page) }}">{{ page }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="{{ url_for('admin.admin_logs_get', page=page) }}">{{ page }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if ctx.data.pages - ctx.current_page > 0 %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ url_for('admin.admin_logs_get', page=ctx.current_page + 1) }}"
+                                   aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                    </ul>
+        </nav>
+
+
+        <div>
+            <h3 class="text-center">راهنمایی</h3>
+            <ul dir="rtl" class="d-flex flex-column justify-content-center align-items-center">
+                <li>در این بخش تمامی تلاش ها برای ورود به حساب کاربری ادمین ذخیره و نمایش داده میشود</li>
+            </ul>
+        </div>
+      </div>
+
+
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+{% endblock %}
+
+
+

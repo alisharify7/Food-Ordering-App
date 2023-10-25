@@ -1,0 +1,129 @@
+{% extends "user/base.html" %}
+
+{% block style %}
+    <style>
+        @media (max-width: 648px){
+            .hide-in-mobile{
+                display: none !important;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block title %}سابقه سفارشات{% endblock %}
+
+
+{% block user_content %}
+    <div class="container-fluid">
+        <div class="row mt-5 justify-content-center ">
+
+        <h4 class="my-2 text-center">لیست غذاهای سفارش داده شده توسط کاربر</h4>
+
+        <div class="col-lg-10 col-12">
+            <table class="table table-dark table-responsive table-hover table-light table-bordered text-start shadow mb-5">
+                <thead>
+                    <tr>
+                        <th class="text-center">Action</th>
+                        <th>تاریخ</th>
+                        <th>غذا</th>
+                        <th class="hide-in-mobile">ردیف</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% if ctx.orders.items %}
+                        {% for order in ctx.orders %}
+                            <tr>
+                                <td>
+                                 <div class="btn-group dropdown w-100">
+                                  <button type="button" class="btn btn-primary w-100 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    عملیات
+                                  </button>
+                                  <ul class="dropdown-menu">
+                                      <li><a  role="button" class="dropdown-item cancel-order" data-order="{{ order.GetPublicKey() }}" href="#">لغو سفارش</a></li>
+{#                                      <li><hr class="dropdown-divider p-0 m-0"></li>#}
+{#                                      <li><a  role="button" class="dropdown-item"  data-order="{{ order.GetPublicKey() }}" href="{{ url_for('user.create_factor_mail', userKey=order.GetPublicKey()) }}">صدور فاکتور دیجیتال</a></li>#}
+                                  </ul>
+                                </div>
+                                </td>
+                                <td>{{ order.OrderDate | GetPersianDate }} </td>
+                                <td>{{ order.FoodID | GetFoodName }}</td>
+                                <td class="hide-in-mobile">{{ loop.index }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">سفارشی یافت نشد</td>
+                        </tr>
+                    {% endif %}
+
+                    
+                </tbody>
+            </table>
+        </div>
+   
+
+        <nav dir="rtl"  class="d-flex justify-content-center align-items-center" aria-label="Page navigation " dir="ltr">
+                        <ul class="pagination">
+
+                            {% if ctx.orders.pages - ctx.current_page  >= 0 and ctx.current_page != 1 %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{{ url_for('user.history_get', page=ctx.current_page - 1) }}"
+                                       aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for page in ctx.orders.iter_pages(right_edge=1, left_edge=1,right_current=1, left_current=1) %}
+                                {% if page %}
+                                    {% if page == ctx.current_page %}
+                                        <li class="page-item">
+                                            <a class="page-link active"
+                                               href="{{ url_for('user.history_get', page=page) }}">{{ page }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="{{ url_for('user.history_get', page=page) }}">{{ page }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if ctx.orders.pages - ctx.current_page > 0 %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{{ url_for('user.history_get', page=ctx.current_page + 1) }}"
+                                       aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+            </ul>
+        </nav>
+
+
+            <div class="food-orders my-5">
+                <h4 class="text-center">سابقه سفارشات کاربر</h4>
+                <ul class="d-flex flex-column justify-content-center align-items-center" dir="rtl">
+                    <li>در این صفحه تمام سفارشاتی که توسط کاربر ثبت شده اند قابل مشاهده می باشد</li>
+                    <li>صرفا کاربر میتواند به تاریخ و غذای انتخابی خود دسترسی داشته باشد </li>
+                    <li>در صورت مشاهده مشکلات فنی میتوانید با پشتیبانی تماس  حاصل فرمایید</li>
+                    <li></li>
+                </ul>
+            </div>
+
+            
+        </div>
+    </div>
+
+    {% include "web/utils/footer.html" %}
+    <input type="hidden" id="token" name="token" value="{{ csrf_token() }}">
+
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('user.UserStatic', filename='js/cancel_order.js') }}"></script>
+{% endblock %}

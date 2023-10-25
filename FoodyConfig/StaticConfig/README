@@ -1,0 +1,5 @@
+in this directory put all static configs that are stored in a python file config
+
+
+
+make sure that you change SMS_IR_Config.py.sample to SMS_IR_Config.py

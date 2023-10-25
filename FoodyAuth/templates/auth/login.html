@@ -1,0 +1,94 @@
+{% extends "web/base.html" %}
+
+{% block title %}ورود به حساب کاربری {% endblock %}
+
+
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('auth.static', filename='css/login.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+    <section class="mt-5 pt-5">
+        <div class="container-fluid mt-0 pt-0 mt-sm-5 pt-sm-5 ">
+            <div class="row justify-content-center align-items-center mt-0 mt-sm-5 mx-3">
+                <div class="col-lg-8 col-md-4 col-12 d-flex flex-column justify-content-center align-items-center text-center">
+                    <p class="display-1 text-white d-lg-block d-none">اتوماسیون تغذیه</p>
+                    <p class="display-4 text-white d-lg-block d-none">ورود کاربران</p>
+                </div>
+                <div class="col-lg-4 col-md-8 col-12 m-0 p-0">
+                    <div class="card shadow py-2">
+                        <div class="card-header text-center my-2">
+                            <h3> ورود به اتوماسیون تغذیه</h3>
+                        </div>
+                        <form action="{{ url_for('auth.login_post') }}" dir="rtl" method="POST">
+                            <div class="card-body fs-5 my-2">
+                                {{ form.hidden_tag() }}
+
+                                <label for="username" class="mb-2">نام کاربری : </label>
+                                {{ form.username(id="username",  placeholder="نام کاربری خود را وارد کنید", class="form-control") }}
+                                {% if form.username.errors %}
+                                    {% for error in form.username.errors %}
+                                        <p style="font-size: 1rem !important;"
+                                           class="text-center text-danger">{{ error }}</p>
+                                    {% endfor %}
+                                {% endif %}
+
+                                <label for="password" class="mb-2 mt-4">گذرواژه حساب کاربری : </label>
+                                <div class="input-group">
+                                    {{ form.password(id="password",  placeholder="گذرواژه خود را وارد کنید", class="form-control") }}
+                                    <i class="bi bi-eye-fill input-group-text" id="eye-password"></i>
+                                </div>
+                                {% if form.password.errors %}
+                                    {% for error in form.password.errors %}
+                                        <p style="font-size: 1rem !important;"
+                                           class="text-center text-danger">{{ error }}</p>
+                                    {% endfor %}
+                                {% endif %}
+
+                                <div class="recaptcha-field my-4 d-flex flex-column justify-content-center align-items-center">
+                                    {{ captchaField }}
+                                </div>
+                            </div>
+                            <div>
+                            </div>
+                            <div class="card-footer d-flex flex-column justify-content-end py-2 d-flex justify-content-between align-items-center">
+                                <div class="w-100">
+                                    {{ form.submit(class="btn btn-success w-100", value="ورود به حساب کاربری") }}
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="position-fixed bottom-0 end-0 m-3">
+        <div class="d-flex  justify-content-center align-items-center">
+
+            <div style="height: 60px">
+                <img src="{{ serve_app_logo() }}" class="rounded-circle w-100 h-100 d-none d-md-block">
+            </div>
+
+            <div style="height: 60px; font-size: 0.8rem"
+                 class="me-2 text-white d-flex flex-column justify-content-center align-items-start">
+                <p class="m-0 d-none d-sm-block" style="font-family: 'Roboto', sans-serif;">alisharify7</p>
+                <p class="m-0 text-decoration-underline  d-none d-sm-block" style="font-family: 'Roboto', sans-serif;">
+                    Copyleft © alisharify7 .</p>
+                {% include "web/utils/version-badge.html" %}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('auth.static', filename='js/login.js') }}"></script>
+{% endblock %}

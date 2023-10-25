@@ -1,0 +1,143 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+لیست تمام کاربران سامانه
+{%  endblock %}
+
+{%  block admin_style %}
+
+    <style>
+    @media (max-width:  1200px){
+        .hide-in-mobile{
+            display: none !important;
+        }
+    }
+    </style>
+{%  endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+      <div class="col-11">
+          <h4 class="text-center my-2 mt-4">لیست تمام کاربران سامانه</h4>
+      </div>
+      <div class="col-11">
+          <table class="table table-responsive table-dark table-bordered table-hover shadow" dir="rtl">
+            <thead>
+                <tr>
+                    <th>نام و نام خانوادگی</th>
+                    <th class="hide-in-mobile">نام کاربری</th>
+                    <th>شماره کارمندی</th>
+                    <th >وضعیت حساب کاربری</th>
+                    <th class="hide-in-mobile">بخش کاری</th>
+                    <th class="hide-in-mobile">شماره تماس</th>
+                    <th class="hide-in-mobile">تاریخ ساخت اکانت</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if ctx.users %}
+                    {% for user in ctx.users %}
+                        <tr class="text-center">
+                            <td>{{ (user.FirstName + " " + user.LastName) | truncate(14, True, " ...") }}</td>
+                            <td class="hide-in-mobile">{{user.Username}}</td>
+                            <td>{{user.EmployeeCode}}</td>
+                            <td class="text-center">
+                                {% if user.Active %}
+                                    <p  class="btn btn-outline-success w-100 m-0">فعال</p>
+                                {% else %}
+                                    <p  class="btn btn-outline-danger w-100 m-0">غیرفعال</p>
+                                {% endif %}
+                            </td>
+                            <td class="hide-in-mobile"> <button class="btn btn-outline-info w-100">{{ user.SectionID | SectionName }}</button> </td>
+                            <td class="hide-in-mobile">{{ user.PhoneNumber }}</td>
+                            <td class="hide-in-mobile">{{ user.CreatedTime | Convert2Persian }}</td>
+                            <td>
+                                <div class="btn-group dropdown w-100">
+                                  <button type="button" class="btn btn-primary w-100 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    عملیات
+                                  </button>
+                                  <ul class="dropdown-menu">
+
+                                      <li><a class="dropdown-item" href="{{ url_for('admin.show_user_info', userKey=user.PublicKey) }}">مشاهده</a></li>
+                                      <li><hr class="dropdown-divider m-0 p-0"></li>
+                                      <li><a class="dropdown-item" href="{{url_for('admin.edit_user', userKey=user.PublicKey)}}">ویرایش</a></li>
+                                      <li><hr class="dropdown-divider p-0 m-0"></li>
+                                      <li><a role="button" data-username="{{ user.GetUserName() }}" class="dropdown-item delete-user-btn" data-userKey="{{ user.PublicKey }}">حذف</a></li>
+                                      <li><hr class="dropdown-divider p-0 m-0"></li>
+                                      <li><a class="dropdown-item" href="{{ url_for('admin.user_this_month_order', userKey=user.PublicKey) }}">سفارشات این ماه</a></li>
+                                  </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center">موردی یافت نشد</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+
+          </table>
+
+
+
+
+
+           <nav dir="rtl"  class="d-flex justify-content-center align-items-center" aria-label="Page navigation "
+                     dir="ltr">
+                    <ul class="pagination">
+
+                        {% if ctx.users.pages - ctx.current_page  >= 0 and ctx.current_page != 1 %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ url_for('admin.manage_users_all', page=ctx.current_page - 1) }}"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for page in ctx.users.iter_pages(right_edge=1, left_edge=1,right_current=1, left_current=1) %}
+                            {% if page %}
+                                {% if page == ctx.current_page %}
+                                    <li class="page-item">
+                                        <a class="page-link active"
+                                           href="{{ url_for('admin.manage_users_all', page=page) }}">{{ page }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="{{ url_for('admin.manage_users_all', page=page) }}">{{ page }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if ctx.users.pages - ctx.current_page > 0 %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ url_for('admin.manage_users_all', page=ctx.current_page + 1) }}"
+                                   aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                    </ul>
+        </nav>
+
+
+
+      </div>
+</div>
+
+        <input type="hidden" id="token" name="token" value="{{ csrf_token() }}">
+
+{% endblock  %}
+
+{% block admin_script %}
+    <script src="{{ url_for('admin.AdminStatic', filename='ManageUsers/js/delete_user.js') }}"></script>
+{% endblock %}
+
+
+

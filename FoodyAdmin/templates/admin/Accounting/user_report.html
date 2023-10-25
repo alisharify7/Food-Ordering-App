@@ -1,0 +1,67 @@
+
+{% extends "admin/base.html" %}
+
+
+{% block title %}
+جستجو سفارشات کاربران
+{% endblock %}
+
+
+{% block admin_style %}
+{% endblock %}
+
+{% block main_content %}
+
+    <div class="row justify-content-center align-items-center">
+
+        <div class="col-11 my-3">
+              <h4 class="text-center my-2 mt-4">گزارش بر اساس <span class="text-danger">کاربر</span></h4>
+              <div class="d-flex justify-content-between align-items-center my-4">
+              </div>
+          </div>
+
+            <div class="col-11">
+                <form method="post" action="{{ url_for('admin.report_user_post') }}" dir="rtl">
+                    {{ form.hidden_tag() }}
+                    <label class="my-2 w-100">کد کارمندی
+                        {{ form.EmployeeCode() }}
+                    </label>
+                    <label class="my-2 w-100">از تاریخ
+                        {{ form.StartDate(id="StartDate") }}
+                        <p class="text-muted text-center">تاریخ را به صورت <span class="text-danger">YYYY/MM/DD</span> وارد شود</p>
+                    </label>
+                    <label class="my-2 w-100">تا تاریخ
+                        {{ form.EndDate(id="EndDate") }}
+                        <p class="text-muted text-center">تاریخ را به صورت <span class="text-danger">YYYY/MM/DD</span> وارد شود</p>
+                    </label>
+
+                    {{ form.Submit() }}
+                </form>
+            </div>
+
+    </div>
+
+{% endblock  %}
+
+{% block admin_script %}
+    {% include "web/utils/datepickerLoader.html" %}
+    <script>
+        $("#StartDate").persianDatepicker(
+            {
+                fontSize:20,
+                cellWidth:30,
+                cellHeight:25
+            }
+        );
+        $("#EndDate").persianDatepicker(
+            {
+                fontSize:20,
+                cellWidth:30,
+                cellHeight:25
+            }
+        );
+    </script>
+{% endblock %}
+
+
+

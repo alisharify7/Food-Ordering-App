@@ -1,0 +1,46 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+جستجو در کاربران
+{% endblock %}
+
+{%  block admin_style %}
+{%  endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+      <div class="col-11">
+          <h4 class="text-center my-2 mt-4">جستجوی پیشرفته در کاربران</h4>
+      </div>
+      <div class="col-11">
+          <form action="{{url_for('admin.search_in_users_post')}}" method="post" dir="rtl">
+                {{ form.hidden_tag() }}
+                <div class="my-2">
+                    <label>معیار جستجو:</label>
+                    {{form.SearchOption(class="form-control")}}
+                </div>
+               <div class="my-2">
+                    <label>باکس جستجو»</label>
+                    {{form.SearchBox(class="form-control", placeholder='مقدار مورد جستجوی خود را وارد نمایید')}}
+               </div>
+
+              {{form.submit(class='w-100 btn btn-success my-2', value='جستجو')}}
+
+                <div class="my-5">
+                    <h2 class="text-center">راهنمایی</h2>
+                    <ul class="d-flex flex-column justify-content-start align-items-center" dir="rtl">
+                        <li>کد ملی: برای مقدار جستجو بر اساس کد ملی صرفا کد ملی کاربر را به صورت عددی(لاتین) وارد نمایید</li>
+                        <li>شماره تماس: برای جستجو بر اساس شماره تماس کاربر صرفا شماره تماس کاربر را به صورت کامل (09321456987) وارد نمایید</li>
+                    </ul>
+                </div>
+
+          </form>
+      </div>
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+{% endblock %}
+
+
+

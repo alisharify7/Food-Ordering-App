@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}خطای - {{content.error_code}} {% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+<div style="width: 100vw !important;height: 100vh !important; background-color: #eee;">
+    
+    <div class="container-fluid text-center w-100 h-100 d-flex flex-column justify-content-center align-items-center">
+        <h1 class="fw-bold"
+         style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;font-size: 12.5rem;">{{ content.error_code }}</h1>
+        <p class="fs-5">{{content.error_desc}}</p>
+        <a href="/" class="btn btn-secondary">بازگشت</a>
+    </div>
+    
+    <div class="fixed-bottom text-center text-muted fw-bold">
+        <p style="font-family:  system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;">TIME: {{ content.time }}</p>
+        <p style="font-family:  system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;">TOKEN: {{ content.fake_token }}</p>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+
+{#
+    todo:
+        add error tracker for each error via uuid that generated for each error
+#}

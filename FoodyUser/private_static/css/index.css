@@ -1,0 +1,20 @@
+.container-index{
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6),  rgba(0,0,0,0.8)),
+    /*url("https://cdn.fartaknews.com/thumbnail/W8dxqLIqdT11/UzAzk2rXQgyoUFsRvy-RrW0GCLPUFmP0Z4RewB091aC9dkR0vnP3zTagInld1OZ6/%D8%BA%D8%B0%D8%A7%DB%8C%2B%D8%A7%DB%8C%D8%B1%D8%A7%D9%86%DB%8C.jpg");*/
+    /*url("https://mag.snapp.express/wp-content/uploads/2022/06/%D8%BA%D8%B0%D8%A7%D9%87%D8%A7%DB%8C-%D8%B3%D9%86%D8%AA%DB%8C-%D8%A7%DB%8C%D8%B1%D8%A7%D9%86%DB%8C.jpg");*/
+    /*url("https://images.kojaro.com/2021/8/e750788c-a870-4aed-ad0c-7a147ba20632.jpg");*/
+    /*url("https://blog.okala.com/wp-content/uploads/2019/07/%D9%82%D9%88%D8%B1%D9%85%D9%87-%D8%B3%D8%A8%D8%B2%DB%8C.jpg");*/
+    url("../media/back.jpg");
+    background-position: center;
+    background-size: cover;
+    background-attachment: initial;
+    background-repeat: no-repeat;
+
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+

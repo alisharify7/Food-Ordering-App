@@ -1,0 +1,156 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+    داشبورد ادمین
+{% endblock %}
+
+{% block admin_style %}
+{% endblock %}
+
+{% block main_content %}
+    <div class="row justify-content-center align-items-center my-3">
+
+        <div class="col-lg-3 col-md-6 col-12 my-2">
+            <div class="card shadow hover-card card-index">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center flex-row-reverse">
+                        <div class="text-center">
+                            <p class="m-0 fs-5">مجموع سفارشات سامانه</p>
+                            <p class="m-0 fs-5">{{ ctx.all_orders }}</p>
+                        </div>
+                        <div>
+                            <i class="bi bi-bricks display-5 text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <i class="bi bi-arrow-clockwise"></i>
+                        <p class="m-0">بروزرسانی</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-12 my-2">
+            <div class="card shadow hover-card card-index">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center flex-row-reverse">
+                        <div class="text-center">
+                            <p class="m-0 fs-5">سفارشات امروز</p>
+                            <p class="m-0 fs-5">{{ ctx.today_orders }}</p>
+                        </div>
+                        <div>
+                            <i class="bi bi-calendar-event display-5 text-info"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <i class="bi bi-arrow-clockwise"></i>
+                        <p class="m-0">بروزرسانی</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-12 my-2">
+            <div class="card shadow hover-card card-index">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center flex-row-reverse">
+                        <div class="text-center">
+                            <p class="m-0 fs-5">کل کاربران</p>
+                            <p class="m-0 fs-5">{{ ctx.all_users }}</p>
+                        </div>
+                        <div>
+                            <i class="bi bi-people-fill display-5 text-success"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <i class="bi bi-arrow-clockwise"></i>
+                        <p class="m-0">بروزرسانی</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-12 my-2">
+            <div class="card shadow hover-card card-index">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center flex-row-reverse">
+                        <div class="text-center">
+                            <p class="m-0 fs-5">کل کاربران فعال </p>
+                            <p class="m-0 fs-5">{{ ctx.active_users }}</p>
+                        </div>
+                        <div>
+                            <i class="bi bi-people-fill display-5 text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <i class="bi bi-arrow-clockwise"></i>
+                        <p class="m-0">بروزرسانی</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {#    charts #}
+
+        <div class="col-lg-6 col-md-12 col-12 my-5 p-0 m-0">
+            <div>
+                <h3 class="text-center">نمودار سفارشات سامانه در 1 ماه اخیر</h3>
+            </div>
+            <div>
+                <canvas id="last-week-orders" class="w-100 h-100"></canvas>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6 col-md-12 col-12 my-5 p-0 m-0">
+            <div>
+                <h3 class="text-center">نمودار سفارشات سامانه در 1 ماه اخیر</h3>
+            </div>
+            <div>
+                <canvas id="one-week-orders-section" class="w-100 h-100"></canvas>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6 col-md-12 col-12 my-5">
+            <div>
+                <h3 class="text-center"> کاربر برتر سفارشات در یک ماه اخیر</h3>
+            </div>
+            <div style="max-height: 550px" class="d-flex justify-content-center align-items-center">
+                <canvas id="top-users-order" class="w-100 h-100"></canvas>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6 col-md-12 col-12 my-5">
+            <div>
+                <h3 class="text-center">کل کاربران سامانه</h3>
+            </div>
+            <div style="max-height: 550px" class="d-flex justify-content-center align-items-center">
+                <canvas id="all_users_info" class=""></canvas>
+            </div>
+        </div>
+
+
+        {#    end of charts #}
+
+    </div>
+    <input type="hidden" id="token" name="token" value="{{ csrf_token() }}">
+
+{% endblock %}
+
+{% block admin_script %}
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.min.js"></script>
+
+    <script src="{{ url_for('admin.AdminStatic', filename='js/index.js') }}"></script>
+{% endblock %}
+
+
+

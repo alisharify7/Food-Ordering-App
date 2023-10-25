@@ -1,0 +1,77 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+ارسال پیامک
+{% endblock %}
+
+{% block admin_style %}
+{% endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+
+        <div class="col-11 my-3">
+          <h4 class="text-center my-2 mt-4">ارسال پیامک به شخص</h4>
+       </div>
+        <div class="col-lg-10 col-md-11 col-12">
+            {% if ctx.data %}
+                <h3 class="text-center my-4">نتیجه پیامک</h3>
+                <table class="table table-dark table-hover table-bordered table-dark" dir="rtl">
+                    <thead>
+                        <tr>
+                            <th>نتیجه</th>
+                            <th>هزینه</th>
+                            <th>شماره دریافت کننده</th>
+                            <th>متن پیامک</th>
+                            <th>شماره ارسال کننده</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                {% if ctx.data.status == "موفق" %}
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                {% else %}
+                                    <i class="bi bi-x-circle-fill text-danger"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ ctx.data.cost }}</td>
+                            <td>{{ ctx.data.receiver_number }}</td>
+                            <td>{{ ctx.data.message }}</td>
+                            <td>{{ ctx.data.sender_number }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            {% else %}
+                <form action="{{ url_for('admin.send_sms_post') }}" dir="rtl" method="POST">
+                    {{ form.hidden_tag() }}
+                    <label class="my-2 w-100">
+                        {{ form.targetMobile() }}
+                    </label>
+                    <label class="my-2 w-100">
+                        {{ form.Text() }}
+                    </label>
+                    <label class="my-2 w-100">
+                        {{ form.Submit() }}
+                    </label>
+                </form>
+            {% endif %}
+        </div>
+        <div class="col-12 my-5 helper d-flex flex-column justify-content-center align-items-center">
+            <H3 CLASS="text-center">راهنما</H3>
+            <ul dir="rtl">
+                <li>ارسال از این طریق به طور حتمی نمی باشد و احتمال دارد پیامک به مقصد نرسد (به علت لیست سیاه)</li>
+                <li>برای دریافت وضعیت ارسال پیامک و رسیدن آن به مخاطب به <a href="{{ url_for('admin.report_sms_today_get') }}">گزارش ارسالی های امروز</a> مراجعه کنید</li>
+                <li>از این روش برای ارسال گروهی و یا ارسال حتمی استفاده نکنید زیرا امکان نرسیدن پیامک وجود دارد</li>
+            </ul>
+        </div>
+
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+{% endblock %}
+
+
+

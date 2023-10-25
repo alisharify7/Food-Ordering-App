@@ -1,0 +1,102 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+گزارش دوره ای پنل پیامکی
+{% endblock %}
+
+{% block admin_style %}
+    <style>
+    @media(max-width: 860px){
+        .responsive_mobile{
+            display: none;
+        }
+    }
+    </style>
+{% endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+
+          <h4 class="text-center my-2 mt-4">گزارش دوره ای پنل پیامکی</h4>
+        <div class="col-lg-10 col-md-11 col-12 my-3 ">
+            {% if ctx.data %}
+                <p>تعداد کل ارسالی ها: {{ ctx.total_sms }}</p>
+            {% endif %}
+       </div>
+
+        <div class="col-lg-10 col-md-11 col-12">
+            {% if ctx.data %}
+                <table class="table table-bordered table-hover table-responsive table-dark" dir="rtl">
+                    <thead>
+                        <tr>
+                            <th>نتیجه</th>
+                            <th>پیام ارسالی</th>
+                            <th>شماره گیرنده</th>
+                            <th class="responsive_mobile">شماره فرستنده</th>
+                            <th>تاریخ ارسال</th>
+                            <th>تاریخ دریافت</th>
+                            <th class="responsive_mobile">هزینه</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in ctx.data %}
+                            <tr>
+                                   <td>
+                                        {% if record.deliveryDateTime %}
+                                            <i class="bi bi-check-circle-fill text-success"></i>
+                                        {% else %}
+                                            <i class="bi bi-x-circle-fill text-danger"></i>
+                                        {% endif %}
+                                   </td>
+                                    <td data-message="{{ record.messageText }}">{{ record.messageText | truncate(35, True, "...") }}</td>
+                                    <td>{{ record.mobile }}</td>
+                                    <td class="responsive_mobile">{{ record.lineNumber }}</td>
+                                    <td>{{ record.sendDateTime | UnixT2Date}}</td>
+                                    <td>{{ record.deliveryDateTime | UnixT2Date }}</td>
+                                    <td class="responsive_mobile">{{ record.cost }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else %}
+                <form  dir="rtl" action="{{ url_for('admin.report_sms_between_post') }}" method="POST">
+                <label class="w-100 my-3">از تاریخ:
+                    {{ form.FromDate(id="FromDate") }}
+                    <p class="text-center text-muted">تاریخ را به صورت YYYY/MM/DD وارد کنید</p>
+                </label>
+                <label class="w-100 my-3">تا تاریخ:
+                    {{ form.EndDate(id="EndDate") }}
+                    <p class="text-center text-muted">تاریخ را به صورت YYYY/MM/DD وارد کنید</p>
+                </label>
+                {{ form.hidden_tag() }}
+                {{ form.Submit() }}
+            </form>
+            {% endif %}
+        </div>
+
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+    {% include "web/utils/datepickerLoader.html" %}
+    <script>
+        $("#FromDate").persianDatepicker(
+            {
+                fontSize:20,
+                cellWidth:30,
+                cellHeight:25
+            }
+        );
+        $("#EndDate").persianDatepicker(
+            {
+                fontSize:20,
+                cellWidth:30,
+                cellHeight:25
+            }
+        );
+    </script>
+{% endblock %}
+
+
+

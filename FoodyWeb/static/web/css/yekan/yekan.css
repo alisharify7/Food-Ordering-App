@@ -1,0 +1,12 @@
+/* downloaded from https://rokaweb.ir */
+@font-face {
+	font-family: 'Yekan';
+	src: url( 'Yekan.eot' );
+	src: url( 'Yekan.eot?#iefix' ) format( 'embedded-opentype' ),
+		url( 'Yekan.woff2' ) format( 'woff2' ),
+		url( 'Yekan.woff' ) format( 'woff' ),
+		url( 'Yekan.ttf' ) format( 'truetype' ),
+		url( 'Yekan.svg#Yekan' ) format( 'svg' );
+	font-weight: normal;
+	font-style: normal;
+}

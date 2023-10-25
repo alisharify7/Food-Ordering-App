@@ -1,0 +1,105 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+ویرایش مشخصات ادمین
+{%  endblock %}
+
+{%  block admin_style %}
+{%  endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+        <div class="col-11">
+            <h4 class="text-center my-2 mt-4">ویرایش مشخصات ادمین</h4>
+        </div>
+        <div class="col-11">
+            <form action="{{ url_for('admin.edit_admin_post', adminKey=ctx.admin.PublicKey) }}" method="POST" dir="rtl">
+                {{ form.hidden_tag() }}
+
+                  <div class="my-3">
+                        <label for="Username">نام کاربری را وارد نمایید:</label>
+                        {{ form.Username(id="Username") }}
+                        {% if form.Username.errors%}
+                            <ul>
+                                {% for err in form.Username.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+                <div class="my-3">
+                        <label for="Password"> گذرواژه را وارد نمایید</label>
+                        {{ form.Password(id="Password") }}
+                        {% if form.Password.errors%}
+                            <ul>
+                                {% for err in form.Password.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+
+                  <div class="my-3">
+                        <label for="PhoneNumber">شماره تماس ادمین را وارد نمایید</label>
+                        {{ form.PhoneNumber(id="PhoneNumber") }}
+                        {% if form.PhoneNumber.errors%}
+                            <ul>
+                                {% for err in form.PhoneNumber.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+                <div class="my-3">
+                        <label for="TryNumber">تعداد دفعات اشتباه ادمین</label>
+                        {{ form.TryNumber(id="TryNumber") }}
+                        <p class="m-0 text-center text-muted">توجه این مقدار در ابتدا بر روی 5 تنظیم شده است و اگر ادمینی گذرواژه خود را بیش از 5 بار اشتباه وارد کنید حساب کاربری اش به صورت خودکار قفل خواهد شد</p>
+
+                        {% if form.TryNumber.errors%}
+                            <ul>
+                                {% for err in form.TryNumber.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+
+                 <div class="my-3">
+                        <label for="Email">ایمیل ادمین را وارد نمایید</label>
+                        {{ form.Email(id="Email") }}
+                        {% if form.Email.errors%}
+                            <ul>
+                                {% for err in form.Email.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+
+                <div class="my-3">
+                        <label for="Active">وضعیت حساب کاربری کارمند را وارد نمایید</label>
+                        {{ form.Active(id="Active", class="my-2 list-unstyled d-flex justify-content-around align-items-center w-100", placeholder="وضعیت حساب کاربری: ") }}
+                        {% if form.Active.errors%}
+                            <ul>
+                                {% for err in form.Active.errors %}
+                                    <li class="text-danger"> {{err}} </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                  </div>
+
+
+                <div class="col-12">
+                    {{ form.Submit() }}
+                </div>
+
+            </form>
+        </div>
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+{% endblock %}
+
+
+

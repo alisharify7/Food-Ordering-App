@@ -1,0 +1,73 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+گزارش ارسالی های امروز
+{% endblock %}
+
+{% block admin_style %}
+    <style>
+    @media(max-width: 850px){
+        .responsive_mobile{
+            display: none;
+        }
+    }
+    </style>
+{% endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+
+      <h4 class="text-center my-2 mt-4">پیامک های ارسال شده امروز</h4>
+       <div class="col-lg-10 col-md-11 col-12 d-flex justify-content-between align-items-center my-3">
+           <p>شارژ کلی سامانه پیامکی: {{ ctx.credit }}</p>
+           <p>تعداد کل ارسالی های امروز: {{ ctx.total_sms }}</p>
+       </div>
+
+        <div class="col-lg-10 col-md-11 col-12">
+            <table class="table table-responsive table-dark table-hover table-bordered" dir="rtl">
+                <thead>
+                    <tr>
+                        <th>نتیجه</th>
+                        <th>متن پیام</th>
+                        <th>شماره گیرنده</th>
+                        <th  class="responsive_mobile">شماره فرستنده</th>
+                        <th  class="responsive_mobile">ساعت ارسال</th>
+                        <th>هزینه</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if not ctx.data %}
+                    <tr>
+                        <td colspan="6" class="text-center">رکوردی یافت نشد</td>
+                    </tr>
+                {% else %}
+                    {% for record in ctx.data %}
+                        <tr>
+                            <td>
+                                {% if record.deliveryDateTime %}
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                {% else %}
+                                    <i class="bi bi-x-circle-fill text-danger"></i>
+                                {% endif %}
+                            </td>
+                        <td data-text="{{ record.messageText }}">{{ record.messageText | truncate(35, True, "...") }}</td>
+                        <td>0{{ record.mobile }}</td>
+                        <td class="responsive_mobile">{{ record.lineNumber }}</td>
+                        <td  class="responsive_mobile">{{ record.sendDateTime | UnixT2Date}}</td>
+                        <td>{{ record.cost }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+
+</div>
+{% endblock  %}
+
+{% block admin_script %}
+{% endblock %}
+
+
+

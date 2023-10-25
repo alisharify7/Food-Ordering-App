@@ -1,0 +1,68 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+تنظیمات
+{%  endblock %}
+
+{%  block admin_style %}
+{%  endblock %}
+
+{% block main_content %}
+<div class="row justify-content-center align-items-center">
+      <div class="col-11">
+          <h3 class="text-center my-2 mt-4">تنظیمات پایه</h3>
+      </div>
+
+      <div class="col-lg-8 col-md-10 col-11" dir="ltr">
+            <form action="{{ url_for('admin.update_logo_image') }}" method="POST" enctype="multipart/form-data">
+                {% if check_app_logo %}
+                    <div class="d-flex flex-column justify-content-center align-items-center my-2">
+                        <p class="m-0">تصویر فعلی لوگو</p>
+                        <img src="{{ serve_app_logo() }}" class="w-50 rounded-4 shadow" style="max-height: 400px">
+                    </div>
+                {% else %}
+                    <p class="text-center my-2">در حال حاضر تصویری برای لوگو تنظیم نشده است و تصویر پیش فرض نمایش داده می شود</p>
+                {% endif %}
+                <h4 class="text-start">تنظیم لوگو</h4>
+                {{ logoform.Image() }}
+                {{ logoform.hidden_tag() }}
+
+                {{ logoform.Submit() }}
+            </form>
+
+          <form action="{{ url_for('admin.update_app_description') }}" method="POST" dir="rtl">
+            <label class="w-100 my-2">
+                نام شرکت:
+                {{ settingform.Name() }}
+            </label>
+            <label class="w-100 my-2">
+                توضیحات کوتاه راجب شرکت:
+                {{ settingform.Description() }}
+            </label>
+            <label class="w-100 my-2">
+                آدرس شرکت:
+                {{ settingform.Address() }}
+            </label>
+            <label class="w-100 my-2">
+                شماره تماس شرکت:
+                {{ settingform.Phone() }}
+            </label>
+
+              {{ settingform.hidden_tag() }}
+              {{ settingform.Submit() }}
+          </form>
+
+      </div>
+
+
+</div>
+
+        <input type="hidden" id="token" name="token" value="{{ csrf_token() }}">
+
+{% endblock  %}
+
+{% block admin_script %}
+{% endblock %}
+
+
+
