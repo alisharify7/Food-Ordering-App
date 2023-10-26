@@ -4,10 +4,10 @@
 
 
   
-  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/alisharify7/Food-Ordering-Employee">
+  <img alt="GitHub repo size" src="[https://img.shields.io/github/repo-size/alisharify7/Food-Ordering-Employee](https://github.com/alisharify7/Django-Learning.git)">
   
   
-  <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/alisharify7/Food-Ordering-Employee">
+  <img alt="GitHub contributors" src="https://github.com/alisharify7/Django-Learning.git">
   <img alt="" src="docs/database.png">
   
 
