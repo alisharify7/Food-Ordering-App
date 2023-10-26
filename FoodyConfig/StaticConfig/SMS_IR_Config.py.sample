@@ -32,6 +32,20 @@
 www.EXAMPLE.ir
 
 """
+### SET_PASSWORD template content should be like this:
+"""
+کاربر گرامی #NAME#
+رمز موقت حساب کاربری شما: #PASS#
+
+اعتبار رمز فوق 24 ساعت می باشد و پس از وارد شدن با رمز فوق به حساب کاربری خود باید رمز جدیدی برای حساب کاربری خود انتخاب کنید
+
+اتوماسیون هوشمند اسم شرکت
+www.EXAMPLE.ir
+
+"""
+
+
+
 
 
 # sms ir templates id
@@ -44,5 +58,10 @@ SMS_IR_TEMPLATES = {
     "WELCOME_NEW_USER":  {
         "ID": 000000,
         "VARIABLES": ["EMPLOYEE_NAME"]
-    }
+    },
+    "SET_PASSWORD": {
+        "ID": 000000,
+        "VARIABLES": ["NAME", "PASS"]
+    },
+
 }
