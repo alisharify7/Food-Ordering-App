@@ -26,7 +26,6 @@ FoodyWeb/templates/web/utils/header.html
 FoodyWeb/templates/web/utils/tags.html
 FoodyWeb/templates/web/utils/version-badge.html
 
-liara.json
 FoodyConfig/StaticConfig/SMS_IR_Config.py
 
 |Media/Foods/default.png

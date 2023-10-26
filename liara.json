@@ -1,0 +1,18 @@
+{
+    "app": "name",
+    "platform": "flask",
+    "flask": {
+      "pythonVersion": "3.11",
+      "timezone": "Asia/Tehran",
+      "mirror": true,
+      "appModule": "app:app"
+  
+    },
+  
+    "disks": [
+      {
+        "name": "media",
+        "mountTo": "/usr/src/app/Media"
+      }
+    ]
+  }
