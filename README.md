@@ -81,8 +81,8 @@ Tech Stack:
 
 - then init and migrate db with below commands:
         
-        # remember at this poit you should create a database 
-        # and also put database name in .env file before running below commands
+        # remember at this point you should create a database (utf8mb4_persian_ci)
+        # and also put the database name in .env file before running the below commands
           
         flask db init
         flask db migrate
