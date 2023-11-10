@@ -10,11 +10,7 @@ from flask.cli import AppGroup
 from FoodyConfig.SuperUser import create_super_user
 from email_validator import validate_email
 
-
-
 create_commands = AppGroup("create", help="creation operation commands.")
-
-
 
 
 @create_commands.command("superuser")
@@ -29,6 +25,7 @@ def createsuperuser():
             email: str
             phone: str
     """
+
     def get_input(message):
         while True:
             x = input(message)
@@ -42,7 +39,6 @@ def createsuperuser():
                     print("invalid Input :(")
                     continue
 
-
     def get_email(message):
         while True:
             x = input(message)
@@ -52,7 +48,6 @@ def createsuperuser():
                 print("Invalid email address")
             else:
                 return x
-
 
     username = get_input("Enter Admin Username: ")
     password = getpass.getpass("Enter Admin Password: ")
@@ -97,16 +92,16 @@ def init_setting():
             s.SetPublicKey()
         except sqlalchemy.exc.ProgrammingError as e:
             print(e)
-            sys.exit()
 
-        s.Name = each["name"]
-        s.Description = each["description"]
+        s.Name = each["name"].strip()
+        s.Description = each["description"].strip()
         try:
             db.session.add(s)
             db.session.commit()
         except sqlalchemy.exc.ProgrammingError as e:
+            db.session.rollback()
             print(e)
-            sys.exit()
+
         except Exception as e:
             db.session.rollback()
             print(f"[{datetime.datetime.utcnow()}] section {s.id} not added")
@@ -135,7 +130,6 @@ def init_setting():
             print(f"[{datetime.datetime.utcnow()}] day {d.NameEn} added")
 
 
-
 @create_commands.command("fakeuser")
 def create_fake_user():
     """
@@ -148,7 +142,6 @@ def create_fake_user():
     import random
     from FoodyCore.extension import db
     from FoodyAuth.model import Section, User
-
 
     def get_number():
         """
@@ -163,7 +156,6 @@ def create_fake_user():
                 return number
             continue
 
-
     while True:
         x = input("This Command Create Fake Users in App. Are You Sure? [Y, N]: ").lower().strip()
         if x not in ["y", "n"]:
@@ -176,7 +168,6 @@ def create_fake_user():
             else:
                 continue
 
-
     while True:
         x = input("Enter Number of users: ")
         if x.isdigit():
@@ -187,9 +178,10 @@ def create_fake_user():
 
     counter = 0
     try:
-        sections = [each[0] for each in db.session.query(Section.id,).distinct().all()]
+        sections = [each[0] for each in db.session.query(Section.id, ).distinct().all()]
         if not sections:
-            raise ValueError("sections are not included in database. use command flask create init_setting for adding setting into database ")
+            raise ValueError(
+                "sections are not included in database. use command flask create init_setting for adding setting into database ")
     except sqlalchemy.exc.ProgrammingError as e:
         print(e)
         sys.exit()
