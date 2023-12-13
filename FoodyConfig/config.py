@@ -76,10 +76,14 @@ class BaseConfig:
     MAIL_ADDRESS = os.environ.get("MAIL_ADDRESS")
     MAIL_DEBUG = STATUS
 
-    # Celery configuration
-    CELERY_BROKER_URL = REDIS_URI
-    CELERY_RESULT_BACKEND = REDIS_URI
-
+    # celery config
+    CELERY = dict(
+        broker_url=REDIS_URI,
+        result_backend=REDIS_URI,
+        task_ignore_result=True,
+        broker_connection_retry_on_startup=True,
+        result_serializer="pickle"
+    )
 
 
     DOMAIN = DOMAIN
