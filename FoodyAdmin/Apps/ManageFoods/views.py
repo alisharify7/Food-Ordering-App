@@ -43,6 +43,7 @@ def add_new_food():
         "add_new_food": "item-active"
     }
     form = ManageFoodsForms.AddFoodForm()
+    form.Active.data = "active"
     return render_template(f"{TEMPLATE_FOLDER}/add_new_food.html", ctx=ctx, form=form)
 
 
