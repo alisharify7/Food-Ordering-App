@@ -113,4 +113,4 @@ def getAdmin(admin_id: int) -> Admin:
     return Admin.query.get(admin_id) or "NULL"
 
 
-print("[OK] All Template Filter checked By Flask App <FoodyCore>".title())
+print("[OK] All Template Filters checked By Flask App <FoodyCore>".capitalize())

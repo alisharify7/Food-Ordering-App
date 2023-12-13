@@ -45,9 +45,6 @@ www.EXAMPLE.ir
 """
 
 
-
-
-
 # sms ir templates id
 SMS_IR_TEMPLATES = {
     "ADD-NEW-USER":  {

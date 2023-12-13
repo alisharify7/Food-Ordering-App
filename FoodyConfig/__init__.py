@@ -1,1 +1,1 @@
-from config import AutoCinfig as GetConfig
+from .config import AutoCinfig as GetConfig

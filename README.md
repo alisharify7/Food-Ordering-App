@@ -69,25 +69,35 @@ Tech Stack:
 - before starting the app, you should do some steps
 - first create your own config file with below command:
  
-      cp .env.sample .env
+  
+### Linux - Mac 
+    cp .env.sample .env 
+
+### Windows
+    copy .env.sample .env
+
 - then open the .env file and fill in all the required fields 
 - the required files include the database configuration, admin configuration, and SecretKey
 
 
 - after these steps you have to run below commands for SMS_IR config file
 
-        cp FoodyConfig/StaticConfig/SMS_IR_Config.py.sample FoodyConfig/StaticConfig/SMS_IR_Config.py
+### Linux - Mac
+    cp FoodyConfig/StaticConfig/SMS_IR_Config.py.sample FoodyConfig/StaticConfig/SMS_IR_Config.py
+### Windows
+    copy FoodyConfig/StaticConfig/SMS_IR_Config.py.sample FoodyConfig/StaticConfig/SMS_IR_Config.py
+
 - and then open FoodyConfig/StaticConfig/SMS_IR_Config.py and replace your template id (FROM SMS_IR) with fake one in file
 
 
 - then init and migrate db with below commands:
         
-        # remember at this point you should create a database (utf8mb4_persian_ci)
-        # and also put the database name in .env file before running the below commands
-          
-        flask db init
-        flask db migrate
-        flask db upgrade
+      # remember at this point you should create a database (utf8mb4_persian_ci)
+      # and also put the database name in .env file before running the below commands
+        
+      flask db init
+      flask db migrate
+      flask db upgrade
 
 - to change the sections, simply open FoodyConfig/StaticConfig/Sections.py and replace all Sections with your own Company Sections (this required a little bit knowledge of Python Dict )
 - one last command is init settings:
