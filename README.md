@@ -18,6 +18,7 @@ Tech Stack:
           sms_ir-python
           requests
           Khayyam
+          celery
       Flask
         Flask-Captcha2
         Flask-Sqlalchemy
