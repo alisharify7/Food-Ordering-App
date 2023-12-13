@@ -16,8 +16,6 @@ env
 .idea
 migrations
 # watch for this
-|Media/PersiandatePicker/
-|Media/PersiandatePicker/*
 FoodyWeb/templates/web/index.html
 FoodyWeb/templates/web/utils/tags.html
 
@@ -28,10 +26,6 @@ FoodyWeb/templates/web/utils/version-badge.html
 
 FoodyConfig/StaticConfig/SMS_IR_Config.py
 
-|Media/Foods/default.png
-|Media/Helper.pdf
-Media/Foods/*
-Media/*
 
 
 

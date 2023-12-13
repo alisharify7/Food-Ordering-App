@@ -1,0 +1,17 @@
+
+
+#
+#           Auto Generated Robots.txt
+#                 Version 2.0.0
+#
+
+
+User-agent: *
+Allow: /
+
+
+User-agent: *
+Disallow: /user/
+Disallow: /user/*
+Disallow: /admin/
+Disallow: /admin/*
