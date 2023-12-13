@@ -15,20 +15,7 @@ env
 .env.liara
 .idea
 migrations
-# watch for this
-FoodyWeb/templates/web/index.html
-FoodyWeb/templates/web/utils/tags.html
-
-FoodyWeb/templates/web/utils/footer.html
-FoodyWeb/templates/web/utils/header.html
-FoodyWeb/templates/web/utils/tags.html
-FoodyWeb/templates/web/utils/version-badge.html
-
 FoodyConfig/StaticConfig/SMS_IR_Config.py
-
-
-
-
 # C extensions
 *.so
 flask_session

@@ -1,6 +1,7 @@
+import os.path
 
 from FoodyWeb import web
-from flask import send_from_directory, redirect,\
+from flask import send_from_directory, redirect, \
     current_app, abort, url_for
 
 from FoodyConfig.config import STATUS, Media
@@ -16,8 +17,7 @@ def Serve(path):
     if STATUS:
         return send_from_directory(Media, path)  # flask serve
     else:
-        return f"This File Only Can be Served Via Nginx WebServer,,, <A href='{current_app.config.get('DOMAIN')+path}'>{current_app.config.get('DOMAIN')+path}</A>", 400
-
+        return f"This File Only Can be Served Via Nginx WebServer,,, <A href='{current_app.config.get('DOMAIN') + path}'>{current_app.config.get('DOMAIN') + path}</A>", 400
 
 
 @web.route("/")
@@ -31,11 +31,9 @@ def index_view():
     return redirect(url_for('auth.login'))
 
 
-
 @web.route("/page-not-found/")
 def PageNotFound():
     """
         return Page Not found 404 Error
     """
     abort(404)
-

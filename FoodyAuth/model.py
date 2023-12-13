@@ -32,7 +32,7 @@ class User(BaseModel):
 
     def SetPassword(self, password: str) -> None:
         """ Set Hashed Password for user """
-        self.Password = generate_password_hash(password)
+        self.Password = generate_password_hash(password, method="pbkdf2")
 
     def CheckPassword(self, password: str) -> bool:
         """ Check Password with Hashed password """
