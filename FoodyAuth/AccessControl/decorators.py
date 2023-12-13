@@ -1,7 +1,7 @@
 from functools import wraps
 from FoodyAuth.model import User
 from flask import session, abort
-from FoodyCore.extension import ServerRedis
+from FoodyCore.extensions import ServerRedis
 
 
 

@@ -3,7 +3,7 @@ import os.path
 from FoodyAuth import auth
 from FoodyAuth.form import LoginForm
 from FoodyConfig.config import Auth_Static, ADMIN_LOGIN_TOKEN
-from FoodyCore.extension import ServerCaptchaV2, db, ServerRedis
+from FoodyCore.extensions import ServerCaptchaV2, db, ServerRedis
 from FoodyAuth.AccessControl.decorators import change_password_only
 
 import FoodyAuth.utils as AuthUtils

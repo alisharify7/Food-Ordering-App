@@ -6,7 +6,7 @@ from flask.cli import AppGroup
 from FoodyAuth.model import User, Section
 from FoodyAdmin.model import Admin, AdminLog
 from FoodyOrder.model import Order, FoodList
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 from FoodyConfig.config import BASE_DIR
 
 

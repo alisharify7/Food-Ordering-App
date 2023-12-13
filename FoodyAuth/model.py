@@ -2,7 +2,7 @@
 from FoodyCore.model import BaseModel
 from sqlalchemy import String, Boolean, Column, ForeignKey, Integer
 from werkzeug.security import generate_password_hash, check_password_hash
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 
 
 class User(BaseModel):

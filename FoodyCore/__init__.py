@@ -1,5 +1,5 @@
 from flask import Flask
-from FoodyCore.extension import ServerCsrf, ServerMigrate, \
+from FoodyCore.extensions import ServerCsrf, ServerMigrate, \
     ServerCaptchaV2, ServerSession, db, ServerCaptchaV2, MailServer
 
 from FoodyConfig.config import AutoCinfig

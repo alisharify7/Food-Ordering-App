@@ -1,7 +1,7 @@
 import uuid
 from flask import session
 from .model import User, Section
-from FoodyCore.extension import ServerRedis
+from FoodyCore.extensions import ServerRedis
 
 
 def get_all_section_wtf_select() -> list:

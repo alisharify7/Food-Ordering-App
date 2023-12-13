@@ -23,7 +23,7 @@ class Admin(BaseModel):
         """
         This Method register a log for admin in log table
         """
-        from FoodyCore.extension import db
+        from FoodyCore.extensions import db
 
         a = AdminLog()
         a.AdminID = self.id

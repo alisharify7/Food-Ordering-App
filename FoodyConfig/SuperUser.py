@@ -1,5 +1,5 @@
 from FoodyAdmin.model import Admin
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 from email_validator import validate_email
 from email_validator.syntax import EmailSyntaxError
 

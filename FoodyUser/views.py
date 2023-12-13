@@ -4,7 +4,7 @@ import khayyam
 from FoodyUser import user
 from flask import render_template, send_from_directory, request, flash, redirect, url_for
 
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 from FoodyAuth.AccessControl.decorators import login_required
 from FoodyConfig.config import User_Static
 from FoodyOrder.model import FoodList, Order

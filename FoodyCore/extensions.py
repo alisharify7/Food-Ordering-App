@@ -1,3 +1,6 @@
+# register all extensions
+
+
 from redis import Redis
 from flask_migrate import Migrate
 from flask_session import Session
@@ -8,6 +11,9 @@ from FoodyConfig.config import REDIS_URI
 from flask_mail import Mail
 from sms_ir import SmsIr
 from FoodyConfig.config import SMS_API, SMS_LINE
+
+
+
 smsIR = SmsIr(
     api_key=SMS_API,
     linenumber=SMS_LINE,

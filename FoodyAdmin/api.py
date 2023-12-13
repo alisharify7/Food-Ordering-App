@@ -6,7 +6,7 @@ from sqlalchemy import func
 from FoodyAdmin import admin
 from FoodyAuth.AccessControl.decorators import admin_login_required
 from FoodyAuth.model import Section, User
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 from FoodyCore.utils import TimeStamp
 from FoodyOrder.model import Order
 

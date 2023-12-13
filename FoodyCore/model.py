@@ -1,6 +1,6 @@
 import datetime
 import uuid
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 from sqlalchemy import String, DateTime, Integer, Column
 from FoodyConfig.config import DATABASE_TABLE_PREFIX
 

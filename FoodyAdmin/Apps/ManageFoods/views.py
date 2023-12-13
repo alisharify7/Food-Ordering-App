@@ -6,7 +6,7 @@ from flask import render_template, flash, redirect, request
 from FoodyAdmin import admin
 from FoodyAdmin.views import admin_login_required
 from FoodyOrder.model import FoodList, Day
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 
 import FoodyAdmin.Apps.ManageFoods.utils as ManageFoodsUtils
 import FoodyAdmin.Apps.ManageFoods.form as ManageFoodsForms

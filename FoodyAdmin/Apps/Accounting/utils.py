@@ -1,4 +1,4 @@
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 from FoodyAuth.model import Section
 
 

@@ -1,5 +1,5 @@
 from FoodyWeb import web
-from FoodyCore.extension import ServerRedis
+from FoodyCore.extensions import ServerRedis
 
 
 @web.app_template_filter(name="ServerRedis")

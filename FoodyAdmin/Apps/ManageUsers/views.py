@@ -5,7 +5,7 @@ from flask import render_template, flash, redirect, request, url_for, jsonify
 
 from FoodyAdmin import admin
 from FoodyAdmin.views import admin_login_required
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 from FoodyAuth.model import User, Section
 from FoodyOrder.model import Order
 from FoodyConfig.config import SMS_IR_TEMPLATES
@@ -14,7 +14,7 @@ from FoodyCore.utils import TimeStamp
 import FoodyAdmin.Apps.ManageUsers.utils as ManageUsersUtils
 import FoodyAdmin.Apps.ManageUsers.form as ManageUsersForm
 
-from FoodyCore.extension import smsIR
+from FoodyCore.extensions import smsIR
 
 BASE_URL = "manage/users/"
 TEMPLATE_FOLDER = "admin/ManageUsers"

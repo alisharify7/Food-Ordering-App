@@ -3,7 +3,7 @@ import json
 from FoodyCore.model import BaseModel
 from sqlalchemy.orm import relationship
 from sqlalchemy import String, Integer, Column, JSON, ForeignKey, Date, Boolean
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 from FoodyCore.utils import TimeStamp
 
 FoodsDay = db.Table(

@@ -6,7 +6,7 @@ from FoodyAuth.model import Section, User
 import FoodyAdmin.Apps.ManageSMS.utils as ManageSMSutils
 import FoodyAdmin.Apps.ManageSMS.form as ManageSMSform
 from FoodyAuth.utils import get_all_section_wtf_select
-from FoodyCore.extension import smsIR
+from FoodyCore.extensions import smsIR
 
 BASE_URL = "Manage/SMS"
 TEMPLATE_FOLDER = "admin/ManageSMS"

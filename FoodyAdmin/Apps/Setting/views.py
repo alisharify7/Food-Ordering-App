@@ -6,7 +6,7 @@ from flask import render_template, redirect, request, flash
 from FoodyAdmin import admin
 from FoodyAuth.AccessControl.decorators import admin_login_required
 from FoodyAdmin.model import Admin, AdminLog
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 from FoodyAdmin.model import SiteSetting
 from FoodyConfig.config import Media, VALID_IMAGE_EXTENSIONS
 from werkzeug.utils import secure_filename

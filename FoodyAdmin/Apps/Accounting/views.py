@@ -4,7 +4,7 @@ import khayyam
 from flask import render_template, flash, redirect, request
 from FoodyAdmin import admin
 from FoodyAdmin.views import admin_login_required
-from FoodyCore.extension import db
+from FoodyCore.extensions import db
 from FoodyOrder.model import Order
 from FoodyAuth.model import Section, User
 from FoodyCore.utils import TimeStamp

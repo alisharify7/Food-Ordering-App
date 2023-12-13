@@ -1,6 +1,6 @@
 from flask_mail import Message
 from FoodyMail.MailParser import ParseMail
-from FoodyCore.extension import MailServer
+from FoodyCore.extensions import MailServer
 
 
 def SerilizeOrderObject(orderDB) -> dict:

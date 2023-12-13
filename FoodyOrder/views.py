@@ -8,8 +8,8 @@ from FoodyAuth.model import User
 from FoodyOrder.model import Day, FoodList, Order
 from FoodyConfig.config import VALID_DAYS_PERSIAN, MAX_ORDER_TIMEOUT_DAY
 from FoodyAuth.AccessControl.decorators import login_required, admin_login_required, admin_and_users_allowed
-from FoodyCore.extension import ServerCsrf
-from FoodyCore.extension import db
+from FoodyCore.extensions import ServerCsrf
+from FoodyCore.extensions import db
 
 
 @order.route("/GetMenuDays/", methods=["GET"])

@@ -78,7 +78,7 @@ def init_setting():
             None
 
     """
-    from FoodyCore.extension import db
+    from FoodyCore.extensions import db
     from FoodyAuth.model import Section
     from FoodyConfig.StaticConfig.Sections import SECTIONS
     from FoodyConfig.config import ALL_DAYS
@@ -140,7 +140,7 @@ def create_fake_user():
     """
     fakerManger = Faker(locale=["fa_IR"])
     import random
-    from FoodyCore.extension import db
+    from FoodyCore.extensions import db
     from FoodyAuth.model import Section, User
 
     def get_number():
