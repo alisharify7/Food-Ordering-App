@@ -47,15 +47,17 @@ def send_email(recipients, subject, sender, text_body="", html_body="",
     """
         this function send mail via flask-mail
 
-        recipients = recipient of email (user's email address)
-        subject = subject of email to send
-        sender = sender email address
-        text_body = email body
-        html_body = if you want to send html email to can pass raw html
-        attachments = attachment files to be attached in email
-        async_thread : send email asynchronously using threading
-        async_celery : send email asynchronously using celery
-        without this parameter this function send email sync
+        recipients:list =  (user's email address)
+        subject:sre = subject of email to send
+        sender:str = sender email address
+        text_body:str = email body
+        html_body:str= if you want to send html email to can pass raw html
+        attachments:byte = attachment files to be attached in email
+
+        sending methods:
+            async_thread:bool : send email asynchronously using threading
+            async_celery:bool : send email asynchronously using celery
+        without this parameter this function send email in sync mode
     """
 
     msg = Message(subject=subject, sender=sender, recipients=recipients)
@@ -67,15 +69,15 @@ def send_email(recipients, subject, sender, text_body="", html_body="",
             msg.attach(*attachment)
 
     if async_thread:
-        current_app.logger.info(f"\n[Thread Async] Mail Sending {recipients}")
+        current_app.logger.info(f"\n[Thread Async] Mail Address: {recipients}")
         Thread(target=async_send_email_thread, args=(current_app._get_current_object(), msg)).start()
 
     elif async_celery:
-        current_app.logger.info(f"\n[Celery Async] Mail Sending {recipients}")
+        current_app.logger.info(f"\n[Celery Async] Mail Address: {recipients}")
         async_send_email_celery.delay(pickle.dumps(msg))
 
     else:
-        current_app.logger.info(f"\n[Sync Normal] Mail Sending {recipients}")
+        current_app.logger.info(f"\n[Sync Normal] Mail Address: {recipients}")
         MailServer.send(msg)
 
 
