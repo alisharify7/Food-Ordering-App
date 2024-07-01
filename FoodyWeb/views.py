@@ -1,5 +1,3 @@
-import os.path
-
 from FoodyWeb import web
 from flask import send_from_directory, redirect, \
     current_app, abort, url_for
@@ -10,7 +8,7 @@ from FoodyConfig.config import STATUS, Media
 @web.route("/Serve/<path:path>")
 def Serve(path):
     """
-    Serve Static files for development Mode (Only When APP_DEBUG=True)
+    Serve Static files for development Mode (Only When APP_DEBUG is True)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         Only In Debug Mode Serving Files for development Purposes
     """
@@ -23,9 +21,8 @@ def Serve(path):
 @web.route("/")
 def index_view():
     """
-    Just redirect to user login page
+    Just redirect user to login page
     You can replace this with a nice and simple landing page for you company
-
         return render_template('path/to/landing page.html')
     """
     return redirect(url_for('auth.login'))

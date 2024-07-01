@@ -12,4 +12,4 @@ def ServerRedis(name=None):
     return ServerRedis.get(name=name)
 
 
-print("[OK] All Template Filters checked By Flask App <FoodyWeb>".capitalize())
+print("[OK] Template Filters checked. <FoodyWeb>".capitalize())

@@ -6,20 +6,12 @@ from FoodyCore import app
 import FoodyAuth.utils as AuthUtils
 
 
-# @app.after_request
-# def after_request(f):
-#     add custom headers to response (or configure nginx)
-#     additional header data and ...
-#     f.headers['X-Frame-Options'] = 'SAMEORIGIN'
-#     return f
-
 
 @app.before_request
 def before_request():
     """
     This Middleware like django authentication put some data in request before heads up to actual view
     :return: None
-
 
         is_userAuthenticated = True  : if user is authenticated
         is_userAuthenticated = False  : if user is not authenticated
@@ -80,7 +72,7 @@ def app_context():
     def serve_app_logo() -> str:
         """
         this view serve app logo
-        if there is no image set for app logo
+        if there is no image 
          return default logo image
         """
         if (site := SiteSetting.query.filter_by(tag="setting").first()):

@@ -1,0 +1,1 @@
+celery -A make_celery worker -l info -P gevent -E

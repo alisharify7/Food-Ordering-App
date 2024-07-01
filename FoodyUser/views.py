@@ -1,3 +1,4 @@
+# build in
 import os.path
 import khayyam
 
@@ -15,8 +16,8 @@ from FoodyUser.form import UserPanelEmailForm
 
 @user.route("/UserStatic/<path:filename>")
 @login_required
-def UserStatic(filename):
-    """Serve Static files to users that have access"""
+def UserStatic(filename:str):
+    """Serve static files to users that authenticated."""
     if os.path.exists(User_Static / filename):
         return send_from_directory(User_Static, filename)
     else:
@@ -24,58 +25,61 @@ def UserStatic(filename):
 
 
 
-@user.get("/")
+@user.route("/", methods=['GET'])
 @login_required
-def index_view():
+def index_view() -> str:
+    """return user index page """
     return render_template("user/index.html")
 
 
 @user.route("/menu/", methods=["GET"])
 @login_required
-def get_menu():
-    """return food menu for user"""
+def get_menu() -> str:
+    """return food menu page"""
     ctx = {}
-    ctx["foods"] = FoodList.query.filter(FoodList.Active == True).all()
+    ctx["foods"] = FoodList.query.filter_by(Active=True).all()
     return render_template("user/menu.html", ctx=ctx)
 
 
 @user.route("/order/", methods=["GET"])
 @login_required
-def order_get():
+def order_get() -> str:
+    """return ordering page """
     return render_template("user/order.html")
 
 
 @user.route("/history/", methods=["GET"])
 @login_required
-def history_get():
+def history_get() -> str:
+    """return orders history """
     page = request.args.get("page", type=int, default=1)
-    ctx = {
-        "orders": Order.query.order_by(Order.OrderDate.desc()).filter(Order.UserID == request.user_object.id).paginate(per_page=15, page=page),
-        "current_page":page
-    }
+    ctx = {"current_page":page}
+
+    ctx["orders"] = Order.query.order_by(Order.OrderDate.desc()) \
+         .filter_by(UserID=request.user_object.id) \
+         .paginate(per_page=15, page=page)
+
     return render_template("user/history.html", ctx=ctx)
 
 
 @user.route("/panel/", methods=["GET"])
 @login_required
-def panel_get():
-    """
-    This View return Template For User Panel
-    """
+def panel_get() -> str:
+    """return users panel page"""
     Today = khayyam.JalaliDate.today()
     t = TimeStamp()
 
     startofMonth = t.convert_jlj2_georgian_d(khayyam.JalaliDate(year=Today.year, month=Today.month, day=1))
     endofMonth = t.convert_jlj2_georgian_d(khayyam.JalaliDate(year=Today.year, month=Today.month, day=Today.daysinmonth))
 
-    userDB = request.user_object # get user object from db
+    user = request.user_object # get user object
 
     form = UserPanelEmailForm()
-    form.Email.data = userDB.Email or ""
+    form.Email.data = user.Email or ""
 
     ctx = {
-        "user":request.user_object,
-        "this_month_orders": Order.query.filter(Order.UserID == request.user_object.id).filter(Order.OrderDate >= startofMonth).filter(Order.OrderDate <= endofMonth).count()
+        "user": request.user_object,
+        "this_month_orders": Order.query.filter(Order.UserID == user.id).filter(Order.OrderDate >= startofMonth).filter(Order.OrderDate <= endofMonth).count()
     }
     return render_template("user/panel.html", ctx=ctx, form=form)
 
@@ -84,29 +88,26 @@ def panel_get():
 @user.route("/panel/", methods=["POST"])
 @login_required
 def panel_post():
-    """
-        this view take a post request for Updating User Email Address in panel
-    """
+    """updating users information in their panel"""
 
-    userDB = request.user_object # get user object from db
+    user = request.user_object # get user object
 
     form = UserPanelEmailForm()
     if not form.validate():
         flash("برخی موارد به درستی مقدار دهی نشده اند", "danger")
-        error = "\n".join([form.errors[err][-1] for err in form.errors ])
+        error = "\n".join([form.errors[err][-1] for err in form.errors])
         if error:
             flash(error, "danger")
         return redirect(url_for('user.panel_get'))
 
-    if not userDB.SetEmailAddress(form.Email.data):
+    if not user.SetEmailAddress(form.Email.data):
         flash("آدرس ایمیل وارد شده توسط کاربر دیگری در سیستم گرفته شده است \nلطفا آدرس دیگری را وارد کنید", "danger")
         return redirect(url_for('user.panel_get'))
 
     try:
-        db.session.add(userDB)
+        db.session.add(user)
         db.session.commit()
     except Exception as e:
-        print(e)
         db.session.rollback()
         flash("خطایی هنگام ذخیره سازی رخ داد بعدا امتحان کند", "danger")
     else:

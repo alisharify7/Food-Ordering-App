@@ -23,7 +23,6 @@ def create_app():
     MailServer.init_app(app=app)
     celery_init_app(app=app)
 
-
     # register blueprints (apps)
     from FoodyOrder import order
     app.register_blueprint(order, url_prefix="/order")

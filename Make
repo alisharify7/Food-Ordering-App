@@ -1,3 +1,0 @@
-#!/usr/bin/bash
-
-sudo chmod 777 ./Migrate.sh
