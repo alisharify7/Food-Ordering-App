@@ -54,7 +54,7 @@ class Admin(BaseModel):
 
     def set_password(self, password:str) -> None:
         """Set Hash Password For admin"""
-        self.Password = generate_password_hash(password)
+        self.password = generate_password_hash(password)
 
 
     def check_password(self, password:str) -> None:

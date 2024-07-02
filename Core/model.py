@@ -34,7 +34,7 @@ class BaseModel(db.Model):
         name = name.replace("-", "_").replace(" ", "")
         return f"{Setting.DATABASE_TABLE_PREFIX_NAME}{name}".lower()
 
-    def SetPublicKey(self):
+    def set_public_key(self):
         """ This Method Set a Unique PublicKey """
         while True:
             token = uuid.uuid4().hex

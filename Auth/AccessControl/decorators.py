@@ -1,18 +1,15 @@
 from functools import wraps
-from FoodyAuth.model import User
-from flask import session, abort
-from FoodyCore.extensions import ServerRedis
-
-
+from flask import abort, session, request, redirect, url_for
+from Core.extensions import db
+from Auth.model import User
+from Admin.model import Admin
 
 def admin_login_required(f):
-    from FoodyAdmin.model import Admin
     """
     Base Decorator For Login admin to their accounts
     """
     @wraps(f)
     def inner_decorator(*args, **kwargs):
-        """Inner decorator"""
 
         if not session.get("login"):
             session.clear()
@@ -22,26 +19,27 @@ def admin_login_required(f):
             session.clear()
             abort(401)
 
-        # Getting user by primary key
-        admin_db = Admin.query.get(account_id)
-        if not admin_db:
+        previous_ip_address = session.get("ip_address", "")
+        if not (request.remote_addr == previous_ip_address):
             session.clear()
             abort(401)
 
-        if not admin_db.Is_Active():
+        # Getting user by primary key
+        if not (admin_object := db.session.get(Admin, account_id)):
+            session.clear()
+            abort(401)
+
+        if not admin_object.status:
             session.clear()
             abort(401)
 
         # check hashed passwords
-        if session['password'] != admin_db.Password:
+        if session.get("password", "null") != admin_object.password:
             session.clear()
             abort(401)
 
         return f(*args, **kwargs)
     return inner_decorator
-
-
-
 
 
 
@@ -51,7 +49,6 @@ def login_required(f):
     """
     @wraps(f)
     def inner_decorator(*args, **kwargs):
-        """Inner decorator"""
 
         if not session.get("login"):
             session.clear()
@@ -63,15 +60,20 @@ def login_required(f):
 
         # Getting user by primary key
         user_db = User.query.get(account_id)
-        if not user_db:
+        if not (user_object := db.session.get(User, account_id)):
             session.clear()
             abort(401)
 
-        if not user_db.Is_Active():
+        previous_ip_address = session.get("ip_address", "")
+        if not (request.remote_addr == previous_ip_address):
             session.clear()
             abort(401)
 
-        if not user_db.Password == session.get("account-password", 'NULL'):
+        if not user_object.status:
+            session.clear()
+            abort(401)
+
+        if not session.get("password", "null") == user_object.password:
             session.clear()
             abort(401)
 

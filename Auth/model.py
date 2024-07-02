@@ -16,19 +16,22 @@ class WorkSection(BaseModel):
 
 class User(BaseModel):
     __tablename__ = BaseModel.SetTableName("users")
+    USERNAME_LENGTH = 256
+    PHONE_NUMBER_LENGTH = 11
+    EMAIL_LENGTH = 320
 
-    username: so.Mapped[str] = so.mapped_column(sa.String(256), unique=True, nullable=False)
+    username: so.Mapped[str] = so.mapped_column(sa.String(USERNAME_LENGTH), unique=True, nullable=False)
     password: so.Mapped[str] = so.mapped_column(sa.String(162), unique=True, nullable=False)
 
     first_name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True, unique=False)
     last_name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True, unique=False)
     phone_number: so.Mapped[str] = so.mapped_column(sa.String(11), unique=True, nullable=False)
 
-    national_code: so.Mapped[str] = so.mapped_column(sa.String(10), unique=True, nullable=False)
+    national_code: so.Mapped[str] = so.mapped_column(sa.String(PHONE_NUMBER_LENGTH), unique=True, nullable=False)
     employee_code: so.Mapped[int] = so.mapped_column(sa.INTEGER, unique=True, nullable=False)
 
     status: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False, nullable=False, unique=False)
-    email_address: so.Mapped[str] = so.mapped_column(sa.String(320), nullable=True, unique=False)
+    email_address: so.Mapped[str] = so.mapped_column(sa.String(EMAIL_LENGTH), nullable=True, unique=False)
     max_try_number: so.Mapped[int] = so.mapped_column(sa.Integer, default=10, unique=False, nullable=False)
     try_number: so.Mapped[int] = so.mapped_column(sa.Integer, default=0, unique=False, nullable=False)
     last_login_time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, onupdate=datetime.datetime.utcnow, default=datetime.datetime.utcnow)
@@ -45,9 +48,27 @@ class User(BaseModel):
             "CreatedTime": self.created_time
         }
 
+    @so.validates("username")
+    def validate_username(self, key: str, value: str):
+        if len(value) > self.USERNAME_LENGTH:
+            raise ValueError("username is to long, valid length is %d" % self.USERNAME_LENGTH)
+        return value
+
+    def set_username(self, username:str) -> bool:
+        """ Set Unique Username for admin """
+
+        if self.query.filter_by(username=username).first():
+            return False
+        else:
+            try: # check validator well
+                self.username = username
+            except Exception as e:
+                return False
+
+            return True
     def set_password(self, password:str) -> None:
         """Set Hash Password For admin"""
-        self.Password = generate_password_hash(password)
+        self.password = generate_password_hash(password)
 
 
     def check_password(self, password:str) -> None:

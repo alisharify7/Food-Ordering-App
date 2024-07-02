@@ -9,6 +9,7 @@ __pycache__/*
 .linux/lib64
 .linux/bin/python3
 
+# project ignore section
 env
 .env
 .env_secure
@@ -18,6 +19,9 @@ migrations
 FoodyConfig/StaticConfig/SMS_IR_Config.py
 Media/Foods/*
 |Media/Foods/default.png
+
+
+
 # C extensions
 *.so
 flask_session

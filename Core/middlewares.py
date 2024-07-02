@@ -34,8 +34,8 @@ def set_user_statue():
 
 
     """
-    if ".js" not in request.url or ".css" not in request.url: # bypass all static media
-        request.current_language = userLocalSelector()
+    if request.headers.get("Content-Type") in ["text/html", "application/json"]: # bypass internal statics
+        # request.current_language = userLocalSelector()
         request.is_authenticated = session.get("login", False)
         try:
             request.user_object = db.session.execute(
@@ -43,8 +43,8 @@ def set_user_statue():
         except Exception as e:
             request.user_object = None
 
-        request.real_ip = request.headers.get('X-Real-Ip', request.remote_addr)
-
+        request.remote_addr = request.headers.get('X-Real-Ip', request.remote_addr)
+        request.real_ip = request.remote_addr
 
 @blp.route("/lang/set/<string:language>/", methods=["GET"])
 def setUserLanguage(language):
