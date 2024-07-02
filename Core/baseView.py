@@ -2,8 +2,10 @@ import os
 from Core import app
 from flask import send_from_directory, current_app
 
+print("hi")
+print(app.debug)
 
-if current_app.debug:
+if app.debug:
     @app.get("/Storage/<path:path>/")
     def ServeStorageFiles(path: os.path):
         """ This view only serve files for development only!!"""

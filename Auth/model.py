@@ -25,9 +25,9 @@ class User(BaseModel):
 
     first_name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True, unique=False)
     last_name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True, unique=False)
-    phone_number: so.Mapped[str] = so.mapped_column(sa.String(11), unique=True, nullable=False)
+    phone_number: so.Mapped[str] = so.mapped_column(sa.String(11), unique=True, nullable=True)
 
-    national_code: so.Mapped[str] = so.mapped_column(sa.String(PHONE_NUMBER_LENGTH), unique=True, nullable=False)
+    national_code: so.Mapped[str] = so.mapped_column(sa.String(PHONE_NUMBER_LENGTH), unique=True, nullable=True)
     employee_code: so.Mapped[int] = so.mapped_column(sa.INTEGER, unique=True, nullable=False)
 
     status: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False, nullable=False, unique=False)

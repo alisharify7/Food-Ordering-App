@@ -9,7 +9,7 @@ def StorageUrl(path: str):
         path = path[1:]
 
     if current_app.debug:
-        return url_for("core.ServeStorageFiles", path=path, _external=True)  # flask serve
+        return url_for("ServeStorageFiles", path=path, _external=True)  # flask serve
     else:
         return f"/Storage/{path}"  # Nginx Serve Files
 

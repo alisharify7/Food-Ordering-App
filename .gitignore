@@ -16,10 +16,7 @@ env
 .env.liara
 .idea
 migrations
-FoodyConfig/StaticConfig/SMS_IR_Config.py
-Media/Foods/*
-|Media/Foods/default.png
-
+Storage/font/*
 
 
 # C extensions

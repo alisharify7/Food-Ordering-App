@@ -61,3 +61,5 @@ def create_app(setting: Setting) -> Flask:
 
 
 app = create_app(Setting)
+
+from Core import baseView

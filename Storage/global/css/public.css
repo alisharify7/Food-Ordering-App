@@ -1,0 +1,145 @@
+/*
+- public css < Global css >
+    loaded in all pages automatically
+*/
+
+
+:root {
+    --main-dark: #000000;
+    --main-dark-hover: #434e56;
+    --main-blue: #137fff;
+    --main-blue-hover: #3797ff;
+    --main-gray: #eee;
+}
+
+@font-face {
+    font-family: "persianFont";
+    src: url("/Storage/font/shabnam-font-v2.4.0/Shabnam-Bold.woff") format("truetype");
+    /*src: url("/Storage/font/vazir-font-v18.0.0/Vazir-Bold.woff") format("truetype");*/
+    font-weight: normal;
+    font-style: normal;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.fs-0-8 {
+    font-size: 0.8rem;
+}
+
+.fs-0-9 {
+    font-size: 0.9rem;
+}
+
+
+.persian-font {
+    font-family: persianFont, Ubuntu, sans-serif;
+}
+
+.fs-large {
+    font-size: 1.3rem;
+    line-height: 1.5 !important;
+}
+
+.no-default-style {
+    background-color: transparent;
+    border: none;
+}
+
+.bg-gray{
+    background-color: var(--main-gray);
+}
+
+.vh-100{
+    height: 100v;
+    }
+/*header*/
+
+.line1,
+.line2,
+.line3 {
+    width: 35px;
+    height: 5px;
+    border-radius: 2px;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+
+#navbar-burger-menu.burger_active .line1 {
+    transform: rotate(45deg) translate(6px, 8px);
+    background-color: var(--main-blue-hover);
+}
+
+#navbar-burger-menu.burger_active .line2 {
+    opacity: 0;
+}
+
+#navbar-burger-menu.burger_active .line3 {
+    transform: rotate(-45deg) translate(5px, -6px);
+    background-color: var(--main-blue);
+}
+
+/*end of header utils*/
+
+
+.waves {
+    position: relative;
+    width: 100%;
+    height: 15vh;
+    margin-bottom: -7px; /*Fix for safari gap*/
+    min-height: 100px;
+    max-height: 150px;
+}
+
+
+/* footer wave animation */
+
+.footer-wave {
+    background: linear-gradient(60deg, rgb(13, 110, 253) 0%, rgb(13, 110, 253) 100%);
+}
+
+.parallax > use {
+    animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
+}
+
+.parallax > use:nth-child(1) {
+    animation-delay: -2s;
+    animation-duration: 7s;
+}
+
+.parallax > use:nth-child(2) {
+    animation-delay: -3s;
+    animation-duration: 10s;
+}
+
+.parallax > use:nth-child(3) {
+    animation-delay: -4s;
+    animation-duration: 13s;
+}
+
+.parallax > use:nth-child(4) {
+    animation-delay: -5s;
+    animation-duration: 20s;
+}
+
+@keyframes move-forever {
+    0% {
+        transform: translate3d(-90px, 0, 0);
+    }
+    100% {
+        transform: translate3d(85px, 0, 0);
+    }
+}
+
+/*Shrinking for mobile*/
+@media (max-width: 768px) {
+    .waves {
+        height: 60px;
+        min-height: 60px;
+    }
+
+}
+
+/*end of footer wave animation*/

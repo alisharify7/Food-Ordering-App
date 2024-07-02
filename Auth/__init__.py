@@ -11,4 +11,4 @@ auth = Blueprint(
 
 
 import Auth.model
-# import FoodyAuth.views
+import Auth.views
