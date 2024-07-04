@@ -1,10 +1,39 @@
-from flask import render_template, request, flash, redirect, url_for, current_app
-
+from flask import render_template, request, flash, redirect, url_for, current_app, get_flashed_messages, make_response
 
 import Auth.form as AuthForm
 from Auth import auth
 from Auth.model import User
 from Auth.utils import login_user
+
+
+@auth.route("/notifications/", methods=["GET"])
+def notifications() -> str:
+    """Notification Messages view
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    This view return user all flash messages in a json
+
+
+    arguments:
+        None -- clear
+
+    return:
+        return all flash messages in a json format
+
+
+    - add no cacheing response of this view
+    """
+    flashes = []
+    messages = get_flashed_messages(with_categories=True)
+
+    for category, message in messages:
+        temp = {"message": message, "type": category}
+        flashes.append(temp)
+
+    response = make_response(flashes)
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 
 @auth.route("/user/logout/", methods=["GET"])
@@ -13,11 +42,15 @@ def logout_user() -> str:
     logout_user(request.user_object)
     return redirect(url_for('web.index_view'))
 
+
 @auth.route("/login/", methods=["GET"])
 def login_get() -> str:
     """render login page"""
     form = AuthForm.LoginForm()
+    flash(message='اعتبار سنجی نادرست می باشد', category='error')
+    flash(message='ورود غیر مجتاز می باشد', category='error')
     return render_template("login.html", form=form)
+
 
 @auth.route("/login/", methods=["POST"])
 def login_post() -> str:
@@ -48,4 +81,3 @@ def login_post() -> str:
     login_user(user_object=request.user_object)
 
     return f"Welcome Back {user_result.username}"
-
