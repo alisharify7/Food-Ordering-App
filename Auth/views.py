@@ -81,3 +81,11 @@ def login_post() -> str:
 
     flash(message=f" خوش آمدید {user_result.full_name()}کاربر گرامی ", category='success')
     return f"Welcome Back {user_result.username}"
+
+
+
+@auth.route("/reset-password/", methods=["GET"])
+def reset_password_get() -> str:
+    """render login page"""
+    form = AuthForm.ResetPasswordForm()
+    return render_template("reset_password.html", form=form)

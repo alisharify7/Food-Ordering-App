@@ -51,3 +51,30 @@ class LoginForm(FlaskForm):
                          })
 
 
+
+class ResetPasswordForm(FlaskForm):
+
+    @property
+    def action(self):
+        return flask.url_for('auth.reset_password_get')
+
+    username = StringField(
+        label="نام کاربری یا آدرس ایمیل یا کدملی یا شماره تماس",
+        validators=[
+            InputRequired(message="وارد کردن داده در این فیلد الزامی است"),
+            DataRequired(message="وارد کردن داده در این فیلد الزامی است "),
+        ],
+        render_kw={
+            "class": "form-control",
+            "placeholder": "username or email address or national code or phone number",
+            "dir": "ltr"
+        }
+    )
+
+    submit = SubmitField(validators=[InputRequired()],
+                         render_kw={
+                             "class": "btn btn-primary w-100 fs-5 my-3",
+                             "value": "بازنشانی گذرواژه"
+                         })
+
+

@@ -1,0 +1,15 @@
+.login-image-container{
+   background: linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.1),rgba(0,0,0,0.1), rgba(0,0,0,0.8)),url("/Storage/auth/media/image6.jpg");
+    background-position: center;
+    background-size: cover;
+    background-attachment: initial;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+.reset-password-image-container{
+   background: linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.1),rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url("/Storage/auth/media/image3.avif");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
