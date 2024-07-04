@@ -2,10 +2,43 @@ import pickle
 from threading import Thread
 from colorama import Fore
 from celery import shared_task
+
 from flask import current_app, url_for, request, render_template
 from flask_mail import Message
 
-from Core.extensions import ServerMail
+from Core.extensions import ServerMail, SmsServer
+
+
+
+def send_reset_password_sms(phone_number: str, token: str, user_object: object) -> bool:
+    """Send reset password sms to a user phone number
+    Args:
+        str: phone_number = phone nuber for sending reset password sms
+        str: token = reset password token
+        sqlalchemy: user_object =  user's object
+
+    Return:
+        bool: True if sms sent successfully
+        bool: False otherwise
+
+
+    """
+    params = [
+        {
+            "name": "EMPLOYEE_NAME",
+            "value": user_object.full_name()
+        },
+        {
+            "name": "EMPLOYEE_CODE",
+            "value": user_object.employee_code
+        }
+    ]
+    return SmsServer.send_verify_code(phone_number=phone_number, parameters=[params],
+                                      template_id=current_app.config.get('SMS_IR_TEMPLATES')['RESET-PASSWORD']
+                                      )
+
+def send_reset_password_email(email_address: str, token: str, user_object: object) -> bool:
+    ...
 
 
 def async_send_email_thread(app, msg):

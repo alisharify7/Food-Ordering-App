@@ -35,13 +35,14 @@ class Setting:
     DOMAIN = os.environ.get("SERVER", "")
     SERVER_NAME = DOMAIN
 
+    # SMS panel config
+    SMS_LINE_NUMBER = os.environ.get("SMS_LINE_NUMBER", "")
+    SMS_API_KEY = os.environ.get("SMS_API_KEY", "")
+
     # Paths
     BASE_DIR = Path(__file__).parent.parent.resolve()
     STORAGE_DIR = BASE_DIR / "Storage"
 
-
-    TICKET_ATTACHMENT_EXT = ["pdf", "png", "jpg", "zip"]
-    TICKET_ATTACHMENT_MAX_SIZE = 1024 * 1024 * 16
 
     MAX_CONTENT_LENGTH = 1024 * 1024 * 50  # global upload max size 50 MB
 
@@ -129,3 +130,37 @@ class Setting:
             }
         }
     )
+
+    SMS_IR_TEMPLATES = {
+        "WELCOMING-NEW-USERS": {
+            "ID": 000000, #<from sms.ir>
+            "VARIABLES": ["EMPLOYEE_NAME", "EMPLOYEE_CODE"]
+        },
+        "RESET-PASSWORD": {
+            "ID": 000000, #<from sms.ir>
+            "VARIABLES": ["NAME", "TEMP-PASS"]
+        },
+    }
+
+    # WELCOMING-NEW-USERS template content:
+    """
+    همکار محترم #WELCOMING-NEW-USERS#
+    ضمن خيرمقدم جهت ورود به شرکت، لطفا جهت دريافت کاربري و رمز عبور سامانه (رزرواسيون تغذيه) به واحد منابع انسانی شرکت مراجعه کنید
+    با تشکر
+
+    اتوماسیون هوشمند تغذیه
+    www.EXAMPLE.ir
+    """
+
+    ### RESET-PASSWORD template content:
+    """
+    کاربر گرامی #NAME#
+    رمز موقت حساب کاربری شما: #TEMP-PASS#
+
+    - اعتبار رمز موقت فوق 24 ساعت می باشد
+    - پس از وارد شدن به سیستم باید رمزعبور جدیدی برای حساب کاربری خود انتخاب کنید
+    
+    اتوماسیون هوشمند تغذیه
+    www.EXAMPLE.ir
+
+    """

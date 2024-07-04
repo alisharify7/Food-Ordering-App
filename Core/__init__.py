@@ -2,11 +2,13 @@ from flask import Flask
 from flask_captcha2 import FlaskCaptcha
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from Config import Setting
-from .extensions import db, ServerSession, \
-    ServerMigrate, ServerMail, babel, csrf
 from .utils import celery_init_app, userLocalSelector
 from .urls import urlpatterns
+
+from Config import Setting
+
+from .extensions import (db, ServerSession, ServerMigrate, ServerMail,
+                         babel, csrf, SmsServer)
 
 def create_app(setting: Setting) -> Flask:
     """
@@ -26,6 +28,7 @@ def create_app(setting: Setting) -> Flask:
     ServerMigrate.init_app(db=extensions.db, app=app)  # migrate
     celery = celery_init_app(app=app)  # celery
     ServerSession.init_app(app=app)  # session
+    app.extensions['sms'] = SmsServer
 
     # babel.init_app(  # babel
     #     app=app,
@@ -35,8 +38,8 @@ def create_app(setting: Setting) -> Flask:
 
     # captcha config
     ServerCaptchaMaster = FlaskCaptcha(app=app)
-    ServerCaptcha2 = ServerCaptchaMaster.getGoogleCaptcha2(name='g-captcha2', conf=Setting.GOOGLE_CAPTCHA_V2_CONF)
-    ServerCaptcha3 = ServerCaptchaMaster.getGoogleCaptcha3(name='g-captcha3', conf=Setting.GOOGLE_CAPTCHA_V3_CONF)
+    ServerCaptcha2 = ServerCaptchaMaster.getGoogleCaptcha2(name='captcha2', conf=Setting.GOOGLE_CAPTCHA_V2_CONF)
+    ServerCaptcha3 = ServerCaptchaMaster.getGoogleCaptcha3(name='captcha3', conf=Setting.GOOGLE_CAPTCHA_V3_CONF)
     app.extensions['master-captcha'] = ServerCaptchaMaster
     app.extensions['captcha2'] = ServerCaptcha2
     app.extensions['captcha3'] = ServerCaptcha3

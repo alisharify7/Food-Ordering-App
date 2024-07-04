@@ -59,7 +59,7 @@ class ResetPasswordForm(FlaskForm):
         return flask.url_for('auth.reset_password_get')
 
     username = StringField(
-        label="نام کاربری یا آدرس ایمیل یا کدملی یا شماره تماس",
+        label="نام کاربری یا کد ملی یا شماره تماس یا ایمیل",
         validators=[
             InputRequired(message="وارد کردن داده در این فیلد الزامی است"),
             DataRequired(message="وارد کردن داده در این فیلد الزامی است "),
