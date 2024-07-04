@@ -47,8 +47,6 @@ def logout_user() -> str:
 def login_get() -> str:
     """render login page"""
     form = AuthForm.LoginForm()
-    flash(message='اعتبار سنجی نادرست می باشد', category='error')
-    flash(message='ورود غیر مجتاز می باشد', category='error')
     return render_template("login.html", form=form)
 
 
@@ -57,11 +55,12 @@ def login_post() -> str:
     """login page -> post"""
 
     form = AuthForm.LoginForm()
-    if not current_app.extensions['captcha2'].is_verify():
+    if not current_app.extensions['captcha3'].is_verify():
+        flash(message="اعتبار سنجی کپچا نادرست می باشد", category="error")
         return render_template("login.html", form=form)
 
     if not form.validate():
-        flash("اعتبار سنجی درخواست نادرست می باشد")
+        flash(message="اعتبار سنجی درخواست نادرست می باشد", category='error')
         return render_template("login.html", form=form)
 
     db = current_app.extensions['sqlalchemy']
@@ -71,13 +70,14 @@ def login_post() -> str:
     user_result = db.session.execute(statement=query).scalar_one_or_none()
 
     if not user_result:
-        flash("اعتبار سنجی نادرست می باشد")
+        flash(message="اعتبار سنجی نادرست می باشد", category='error')
         return render_template("login.html", form=form)
 
     if not user_result.check_password(password):
-        flash("اعتبار سنجی نادرست می باشد")
+        flash(message="اعتبار سنجی نادرست می باشد", category='error')
         return render_template("login.html", form=form)
 
     login_user(user_object=request.user_object)
 
+    flash(message=f" خوش آمدید {user_result.full_name()}کاربر گرامی ", category='success')
     return f"Welcome Back {user_result.username}"

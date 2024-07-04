@@ -46,7 +46,7 @@ class LoginForm(FlaskForm):
 
     submit = SubmitField(validators=[InputRequired()],
                          render_kw={
-                             "class": "btn btn-primary w-100 fs-5 mt-4",
+                             "class": "btn btn-primary w-100 fs-5 ",
                              "value": "ورود"
                          })
 

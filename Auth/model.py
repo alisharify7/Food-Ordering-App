@@ -48,6 +48,9 @@ class User(BaseModel):
             "CreatedTime": self.created_time
         }
 
+    def full_name(self):
+        """concat first name and last name"""
+        return f"{self.first_name} {self.last_name}"
     @so.validates("username")
     def validate_username(self, key: str, value: str):
         if len(value) > self.USERNAME_LENGTH:
