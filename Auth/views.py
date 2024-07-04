@@ -1,5 +1,7 @@
 from flask import render_template, request, flash, redirect, url_for, current_app, get_flashed_messages, make_response
 
+import sqlalchemy as sa
+
 import Auth.form as AuthForm
 from Auth import auth
 from Auth.model import User
@@ -88,4 +90,39 @@ def login_post() -> str:
 def reset_password_get() -> str:
     """render login page"""
     form = AuthForm.ResetPasswordForm()
+    ctx = {'message': False}
+    return render_template("reset_password.html", form=form)
+@auth.route("/reset-password/", methods=["POST"])
+def reset_password_post() -> str:
+    """render login page"""
+    ctx = {'message': False}
+    form = AuthForm.ResetPasswordForm()
+
+    if not current_app.extensions['captcha3'].is_verify():
+        flash(message="اعتبار سنجی کپچا نادرست می باشد", category="error")
+        return render_template("reset_password.html", form=form, ctx=ctx)
+
+    if not form.validate():
+        flash(message="اعتبار سنجی درخواست نادرست می باشد", category='error')
+        return render_template("reset_password.html", form=form, ctx=ctx)
+
+    field_data = form.username.data
+
+    db = current_app.extensions['sqlalchemy']
+    query = db.session.select(User).filter(sa.or_(username=field_data, email_address=field_data, national_code=field_data, phone_number=field_data))
+
+    user_result = db.session.execute(statement=query).scalar_one_or_none()
+
+    ctx["message"] = "در صورتی که کاربری با مشخصات وارد شما در سیستم ثبت شده باشد <br> پیامک بازنشانی گذرواژه برای حساب مورد ارسال خواهد شد"
+    flash(message=ctx["message"], category='success')
+
+    if not user_result:
+        return render_template("reset_password.html", form=form, ctx=ctx)
+
+
+
+    return render_template("reset_password.html", form=form, ctx=ctx)
+
+
+
     return render_template("reset_password.html", form=form)
