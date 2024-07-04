@@ -1,6 +1,5 @@
 .image-container{
-    /*linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6),  rgba(0,0,0,0.8)), */
-   background: linear-gradient( rgba(0,0,0,0.3),  rgba(0,0,0,0.6)),url("/Storage/auth/media/image5.jpg");
+   background: url("/Storage/auth/media/image6.jpg");
     background-position: center;
     background-size: cover;
     background-attachment: initial;

@@ -16,6 +16,7 @@ def create_app(setting: Setting) -> Flask:
         __name__,
         template_folder="templates",
     )
+
     app.config.from_object(setting)
 
     # register extensions

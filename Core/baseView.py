@@ -2,8 +2,6 @@ import os
 from Core import app
 from flask import send_from_directory, current_app
 
-print("hi")
-print(app.debug)
 
 if app.debug:
     @app.get("/Storage/<path:path>/")

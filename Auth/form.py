@@ -1,3 +1,4 @@
+import flask
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectMultipleField, widgets
 from wtforms.validators import InputRequired, DataRequired, Length, EqualTo
@@ -7,7 +8,14 @@ class MultiCheckboxField(SelectMultipleField):
     option_widget = widgets.CheckboxInput()
 
 
+
+
 class LoginForm(FlaskForm):
+
+    @property
+    def action(self):
+        return flask.url_for('auth.login_get')
+
     username = StringField(
         label="نام کاربری",
         validators=[
@@ -43,25 +51,3 @@ class LoginForm(FlaskForm):
                          })
 
 
-class ChangePasswordForm(FlaskForm):
-    password = PasswordField(
-        validators=[
-            InputRequired(message="وارد کردن داده در این فیلد الزامی است"),
-            DataRequired(message="وارد کردن داده در این فیلد الزامی است "),
-            Length(min=6, max=64, message="حداقل طول گذرواژه باید 6 کاراکتر باشدو حداکثر 64 کاراکتر")
-        ]
-    )
-    password_repeat = PasswordField(
-        validators=[
-            InputRequired(message="وارد کردن داده در این فیلد الزامی است    "),
-            DataRequired(message="وارد کردن داده در این فیلد الزامی است "),
-            Length(min=6, max=64, message="حداقل طول گذرواژه باید 6 کاراکتر باشدو حداکثر 64 کاراکتر"),
-            EqualTo("password", message="گذرواژه ها یکسان نیستند")
-        ]
-    )
-
-    # reset_token = HiddenField(validators=[
-    #     DataRequired(),
-    #     InputRequired(),
-    # ])
-    submit = SubmitField()

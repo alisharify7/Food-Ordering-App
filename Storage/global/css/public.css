@@ -10,6 +10,11 @@
     --main-blue: #137fff;
     --main-blue-hover: #3797ff;
     --main-gray: #eee;
+    /*--main-blue-hover: #2b83ba;*/
+    /*--main-blue-dark: #154464;*/
+    --main-orange: #f1592a;
+    --main-orange-hover: #d2512a;
+    --main-gray: #eee;
 }
 
 @font-face {
@@ -52,8 +57,11 @@
 }
 
 .vh-100{
-    height: 100v;
-    }
+    height: 100vh;
+}
+.bg-blue{
+    background-color: var(--main-blue);
+}
 /*header*/
 
 .line1,
