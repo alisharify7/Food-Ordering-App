@@ -10,13 +10,12 @@ login page
 
 {% block content %}
 <section>
-    <div class="container-fluid bg-dark persian-font">
+    <div class="container-fluid bg-dark persian-font-light">
         <div class="row justify-content-center align-items-center">
             <div class="col-md-4 col-12 vh-100 d-flex justify-content-center align-items-center px-3 px-md-5">
-                <div class="card border-0 rounded-4 shadow">
+                <div class="card border-0 rounded-4 blue-shadow">
                     <div class="card-header bg-transparent rounded-4 border-0 border-top border-5 border-primary">
-                        <p class="h3 my-2 mt-3 text-center">خوش برگشتی <span class="text-danger">قهرمان</span> !</p>
-                        <p class="h6 text-muted text-center">با استفاده از نام کاربری و رمزعبوری که از طریق پیامک دریافت کردی وارد سیستم بشو !</p>
+                        <p class="h3 my-2 mt-3 text-center fw-100">اتوماسیون <b class="fw-bold border-bottom border-2 border-warning">تغذیه</b> کارمندان</p>
                     </div>
                     <div class="card-body">
                         <form id="loginForm" method="post" action="{{ form.action }}">
@@ -30,16 +29,16 @@ login page
                                 {{ form.password }}
                             </label>
                             <div class="d-flex justify-content-between align-items-center my-3">
-                                <a href="#" class="text-decoration-none text-primary">فراموشی رمز عبور؟</a>
                                 {{ form.remember_me }}
+                                <a href="#" class="text-decoration-none text-primary">فراموشی رمز عبور؟</a>
                             </div>
 
-                            <div>
-                                <button class="btn w-100  btn-primary  my-2 d-flex justify-content-center align-items-center">ورود با حساب کاربری گوگل<i class="bi bi-google mx-2 fs-5"></i></button>
-                                <button class="btn w-100  btn-primary  my-2 d-flex justify-content-center align-items-center"> ورود با حساب کاربری فیسبوک<i class="bi bi-facebook mx-2 fs-5 "></i></button>
-                            </div>
+{#                            <div>#}
+{#                                <button class="btn w-100  btn-primary  my-2 d-flex justify-content-center align-items-center">ورود با حساب کاربری گوگل<i class="bi bi-google mx-2 fs-5"></i></button>#}
+{#                                <button class="btn w-100  btn-primary  my-2 d-flex justify-content-center align-items-center"> ورود با حساب کاربری فیسبوک<i class="bi bi-facebook mx-2 fs-5 "></i></button>#}
+{#                            </div>#}
 
-                             <div class="captcha-container d-flex justify-content-center align-items-center mt-3">
+                             <div class="captcha-container d-flex justify-content-center align-items-center">
                                 {{ captcha.render_captcha(
                                     model_name='g-captcha3',
                                     BtnText=form.submit.render_kw.get('value'),
@@ -49,8 +48,9 @@ login page
                             </div>
                         </form>
                     </div>
-                    <div class="card-footer bg-transparent border-0">
-                        <a href="#" class="text-decoration-none text-primary text-center mb-2 d-block"> حساب کاربری ندارید؟</a>
+                    <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                        <a href="#" class="text-decoration-none text-primary text-center"> حساب کاربری ندارید؟</a>
+                        <a href="#" class=" text-muted text-center ">راهنمای سامانه</a>
                     </div>
                 </div>
             </div>

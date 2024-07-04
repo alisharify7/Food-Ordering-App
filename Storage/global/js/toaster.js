@@ -25,7 +25,7 @@ const options = {
 const notify = new Notyf(options)
 
 function push_notification(message = '', type = 'error') {
-    const message_html = `<p dir="ltr" class="my-1 mx-2">${message}</p>`;
+    const message_html = `<p dir="ltr" class="my-1 mx-2 persian-font-bold">${message}</p>`;
     notify.open({type: type, message: message_html, dismissible: true});
 }
 

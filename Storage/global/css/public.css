@@ -18,10 +18,19 @@
 }
 
 @font-face {
-    font-family: "persianFont";
-    src: url("/Storage/font/shabnam-font-v2.4.0/Shabnam-Bold.woff") format("truetype");
+    font-family: "persianFontLight";
+    src: url("/Storage/font/shabnam-font-v2.4.0/Shabnam-Light.woff") format("truetype");
     /*src: url("/Storage/font/vazir-font-v18.0.0/Vazir-Bold.woff") format("truetype");*/
     font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: "persianFontBold";
+    src: url("/Storage/font/shabnam-font-v2.4.0/Shabnam-bold.woff") format("truetype");
+    /*src: url("/Storage/font/vazir-font-v18.0.0/Vazir-Bold.woff") format("truetype");*/
+    font-weight: bold;
     font-style: normal;
 }
 
@@ -38,10 +47,18 @@
 }
 
 
-.persian-font {
-    font-family: persianFont, Ubuntu, sans-serif;
+.persian-font-light {
+    font-family: persianFontLight, Ubuntu, sans-serif;
 }
-
+.persian-font-bold {
+    font-family: persianFontBold, Ubuntu, sans-serif;
+}
+.english-fond {
+    font-family: persianFontBold, Ubuntu, sans-serif;
+}
+.blue-shadow {
+    box-shadow: 0px 0px 45px -7px #419dd7;
+}
 .fs-large {
     font-size: 1.3rem;
     line-height: 1.5 !important;
