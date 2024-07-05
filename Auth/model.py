@@ -3,6 +3,7 @@ import sqlalchemy as sa
 import sqlalchemy.orm as so
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from flask import current_app
 from Core.model import BaseModel
 
 
@@ -12,6 +13,43 @@ class WorkSection(BaseModel):
     name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=False, unique=False)
     description: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False, unique=False)
 
+    # default work station for site admin is admin_website
+
+
+
+class UserRole(BaseModel):
+    __tablename__ = BaseModel.SetTableName("user_roles")
+    USER = 1
+    ADMIN = 2
+    ROLES_CHOICES = (
+        (USER, "USER"),
+        (ADMIN, "ADMIN"),
+    )
+
+    name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=False, unique=True)
+
+    @classmethod
+    def init_roles(cls):
+        db = current_app.extensions['sqlalchemy']
+
+        for role_id, role_name in cls.ROLES_CHOICES:
+            t = cls(name=role_name, id=role_id)
+            t.set_public_key()
+            db.session.add(t)
+
+        db.session.commit()
+
+    def __str__(self):
+        return f"<UserRole {self.id} - {self.name}>"
+
+
+
+User2Role = sa.Table(
+        BaseModel.SetTableName("users_2_roles"),
+        BaseModel.metadata,
+  sa.Column("role_id", sa.Integer, sa.ForeignKey(BaseModel.SetTableName("user_roles")+".id", ondelete="CASCADE"), unique=False, nullable=False),
+        sa.Column("user_id", sa.Integer, sa.ForeignKey(BaseModel.SetTableName("users")+".id", ondelete="CASCADE"), unique=False, nullable=False),
+)
 
 
 class User(BaseModel):
@@ -34,9 +72,13 @@ class User(BaseModel):
     email_address: so.Mapped[str] = so.mapped_column(sa.String(EMAIL_LENGTH), nullable=True, unique=False)
     max_try_number: so.Mapped[int] = so.mapped_column(sa.Integer, default=10, unique=False, nullable=False)
     try_number: so.Mapped[int] = so.mapped_column(sa.Integer, default=0, unique=False, nullable=False)
-    last_login_time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, onupdate=datetime.datetime.utcnow, default=datetime.datetime.utcnow)
+    roles = so.relationship(UserRole, secondary=User2Role, backref="users")
+
+    last_login_time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, onupdate=datetime.datetime.utcnow,
+                                                               default=datetime.datetime.utcnow)
     work_section_id: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey(WorkSection.id, ondelete='SET NULL'),
                                                        nullable=False, unique=False)
+
 
     def to_dict(self):
         return {
@@ -51,13 +93,14 @@ class User(BaseModel):
     def full_name(self):
         """concat first name and last name"""
         return f"{self.first_name} {self.last_name}"
+
     @so.validates("username")
     def validate_username(self, key: str, value: str):
         if len(value) > self.USERNAME_LENGTH:
             raise ValueError("username is to long, valid length is %d" % self.USERNAME_LENGTH)
         return value
 
-    def set_username(self, username:str) -> bool:
+    def set_username(self, username: str) -> bool:
         """ Set Unique Username for admin """
 
         if self.query.filter_by(username=username).first():
@@ -69,12 +112,12 @@ class User(BaseModel):
                 return False
 
             return True
-    def set_password(self, password:str) -> None:
+    def set_password(self, password: str) -> None:
         """Set Hash Password For admin"""
         self.password = generate_password_hash(password)
 
 
-    def check_password(self, password:str) -> None:
+    def check_password(self, password: str) -> None:
         """Check Password with Hashed Password in db"""
         return check_password_hash(self.Password, password)
 
@@ -85,7 +128,7 @@ class User(BaseModel):
             raise ValueError("email address is to long, valid length is %d" % self.EMAIL_LENGTH)
         return value
 
-    def set_email_address(self, email:str) -> None:
+    def set_email_address(self, email: str) -> None:
         """Set Unique Email for admin"""
         if self.query.filter_by(email_address=email).first():
             return False
@@ -104,7 +147,7 @@ class User(BaseModel):
             raise ValueError("phone number is to long, valid length is %d" % self.PHONE_NUMBER_LENGTH)
         return value
 
-    def set_phone_number(self, phone:str) -> None:
+    def set_phone_number(self, phone: str) -> None:
         """ Set Unique Phone For admin  """
         if self.query.filter_by(phone_number=phone).first():
             return False
@@ -121,6 +164,9 @@ class User(BaseModel):
 
     def set_last_login(self):
         self.last_login_time = datetime.datetime.utcnow()
+
+    def __str__(self):
+        return f"<User {self.id}-{self.username}-{self.first_name()}>"
 
     logs = so.relationship("UserLog", backref='user', lazy='dynamic')
 

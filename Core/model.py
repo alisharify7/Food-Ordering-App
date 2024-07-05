@@ -27,7 +27,7 @@ class BaseModel(db.Model):
     #     # 'mysql_collate': 'utf8_persian_ci'
     # }
 
-    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    id: so.Mapped[int] = so.mapped_column(sa.INTEGER, primary_key=True)
     @staticmethod
     def SetTableName(name):
         """Use This Method For setting a table name"""
@@ -66,24 +66,23 @@ class BaseModel(db.Model):
                                                                               onupdate=datetime.datetime.now,
                                                                               default=datetime.datetime.now)
 
-
-class SettingAttributeType(enum.Enum):
-    json = 1
-    string = 2
-    integer = 3
-    float = 4
-
-
-class SettingAttribute(BaseModel):
-    __tablename__ = BaseModel.SetTableName("setting_attribute")
-
-    name: so.Mapped[str] = so.mapped_column(sa.String(128), nullable=False, unique=True)
-    description: so.Mapped[str] = so.mapped_column(sa.String(512), nullable=True, unique=False)
-
-    value = so.relationship("SettingAttributeValue", backref="setting_attribute", lazy="dynamic")
-
-class SettingAttributeValue(BaseModel):
-    __tablename__ = BaseModel.SetTableName("setting_attribute_value")
-
-    value: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False, unique=False)
-    setting_attribute_id: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey(SettingAttribute.id, ondelete='SET NULL'), nullable=True, unique=True) # one to one
+#
+# class SettingAttributeType(enum.Enum):
+#     json = 1
+#     string = 2
+#     integer = 3
+#     float = 4
+#
+#
+# class SettingAttribute(BaseModel):
+#     __tablename__ = BaseModel.SetTableName("setting_attribute")
+#
+#     name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=False, unique=True)
+#     value = so.relationship("SettingAttributeValue", backref="setting_attribute", lazy="dynamic")
+#
+#
+# class SettingAttributesValue(BaseModel):
+#     __tablename__ = BaseModel.SetTableName("setting_attribute_value")
+#
+#     value: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False, unique=False)
+#     setting_attribute_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(SettingAttribute.id, ondelete='SET NULL'), nullable=True, unique=True) # one to one
