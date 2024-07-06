@@ -21,6 +21,7 @@ executing==2.0.1
 Flask==3.0.3
 flask-babel==4.0.0
 Flask-captcha2==3.0.4
+Flask-Login==0.6.3
 Flask-Mail==0.10.0
 Flask-Migrate==4.0.7
 Flask-Session==0.8.0
