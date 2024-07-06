@@ -44,7 +44,7 @@ class LoginForm(FlaskForm):
 
     remember_me = MultiCheckboxField(choices=['مرا به خاطر داشته باش'], render_kw={"class": "list-unstyled m-0 text-muted"})
 
-    submit = SubmitField(validators=[InputRequired()],
+    submit = SubmitField(
                          render_kw={
                              "class": "btn btn-primary w-100 fs-5 ",
                              "value": "ورود"

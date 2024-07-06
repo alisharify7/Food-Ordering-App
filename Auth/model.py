@@ -102,11 +102,6 @@ class User(BaseModel, UserMixin):
         """concat first name and last name"""
         return f"{self.first_name} {self.last_name}"
 
-    @so.validates("username")
-    def validate_username(self, key: str, value: str):
-        if len(value) > self.USERNAME_LENGTH:
-            raise ValueError("username is to long, valid length is %d" % self.USERNAME_LENGTH)
-        return value
 
     def set_username(self, username: str) -> bool:
         """ Set Unique Username for admin """
@@ -127,14 +122,8 @@ class User(BaseModel, UserMixin):
 
     def check_password(self, password: str) -> None:
         """Check Password with Hashed Password in db"""
-        return check_password_hash(self.Password, password)
+        return check_password_hash(self.password, password)
 
-
-    @so.validates("email_address")
-    def validate_email_address(self, key: str, value: str):
-        if len(value) > self.EMAIL_LENGTH:
-            raise ValueError("email address is to long, valid length is %d" % self.EMAIL_LENGTH)
-        return value
 
     def set_email_address(self, email: str) -> None:
         """Set Unique Email for admin"""
@@ -147,13 +136,6 @@ class User(BaseModel, UserMixin):
                 return False
 
             return True
-
-
-    @so.validates("phone_number")
-    def validate_phone_number(self, key: str, value: str):
-        if len(value) > self.PHONE_NUMBER_LENGTH:
-            raise ValueError("phone number is to long, valid length is %d" % self.PHONE_NUMBER_LENGTH)
-        return value
 
     def set_phone_number(self, phone: str) -> None:
         """ Set Unique Phone For admin  """
@@ -174,13 +156,7 @@ class User(BaseModel, UserMixin):
         self.last_login_time = datetime.datetime.utcnow()
 
     def __str__(self):
-        return f"<User {self.id}-{self.username}-{self.first_name()}>"
-
-
-    @property
-    def is_active(self):
-        return self.is_active
-
+        return f"<User {self.id}-{self.username}-{self.full_name()}>"
 
 
 

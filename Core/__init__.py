@@ -8,7 +8,7 @@ from .urls import urlpatterns
 from Config import Setting
 
 from .extensions import (db, ServerSession, ServerMigrate, ServerMail,
-                         babel, csrf, SmsServer, login_manager)
+                         babel, csrf, SmsServer, login_manager, debugger)
 
 
 from Auth.utils import load_user
@@ -33,6 +33,7 @@ def create_app(setting: Setting) -> Flask:
     celery = celery_init_app(app=app)  # celery
     ServerSession.init_app(app=app)  # session
     login_manager.init_app(app=app) # flask-login
+    debugger.init_app(app) # flask_debugger tol
     app.extensions['sms'] = SmsServer
 
 
