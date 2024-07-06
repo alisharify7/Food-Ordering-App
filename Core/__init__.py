@@ -8,7 +8,10 @@ from .urls import urlpatterns
 from Config import Setting
 
 from .extensions import (db, ServerSession, ServerMigrate, ServerMail,
-                         babel, csrf, SmsServer)
+                         babel, csrf, SmsServer, login_manager)
+
+
+from Auth.utils import load_user
 
 def create_app(setting: Setting) -> Flask:
     """
@@ -19,6 +22,7 @@ def create_app(setting: Setting) -> Flask:
         template_folder="templates",
     )
 
+
     app.config.from_object(setting)
 
     # register extensions
@@ -28,7 +32,15 @@ def create_app(setting: Setting) -> Flask:
     ServerMigrate.init_app(db=extensions.db, app=app)  # migrate
     celery = celery_init_app(app=app)  # celery
     ServerSession.init_app(app=app)  # session
+    login_manager.init_app(app=app) # flask-login
     app.extensions['sms'] = SmsServer
+
+
+    login_manager.user_loader(load_user)
+    login_manager.login_message_category = "error"
+    login_manager.login_message = "برای دسترسی به بخش مورد نظر ورود به حساب کاربری الزامی می باشد"
+    login_manager.login_view = "auth.login_get"
+
 
     # babel.init_app(  # babel
     #     app=app,

@@ -1,9 +1,10 @@
 from flask import render_template, request, flash, redirect, url_for, current_app, get_flashed_messages, make_response
 
 import sqlalchemy as sa
+from flask_login import login_user as login_user_flask_login, logout_user as logout_user_flask_login
 
-import Auth.form as AuthForm
 from Auth import auth
+import Auth.form as AuthForm
 from Auth.model import User
 from Auth.utils import login_user
 
@@ -41,7 +42,7 @@ def notifications() -> str:
 @auth.route("/user/logout/", methods=["GET"])
 def logout_user() -> str:
     """logout user view"""
-    logout_user(request.user_object)
+    logout_user_flask_login()
     return redirect(url_for('web.index_view'))
 
 
@@ -79,11 +80,10 @@ def login_post() -> str:
         flash(message="اعتبار سنجی نادرست می باشد", category='error')
         return render_template("login.html", form=form)
 
-    login_user(user_object=request.user_object)
+    login_user_flask_login(user=request.user_object)
 
     flash(message=f" خوش آمدید {user_result.full_name()}کاربر گرامی ", category='success')
-    return f"Welcome Back {user_result.username}"
-
+    return redirect(url_for("user.index_get"))
 
 
 @auth.route("/reset-password/", methods=["GET"])
@@ -92,6 +92,8 @@ def reset_password_get() -> str:
     form = AuthForm.ResetPasswordForm()
     ctx = {'message': False}
     return render_template("reset_password.html", form=form)
+
+
 @auth.route("/reset-password/", methods=["POST"])
 def reset_password_post() -> str:
     """render login page"""

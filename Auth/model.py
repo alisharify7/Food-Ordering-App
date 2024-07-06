@@ -7,7 +7,7 @@ import sqlalchemy.orm as so
 
 from flask import current_app
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_login import UserMixin
 # application
 from Core.model import BaseModel
 
@@ -58,7 +58,7 @@ User2Role = sa.Table(
 )
 
 
-class User(BaseModel):
+class User(BaseModel, UserMixin):
     __tablename__ = BaseModel.SetTableName("users")
     USERNAME_LENGTH = 256
     PHONE_NUMBER_LENGTH = 11
@@ -84,6 +84,8 @@ class User(BaseModel):
                                                                default=datetime.datetime.utcnow)
     work_section_id: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey(WorkSection.id, ondelete='SET NULL'),
                                                        nullable=False, unique=False)
+
+    logs = so.relationship("UserLog", backref='user', lazy='dynamic')
 
 
     def to_dict(self):
@@ -174,7 +176,13 @@ class User(BaseModel):
     def __str__(self):
         return f"<User {self.id}-{self.username}-{self.first_name()}>"
 
-    logs = so.relationship("UserLog", backref='user', lazy='dynamic')
+
+    @property
+    def is_active(self):
+        return self.is_active
+
+
+
 
 
 class UserLog(BaseModel):
