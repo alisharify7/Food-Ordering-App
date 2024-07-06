@@ -1,9 +1,14 @@
+# build in
 import datetime
+
+# lib
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask import current_app
+from werkzeug.security import generate_password_hash, check_password_hash
+
+# application
 from Core.model import BaseModel
 
 
@@ -11,7 +16,7 @@ class WorkSection(BaseModel):
     __tablename__ = BaseModel.SetTableName("work_section")
 
     name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=False, unique=False)
-    description: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False, unique=False)
+    description: so.Mapped[str] = so.mapped_column(sa.Text, nullable=True, unique=False)
 
     # default work station for site admin is admin_website
 
@@ -31,11 +36,12 @@ class UserRole(BaseModel):
     @classmethod
     def init_roles(cls):
         db = current_app.extensions['sqlalchemy']
-
         for role_id, role_name in cls.ROLES_CHOICES:
-            t = cls(name=role_name, id=role_id)
-            t.set_public_key()
-            db.session.add(t)
+            query = db.session.select(UserRole).filter_by(id=role_id)
+            if not (db.session.execute(query).scalar_one_or_none()):
+                t = cls(name=role_name, id=role_id)
+                t.set_public_key()
+                db.session.add(t)
 
         db.session.commit()
 
