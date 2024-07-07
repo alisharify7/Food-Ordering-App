@@ -32,8 +32,7 @@ class Setting:
     DEBUG = APP_DEBUG_STATUS
     FLASK_DEBUG = APP_DEBUG_STATUS
 
-    DOMAIN = os.environ.get("SERVER", "")
-    SERVER_NAME = DOMAIN
+    SERVER_NAME = os.environ.get("SERVER_NAME", "")
 
     # SMS panel config
     SMS_LINE_NUMBER = os.environ.get("SMS_LINE_NUMBER", "")
@@ -42,6 +41,10 @@ class Setting:
     # Paths
     BASE_DIR = Path(__file__).parent.parent.resolve()
     STORAGE_DIR = BASE_DIR / "Storage"
+    make_sure_directory_exists(STORAGE_DIR)
+
+    USERS_AVATARS = STORAGE_DIR / 'avatars'
+    make_sure_directory_exists(USERS_AVATARS)
 
 
     MAX_CONTENT_LENGTH = 1024 * 1024 * 50  # global upload max size 50 MB
@@ -73,8 +76,14 @@ class Setting:
     SESSION_REDIS = redis.Redis.from_url(os.environ.get("REDIS_SESSION_URI")) if os.environ.get("REDIS_SESSION_URI",
                                                                                                 None) else REDIS_DEFAULT_INTERFACE
 
-    # Recaptcha Config <Flask-captcha2>
+    # flask debugger config
+    # https://flask-debugtoolbar.readthedocs.io/en/0.15.1/index.html
+    DEBUG_TB_ENABLED = DEBUG
+    DEBUG_TB_PROFILER_ENABLED = DEBUG
+    DEBUG_TB_TEMPLATE_EDITOR_ENABLED = DEBUG
 
+
+    # Recaptcha Config <Flask-captcha2>
     GOOGLE_CAPTCHA_V2_CONF = {
         "CAPTCHA_PRIVATE_KEY": os.environ.get("CAPTCHA_PRIVATE_KEY_V2", ""),
         "CAPTCHA_PUBLIC_KEY": os.environ.get("CAPTCHA_PUBLIC_KEY_V2", ""),
@@ -86,7 +95,7 @@ class Setting:
     GOOGLE_CAPTCHA_V3_CONF = {
         "CAPTCHA_PRIVATE_KEY": os.environ.get("CAPTCHA_PRIVATE_KEY_V3", ""),
         "CAPTCHA_PUBLIC_KEY": os.environ.get("CAPTCHA_PUBLIC_KEY_V3", ""),
-        "CAPTCHA_ENABLED": os.environ.get('CAPTCHA_ENABLED_V3', str(DEBUG)) == 'True',
+        "CAPTCHA_ENABLED": os.environ.get('CAPTCHA_ENABLED_V3',str(DEBUG)) == 'True',
         "CAPTCHA_SCORE": float(os.environ.get('CAPTCHA_SCORE_V3', 0.5)) if os.environ.get('CAPTCHA_SCORE_V3',
                                                                                           '0.5').isdigit() else os.environ.get(
             'CAPTCHA_SCORE_V3', 0.5),

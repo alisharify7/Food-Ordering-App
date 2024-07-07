@@ -1,0 +1,24 @@
+{% extends 'user/base.html' %}
+
+{% block title %} پرووفایل کاربری {% endblock title %}
+{% block style %}{% endblock style %}
+
+{% block content %}
+    <div class="col-12 d-flex flex-column justify-content-center align-items-center">
+        <img class="rounded-circle p-1 border border-primary shadow border-1" style="width: 340px" src="{{ current_user.avatar }}">
+        <p class="m-0 mt-2">{{ current_user.username }}</p>
+        <small>{{ current_user.created_time }}</small>
+        <small>{{ current_user.shamsi(current_user.created_time) }}</small>
+    </div>
+
+    <div class="col-md-6 col-12 card">
+        <div class="card-header">اطلاعت کارمندی</div>
+        <div class="card-body">
+
+        </div>
+        <div class="card-footer"></div>
+    </div>
+
+
+{% endblock content %}
+{% block script %}{% endblock script %}

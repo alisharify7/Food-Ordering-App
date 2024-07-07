@@ -1,9 +1,8 @@
 import uuid
-import enum
-import json
 import datetime
 from typing import Optional
 
+import khayyam
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from flask import current_app
@@ -66,7 +65,15 @@ class BaseModel(db.Model):
                                                                               onupdate=datetime.datetime.now,
                                                                               default=datetime.datetime.now)
 
-#
+
+    @staticmethod
+    def shamsi(obj):
+        if isinstance(obj, datetime.datetime):
+            c = khayyam.JalaliDatetime(obj)
+            return f"{str(c.date())} {c.time()}"
+        return obj
+
+
 # class SettingAttributeType(enum.Enum):
 #     json = 1
 #     string = 2

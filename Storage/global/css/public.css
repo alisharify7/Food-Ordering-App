@@ -48,13 +48,13 @@
 
 
 .persian-font-light {
-    font-family: persianFontLight, Ubuntu, sans-serif;
+    font-family: persianFontLight, Ubuntu, sans-serif !important;
 }
 .persian-font-bold {
-    font-family: persianFontBold, Ubuntu, sans-serif;
+    font-family: persianFontBold, Ubuntu, sans-serif !important;;
 }
 .english-fond {
-    font-family: persianFontBold, Ubuntu, sans-serif;
+    font-family: persianFontBold, Ubuntu, sans-serif !important;;
 }
 .blue-shadow {
     box-shadow: 0px 0px 45px -7px #419dd7;

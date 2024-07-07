@@ -1,15 +1,30 @@
-<ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
+<ul class="nav sidebar-menu flex-column pe-0 " style="height: 90vh" data-lte-toggle="treeview" role="menu" data-accordion="false" dir="rtl">
 
-    <li class="nav-header">EXAMPLES</li>
+    <li class="nav-header">خانه</li>
     <li class="nav-item">
-        <a href="#" class="nav-link active"> <i class="nav-icon bi bi-speedometer"></i>
-            <p>
-                Dashboard
-            </p>
+        <a href="{{ url_for('user.index_get') }}" class="nav-link {{ 'active' if request.path == url_for('user.index_get') }}"> <i class="nav-icon bi bi-speedometer"></i>
+            <p>داشبورد</p>
+        </a>
+    </li>
+    <li class="nav-header">رزرو</li>
+    <li class="nav-item">
+        <a href="{{ url_for('user.order_get') }}" class="nav-link {{ 'active' if request.path == url_for('user.order_get') }}"> <i class="nav-icon bi bi-bag-plus"></i>
+            <p>سفارش غذا</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link "> <i class="nav-icon bi bi-clock-history"></i>
+            <p>سابقه سفارشات</p>
+        </a>
+    </li>
+    <li class="nav-header">کاربر</li>
+    <li class="nav-item">
+        <a href="{{ url_for('user.profile_get') }}" class="nav-link {{ 'active' if request.path == url_for('user.profile_get') }}"> <i class="nav-icon bi bi-person"></i>
+            <p>پروفایل</p>
         </a>
     </li>
 
-<li class="nav-item"> <a href="./docs/introduction.html" class="nav-link"> <i class="nav-icon bi bi-download"></i>
+<li class="nav-item mt-auto"> <a href="./docs/introduction.html" class="nav-link"> <i class="nav-icon bi bi-download"></i>
     <p>Installation</p>
 </a> </li>
 

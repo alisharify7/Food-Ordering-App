@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, current_app
 
 
 auth = Blueprint(
@@ -10,5 +10,6 @@ auth = Blueprint(
 )
 
 
-import Auth.model
 import Auth.views
+import Auth.model
+

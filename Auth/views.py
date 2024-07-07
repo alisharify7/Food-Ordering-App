@@ -69,7 +69,7 @@ def login_post() -> str:
     username, password = form.username.data, form.password.data
 
     query = db.select(User).filter_by(username=username)
-    user_result:User = db.session.execute(query).scalar_one_or_none()
+    user_result = db.session.execute(query).scalar_one_or_none()
 
     if not user_result:
         flash(message="اعتبار سنجی نادرست می باشد", category='error')
@@ -79,7 +79,7 @@ def login_post() -> str:
         flash(message="اعتبار سنجی نادرست می باشد", category='error')
         return render_template("login.html", form=form)
 
-    flash(message=f" خوش آمدید {user_result.full_name()}کاربر گرامی ", category='success')
+    flash(message=f" کاربر گرامی خوش آمدید ", category='success')
     login_user_flask_login(user=user_result)
 
     return redirect(url_for("user.index_get"))

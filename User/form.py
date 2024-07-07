@@ -31,3 +31,19 @@ class UserPanelEmailForm(FlaskForm):
             "class":"btn btn-success my-2 w-100"
         }
     )
+
+
+class UserProfileForm(FlaskForm):
+    username = StringField(render_kw={"disabled: true"})
+    password = StringField()
+    avatar = ""
+    first_name = StringField()
+    last_name = StringField()
+    phone_number = StringField()
+    national_code = StringField()
+    employee_code = StringField()
+    status = StringField()
+    email_address = StringField()
+    last_login_time = StringField()
+    work_section = StringField()
+
