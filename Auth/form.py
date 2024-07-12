@@ -1,13 +1,12 @@
 import flask
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectMultipleField, widgets
-from wtforms.validators import InputRequired, DataRequired, Length, EqualTo
+from wtforms.validators import InputRequired, DataRequired
+
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
-
-
 
 
 class LoginForm(FlaskForm):
@@ -42,14 +41,14 @@ class LoginForm(FlaskForm):
         }
     )
 
-    remember_me = MultiCheckboxField(choices=['مرا به خاطر داشته باش'], render_kw={"class": "list-unstyled m-0 text-muted"})
+    remember_me = MultiCheckboxField(choices=['مرا به خاطر داشته باش'],
+                                     render_kw={"class": "list-unstyled m-0 text-muted"})
 
     submit = SubmitField(
-                         render_kw={
-                             "class": "btn btn-primary w-100 fs-5 ",
-                             "value": "ورود"
-                         })
-
+        render_kw={
+            "class": "btn btn-primary w-100 fs-5 ",
+            "value": "ورود"
+        })
 
 
 class ResetPasswordForm(FlaskForm):
@@ -76,5 +75,3 @@ class ResetPasswordForm(FlaskForm):
                              "class": "btn btn-primary w-100 fs-5 my-3",
                              "value": "بازنشانی گذرواژه"
                          })
-
-

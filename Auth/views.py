@@ -1,13 +1,12 @@
-from flask import render_template, request, flash, redirect, url_for, get_flashed_messages, make_response, current_app
-
 import sqlalchemy as sa
+from flask import render_template, flash, redirect, url_for, get_flashed_messages, make_response, current_app
 from flask_login import login_user as login_user_flask_login, logout_user as logout_user_flask_login
 
-from Auth import auth
 import Auth.form as AuthForm
+from Auth import auth
 from Auth.model import User
 from Core.extensions import db
-
+from Core.utils import get_next_page
 
 @auth.route("/notifications/", methods=["GET"])
 def notifications() -> str:
@@ -63,13 +62,14 @@ def login_post() -> str:
         return render_template("login.html", form=form)
 
     if not form.validate():
-        flash(message="اعتبار سنجی درخواست نادرست می باشد", category='error') # TODO: add form errors to html
+        flash(message="اعتبار سنجی درخواست نادرست می باشد", category='error')  # TODO: add form errors to html
+        print(form.errors)
         return render_template("login.html", form=form)
 
-    username, password = form.username.data, form.password.data
+    remember_me, username, password = bool(form.remember_me.data), form.username.data, form.password.data
 
     query = db.select(User).filter_by(username=username)
-    user_result = db.session.execute(query).scalar_one_or_none()
+    user_result = db.session.execute(query).unique().scalar_one_or_none()
 
     if not user_result:
         flash(message="اعتبار سنجی نادرست می باشد", category='error')
@@ -79,10 +79,18 @@ def login_post() -> str:
         flash(message="اعتبار سنجی نادرست می باشد", category='error')
         return render_template("login.html", form=form)
 
-    flash(message=f" کاربر گرامی خوش آمدید ", category='success')
-    login_user_flask_login(user=user_result)
+    if not any(user_result.roles):
+        flash(message="کاربر مورد نظر دسترسی مورد نیاز را ندارد", category='error')
+        return render_template("login.html", form=form)
 
-    return redirect(url_for("user.index_get"))
+    if not user_result.status:
+        flash(message="حساب کاربری مورد نظر غیرفعال می باشد", category='error')
+        return render_template("login.html", form=form)
+
+
+    login_user_flask_login(user=user_result, remember=remember_me)
+    next_page = get_next_page(fall_back_url=url_for("user.index_get"))
+    return redirect(next_page)
 
 
 @auth.route("/reset-password/", methods=["GET"])
@@ -110,7 +118,8 @@ def reset_password_post() -> str:
     field_data = form.username.data
 
     db = current_app.extensions['sqlalchemy']
-    query = db.session.select(User).filter(sa.or_(username=field_data, email_address=field_data, national_code=field_data, phone_number=field_data))
+    query = db.session.select(User).filter(
+        sa.or_(username=field_data, email_address=field_data, national_code=field_data, phone_number=field_data))
 
     user_result = db.session.execute(statement=query).scalar_one_or_none()
 
@@ -120,10 +129,6 @@ def reset_password_post() -> str:
     if not user_result:
         return render_template("reset_password.html", form=form, ctx=ctx)
 
-
-
     return render_template("reset_password.html", form=form, ctx=ctx)
-
-
 
     return render_template("reset_password.html", form=form)

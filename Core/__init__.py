@@ -38,9 +38,10 @@ def create_app(setting: Setting) -> Flask:
 
 
     login_manager.user_loader(load_user)
-    login_manager.login_message_category = "error"
     login_manager.login_message = "برای دسترسی به بخش مورد نظر ورود به حساب کاربری الزامی می باشد"
+    login_manager.login_message_category = "error"
     login_manager.login_view = "auth.login_get"
+
 
 
     # babel.init_app(  # babel
@@ -58,9 +59,6 @@ def create_app(setting: Setting) -> Flask:
     app.extensions['captcha3'] = ServerCaptcha3
 
     # Register apps:
-    from .middlewares import blp
-    app.register_blueprint(blp, url_prefix='/')
-
     for each in urlpatterns:
         app.register_blueprint(each['obj'], url_prefix=each['prefix'])
 

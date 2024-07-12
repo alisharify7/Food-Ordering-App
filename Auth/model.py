@@ -1,13 +1,14 @@
 # build in
 import datetime
+import typing
 
 # lib
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-
 from flask import current_app
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+
 # application
 from Core.model import BaseModel
 
@@ -44,6 +45,7 @@ class WorkSection(BaseModel):
 
         db.session.commit()
 
+
 class UserRole(BaseModel):
     __tablename__ = BaseModel.SetTableName("user_roles")
     USER = 1
@@ -70,13 +72,16 @@ class UserRole(BaseModel):
     def __str__(self):
         return f"<UserRole {self.id} - {self.name}>"
 
-
+    def __repr__(self):
+        return self.__str__()
 
 User2Role = sa.Table(
-        BaseModel.SetTableName("users_2_roles"),
-        BaseModel.metadata,
-  sa.Column("role_id", sa.Integer, sa.ForeignKey(BaseModel.SetTableName("user_roles")+".id", ondelete="CASCADE"), unique=False, nullable=False),
-        sa.Column("user_id", sa.Integer, sa.ForeignKey(BaseModel.SetTableName("users")+".id", ondelete="CASCADE"), unique=False, nullable=False),
+    BaseModel.SetTableName("users_2_roles"),
+    BaseModel.metadata,
+    sa.Column("role_id", sa.Integer, sa.ForeignKey(BaseModel.SetTableName("user_roles") + ".id", ondelete="CASCADE"),
+              unique=False, nullable=False),
+    sa.Column("user_id", sa.Integer, sa.ForeignKey(BaseModel.SetTableName("users") + ".id", ondelete="CASCADE"),
+              unique=False, nullable=False),
 )
 
 
@@ -88,7 +93,7 @@ class User(BaseModel, UserMixin):
 
     username: so.Mapped[str] = so.mapped_column(sa.String(USERNAME_LENGTH), unique=True, nullable=False)
     password: so.Mapped[str] = so.mapped_column(sa.String(162), unique=True, nullable=False)
-    avatar: so.Mapped[str] = so.mapped_column(sa.String(256), unique=True, nullable=False)
+    avatar: so.Mapped[str] = so.mapped_column(sa.String(256), unique=True, nullable=True)
     first_name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True, unique=False)
     last_name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True, unique=False)
     phone_number: so.Mapped[str] = so.mapped_column(sa.String(11), unique=True, nullable=True)
@@ -100,7 +105,6 @@ class User(BaseModel, UserMixin):
     email_address: so.Mapped[str] = so.mapped_column(sa.String(EMAIL_LENGTH), nullable=True, unique=False)
     max_try_number: so.Mapped[int] = so.mapped_column(sa.Integer, default=10, unique=False, nullable=False)
     try_number: so.Mapped[int] = so.mapped_column(sa.Integer, default=0, unique=False, nullable=False)
-    roles = so.relationship(UserRole, secondary=User2Role, backref="users")
 
     last_login_time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, onupdate=datetime.datetime.utcnow,
                                                                default=datetime.datetime.utcnow)
@@ -108,22 +112,11 @@ class User(BaseModel, UserMixin):
                                                        nullable=False, unique=False)
 
     logs = so.relationship("UserLog", backref='user', lazy='dynamic')
-
-
-    def to_dict(self):
-        return {
-            "username": self.username,
-            "FirstName": self.first_name or "NULL",
-            "LastName": self.last_name or "NULL",
-            "Email": self.email_address,
-            "Status": "Active" if self.status else "inactive",
-            "CreatedTime": self.created_time
-        }
+    roles = so.relationship(UserRole, secondary=User2Role, backref="users", lazy='joined')
 
     def full_name(self):
         """concat first name and last name"""
         return f"{self.username} - {self.username}"
-
 
     def set_username(self, username: str) -> bool:
         """ Set Unique Username for admin """
@@ -131,28 +124,27 @@ class User(BaseModel, UserMixin):
         if self.query.filter_by(username=username).first():
             return False
         else:
-            try: # check validator well
+            try:  # check validator well
                 self.username = username
             except Exception as e:
                 return False
 
             return True
+
     def set_password(self, password: str) -> None:
         """Set Hash Password For admin"""
         self.password = generate_password_hash(password)
 
-
     def check_password(self, password: str) -> None:
         """Check Password with Hashed Password in db"""
         return check_password_hash(self.password, password)
-
 
     def set_email_address(self, email: str) -> None:
         """Set Unique Email for admin"""
         if self.query.filter_by(email_address=email).first():
             return False
         else:
-            try: # check validator well
+            try:  # check validator well
                 self.email_address = email
             except Exception as e:
                 return False
@@ -177,10 +169,19 @@ class User(BaseModel, UserMixin):
     def set_last_login(self):
         self.last_login_time = datetime.datetime.utcnow()
 
+    def get_roles(self) -> typing.List:
+        """return all roles that user has just name of the roles"""
+        roles_name = list()
+        for each in self.roles:
+            roles_name.append(each.name.lower())
+
+        return roles_name
+
     def __str__(self):
-        return f"<User {self.id}-{self.username}-{self.full_name()}>"
+        return f"<User {self.id} - {self.full_name()} - {self.get_roles()}>"
 
-
+    def __repr__(self):
+        return self.__str__()
 
 
 class UserLog(BaseModel):
@@ -188,6 +189,5 @@ class UserLog(BaseModel):
 
     ip_address: so.Mapped[str] = so.mapped_column(sa.String(15), nullable=False, unique=False)
     action: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False, unique=False)
-    user_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(User.id, ondelete="SET NULL"), nullable=False, unique=False)
-
-
+    user_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(User.id, ondelete="SET NULL"), nullable=False,
+                                               unique=False)

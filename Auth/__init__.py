@@ -1,5 +1,4 @@
-from flask import Blueprint, current_app
-
+from flask import Blueprint
 
 auth = Blueprint(
     name="auth",
@@ -9,7 +8,5 @@ auth = Blueprint(
     static_url_path="AuthStorage"
 )
 
-
 import Auth.views
 import Auth.model
-

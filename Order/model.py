@@ -3,16 +3,17 @@ import json
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
-from Core.model import BaseModel
 from Auth.model import User
-
+from Core.model import BaseModel
 
 Food2ReserveDay = sa.Table(
-        BaseModel.SetTableName("food_2_day_reserve"),
-        BaseModel.metadata,
-  sa.Column( "food_menu_id", sa.INTEGER, sa.ForeignKey(BaseModel.SetTableName("food_menu") + ".id"), nullable=False),
-        sa.Column( "food_reserve_day_id", sa.INTEGER, sa.ForeignKey(BaseModel.SetTableName("food_reserve_day") + ".id"), nullable=False),
+    BaseModel.SetTableName("food_2_day_reserve"),
+    BaseModel.metadata,
+    sa.Column("food_menu_id", sa.INTEGER, sa.ForeignKey(BaseModel.SetTableName("food_menu") + ".id"), nullable=False),
+    sa.Column("food_reserve_day_id", sa.INTEGER, sa.ForeignKey(BaseModel.SetTableName("food_reserve_day") + ".id"),
+              nullable=False),
 )
+
 
 class FoodReserveDay(BaseModel):
     __tablename__ = BaseModel.SetTableName("food_reserve_day")
@@ -27,7 +28,6 @@ class FoodType(BaseModel):
     __tablename__ = BaseModel.SetTableName("food_menu_type")
     name: so.Mapped[str] = so.mapped_column(sa.String(256), unique=True, nullable=False)
 
-
     def __str__(self):
         return f"<FoodType {self.id} - {self.name}>"
 
@@ -41,8 +41,7 @@ class Food(BaseModel):
     food_type: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(FoodType.id), unique=False)
 
     reserve_days = so.relationship(FoodReserveDay, secondary=Food2ReserveDay, backref="foods_list", lazy="dynamic")
-    prices = so.relationship("FoodPrice",  backref="food", lazy="dynamic")
-
+    prices = so.relationship("FoodPrice", backref="food", lazy="dynamic")
 
     @property
     def price(self):
@@ -51,7 +50,6 @@ class Food(BaseModel):
 
     def __str__(self):
         return f"<FoodType {self.id} - {self.name}>"
-
 
 
 class FoodPrice(BaseModel):
@@ -63,14 +61,14 @@ class FoodPrice(BaseModel):
         return f"<FoodPrice {self.id} - {self.price}>"
 
 
-
 Order2FoodPrice = sa.Table(
     BaseModel.SetTableName("order-2-food-price"),
     BaseModel.metadata,
     sa.Column("food_menu_id", sa.INTEGER, sa.ForeignKey(Food.id), nullable=False),
     sa.Column("food_price_id", sa.INTEGER, sa.ForeignKey(FoodPrice.id), nullable=False),
-    sa.Column("order_id", sa.INTEGER, sa.ForeignKey(BaseModel.SetTableName("orders")+".id"), nullable=False)
+    sa.Column("order_id", sa.INTEGER, sa.ForeignKey(BaseModel.SetTableName("orders") + ".id"), nullable=False)
 )
+
 
 class Order(BaseModel):
     __tablename__ = BaseModel.SetTableName("orders")
@@ -78,7 +76,5 @@ class Order(BaseModel):
 
     foods = so.relationship(Food, secondary=Order2FoodPrice, backref="orders", lazy="dynamic")
 
-
     def __str__(self):
         return f"<Order {self.id} - {self.food_id}>"
-

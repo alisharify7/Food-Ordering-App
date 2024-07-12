@@ -46,7 +46,6 @@ class Setting:
     USERS_AVATARS = STORAGE_DIR / 'avatars'
     make_sure_directory_exists(USERS_AVATARS)
 
-
     MAX_CONTENT_LENGTH = 1024 * 1024 * 50  # global upload max size 50 MB
 
     # Database Config
@@ -82,12 +81,11 @@ class Setting:
     DEBUG_TB_PROFILER_ENABLED = DEBUG
     DEBUG_TB_TEMPLATE_EDITOR_ENABLED = DEBUG
 
-
     # Recaptcha Config <Flask-captcha2>
     GOOGLE_CAPTCHA_V2_CONF = {
         "CAPTCHA_PRIVATE_KEY": os.environ.get("CAPTCHA_PRIVATE_KEY_V2", ""),
         "CAPTCHA_PUBLIC_KEY": os.environ.get("CAPTCHA_PUBLIC_KEY_V2", ""),
-        "CAPTCHA_ENABLED": os.environ.get('CAPTCHA_ENABLED_V2', str(DEBUG)) == 'True',
+        "CAPTCHA_ENABLED": os.environ.get('CAPTCHA_ENABLED_V2', str(DEBUG)) == 'ATrue',
         "CAPTCHA_LOG": os.environ.get('CAPTCHA_LOG_V2', str(DEBUG)) == 'True',
         "CAPTCHA_LANGUAGE": os.environ.get('CAPTCHA_LANGUAGE_V2', 'en')
     }
@@ -95,7 +93,7 @@ class Setting:
     GOOGLE_CAPTCHA_V3_CONF = {
         "CAPTCHA_PRIVATE_KEY": os.environ.get("CAPTCHA_PRIVATE_KEY_V3", ""),
         "CAPTCHA_PUBLIC_KEY": os.environ.get("CAPTCHA_PUBLIC_KEY_V3", ""),
-        "CAPTCHA_ENABLED": os.environ.get('CAPTCHA_ENABLED_V3',str(DEBUG)) == 'True',
+        "CAPTCHA_ENABLED": os.environ.get('CAPTCHA_ENABLED_V3', str(DEBUG)) == 'ATrue',
         "CAPTCHA_SCORE": float(os.environ.get('CAPTCHA_SCORE_V3', 0.5)) if os.environ.get('CAPTCHA_SCORE_V3',
                                                                                           '0.5').isdigit() else os.environ.get(
             'CAPTCHA_SCORE_V3', 0.5),
@@ -143,11 +141,11 @@ class Setting:
 
     SMS_IR_TEMPLATES = {
         "WELCOMING-NEW-USERS": {
-            "ID": 000000, #<from sms.ir>
+            "ID": 000000,  # <from sms.ir>
             "VARIABLES": ["EMPLOYEE_NAME", "EMPLOYEE_CODE"]
         },
         "RESET-PASSWORD": {
-            "ID": 000000, #<from sms.ir>
+            "ID": 000000,  # <from sms.ir>
             "VARIABLES": ["NAME", "TEMP-PASS"]
         },
     }

@@ -1,6 +1,6 @@
-from flask import session, current_app
 from Auth.model import User
 from Core.extensions import db
+
 
 def load_user(user_id: str):
     try:
@@ -9,7 +9,3 @@ def load_user(user_id: str):
         user_id = None
 
     return db.session.get(User, user_id)
-
-
-
-
