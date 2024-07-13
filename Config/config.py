@@ -77,9 +77,9 @@ class Setting:
 
     # flask debugger config
     # https://flask-debugtoolbar.readthedocs.io/en/0.15.1/index.html
-    DEBUG_TB_ENABLED = DEBUG
-    DEBUG_TB_PROFILER_ENABLED = DEBUG
-    DEBUG_TB_TEMPLATE_EDITOR_ENABLED = DEBUG
+    DEBUG_TB_ENABLED = False
+    DEBUG_TB_PROFILER_ENABLED = False
+    DEBUG_TB_TEMPLATE_EDITOR_ENABLED = False
 
     # Recaptcha Config <Flask-captcha2>
     GOOGLE_CAPTCHA_V2_CONF = {

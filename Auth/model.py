@@ -1,6 +1,7 @@
 # build in
 import datetime
 import typing
+from hashlib import sha256
 
 # lib
 import sqlalchemy as sa
@@ -130,6 +131,19 @@ class User(BaseModel, UserMixin):
                 return False
 
             return True
+
+    def gravatar(self, size:int) -> str:
+        """return's users profile image url on gravatar service
+        Params:
+        size:int = size of image
+
+        """
+        user_email = self.email_address or ""
+        hashed_email_address = sha256(user_email.encode()).hexdigest()
+        size = f"?size={size}" if size else None or ""
+        return f"https://gravatar.com/avatar/{hashed_email_address}/{size}"
+
+
 
     def set_password(self, password: str) -> None:
         """Set Hash Password For admin"""
