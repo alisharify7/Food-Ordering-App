@@ -72,8 +72,7 @@ Order2FoodPrice = sa.Table(
 
 class Order(BaseModel):
     __tablename__ = BaseModel.SetTableName("orders")
-    user_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(User.id, ondelete='SET NULL'), nullable=False)
-
+    user_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(User.id, ondelete='SET NULL'), nullable=True)
     foods = so.relationship(Food, secondary=Order2FoodPrice, backref="orders", lazy="dynamic")
 
     def __str__(self):

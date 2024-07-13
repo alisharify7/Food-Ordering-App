@@ -109,7 +109,7 @@ class User(BaseModel, UserMixin):
     last_login_time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, onupdate=datetime.datetime.utcnow,
                                                                default=datetime.datetime.utcnow)
     work_section_id: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey(WorkSection.id, ondelete='SET NULL'),
-                                                       nullable=False, unique=False)
+                                                       nullable=True, unique=False, default=0)
 
     logs = so.relationship("UserLog", backref='user', lazy='dynamic')
     roles = so.relationship(UserRole, secondary=User2Role, backref="users", lazy='joined')
@@ -189,5 +189,5 @@ class UserLog(BaseModel):
 
     ip_address: so.Mapped[str] = so.mapped_column(sa.String(15), nullable=False, unique=False)
     action: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False, unique=False)
-    user_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(User.id, ondelete="SET NULL"), nullable=False,
+    user_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(User.id, ondelete="SET NULL"), nullable=True,
                                                unique=False)
