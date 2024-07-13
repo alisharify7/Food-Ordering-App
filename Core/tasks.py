@@ -9,7 +9,6 @@ from flask_mail import Message
 from Core.extensions import ServerMail, SmsServer
 
 
-
 def send_reset_password_sms(phone_number: str, token: str, user_object: object) -> bool:
     """Send reset password sms to a user phone number
     Args:
@@ -33,11 +32,13 @@ def send_reset_password_sms(phone_number: str, token: str, user_object: object) 
             "value": user_object.employee_code
         }
     ]
-    return SmsServer.send_verify_code(phone_number=phone_number, parameters=[params],
-                                      template_id=current_app.config.get('SMS_IR_TEMPLATES')['RESET-PASSWORD']
-                                      )
+    return SmsServer.send_verify_code(phone_number=phone_number, parameters=[params], \
+        template_id=current_app.config.get('SMS_IR_TEMPLATES')['RESET-PASSWORD']
+    )
 
-def send_reset_password_email(email_address: str, token: str, user_object: object) -> bool:
+
+def send_reset_password_email(email_address: str, token: str,
+                              user_object: object) -> bool:
     ...
 
 
@@ -59,7 +60,8 @@ def async_send_email_celery(msg):
 
 
 def send_email(recipients, subject, sender, text_body="", html_body="",
-               attachments=None, async_thread=False, async_celery=False, language: str = "en"):
+               attachments=None, async_thread=False,
+               async_celery=False, language: str = "en"):
     """
         this function send mail via flask-mail
 
@@ -83,15 +85,19 @@ def send_email(recipients, subject, sender, text_body="", html_body="",
             msg.attach(*attachment)
 
     if async_thread:
-        current_app.logger.info(f"\n[{Fore.RED}Thread{Fore.RESET}{Fore.RED} Async{Fore.RESET}] Mail Sending {recipients}")
-        Thread(target=async_send_email_thread, args=(current_app._get_current_object(), msg)).start()
+        current_app.logger.info(f"\n[{Fore.RED}Thread{Fore.RESET}{Fore.RED} \
+                                 Async{Fore.RESET}] Mail Sending {recipients}")
+        Thread(target=async_send_email_thread, args=(
+            current_app._get_current_object(), msg)).start()
 
     elif async_celery:
-        current_app.logger.info(f"\n[{Fore.GREEN}Celery{Fore.RESET}{Fore.RED} Async{Fore.RESET}] Mail Sending {recipients}")
+        current_app.logger.info(f"\n[{Fore.GREEN}Celery{Fore.RESET}{Fore.RED}\
+                                 Async{Fore.RESET}] Mail Sending {recipients}")
         async_send_email_celery.delay(pickle.dumps(msg))
 
     else:
-        current_app.logger.info(f"\n[{Fore.YELLOW}Normal{Fore.RESET}{Fore.RED} Sync{Fore.RESET}] Mail Sending {recipients}")
+        current_app.logger.info(f"\n[{Fore.YELLOW}Normal{Fore.RESET}{Fore.RED}\
+                                 Sync{Fore.RESET}] Mail Sending {recipients}")
         ServerMail.send(msg)
 
 
@@ -106,8 +112,10 @@ def sendActivAccounteMail(context: dict, recipients: list, **kwargs):
 
     template = render_template("Mail/Auth/ActivateAccount.html", **context,
                                **{"ActivateLink": url_for(
-                                   "auth.active_account", token=context['token'],
-                                   language=request.current_language,  # send user's language to endpoint as well
+                                   "auth.active_account",
+                                   token=context['token'],
+                                   # send user's language to endpoint as well
+                                   language=request.current_language,
                                    _external=True)})
 
     send_email(
@@ -130,8 +138,10 @@ def sendResetPasswordMail(context: dict, recipients: list, **kwargs):
 
     template = render_template("Mail/Auth/ResetPassword.html", **context,
                                **{"ActivateLink": url_for(
-                                   "auth.check_reset_password", token=context['token'],
-                                   language=request.current_language,  # send user's language to endpoint as well
+                                   "auth.check_reset_password",
+                                   token=context['token'],
+                                   # send user's language to endpoint as well
+                                   language=request.current_language,
                                    _external=True)})
 
     send_email(
@@ -151,11 +161,12 @@ def sendNewsLetterMail(context: dict, recipients: list, **kwargs):
         values:
             token: slug url for reset user Account
     """
-
     template = render_template("Mail/NewsLetter/Confirm.html", **context,
                                **{"ActivateLink": url_for(
-                                   "web.confirm_news_letter_get", token=context['token'],
-                                   language=request.current_language,  # send user's language to endpoint as well
+                                   "web.confirm_news_letter_get",
+                                   token=context['token'],
+                                   # send user's language to endpoint as well
+                                   language=request.current_language,
                                    _external=True)})
 
     send_email(

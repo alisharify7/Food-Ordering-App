@@ -70,7 +70,8 @@ def send_email(recipients, subject, sender, text_body="", html_body="",
 
     if async_thread:
         current_app.logger.info(f"\n[Thread Async] Mail Address: {recipients}")
-        Thread(target=async_send_email_thread, args=(current_app._get_current_object(), msg)).start()
+        Thread(target=async_send_email_thread, args=(
+            current_app._get_current_object(), msg)).start()
 
     elif async_celery:
         current_app.logger.info(f"\n[Celery Async] Mail Address: {recipients}")
@@ -96,7 +97,8 @@ def sendActivAccounteMail(context: dict, recipients: list, **kwargs):
 
     send_email(
         subject="Active Account",
-        sender=(('فعال سازی حساب کاربری'), current_app.config.get("MAIL_DEFAULT_SENDER", ":)")),
+        sender=(('فعال سازی حساب کاربری'), current_app.config.get(
+            "MAIL_DEFAULT_SENDER", ":)")),
         recipients=recipients,
         html_body=template,
         **kwargs

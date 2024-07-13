@@ -54,18 +54,18 @@ def userLocalSelector():
     """
     try:
         return session.get("language", "fa")
-    except:
+    except Exception:
         return "en"
 
 
-
-def make_file_name_secure(name: str, round:int=3):
+def make_file_name_secure(name: str, round: int = 3):
     """This function make sure a file name is secure
     remove dangerous characters and add  uuid to first of file name
     """
     name = name.replace(" ", "")
     name = werkzeug_secure_filename(name)
-    return f"{''.join([uuid.uuid4().hex for _ in range(round)])}-{datetime.datetime.utcnow().date()}-{name}"
+    return f"{''.join([uuid.uuid4().hex for _ in range(round)])}\
+        -{datetime.datetime.utcnow().date()}-{name}"
 
 
 def celery_init_app(app: Flask) -> Celery:
@@ -85,6 +85,7 @@ def celery_init_app(app: Flask) -> Celery:
     app.extensions["celery"] = celery_app
     return celery_app
 
+
 def compress_image(image, quality: int = 50):
     """
     compress image size
@@ -96,8 +97,10 @@ def compress_image(image, quality: int = 50):
     image.save(image, optimize=True, quality=quality)
     return True
 
+
 @shared_task(store_result=True)
-def add_watermark(logo_full_path: str, filename, outputname: str, position="bottomleft", scale: int = 15,
+def add_watermark(logo_full_path: str, filename, outputname: str,
+                  position="bottomleft", scale: int = 15,
                   padding: int = 5):
     """
     github: repo https://github.com/theitrain/watermark
@@ -118,7 +121,8 @@ def add_watermark(logo_full_path: str, filename, outputname: str, position="bott
     try:
         original_logo = Image.open(logo_full_path)
     except UnidentifiedImageError:
-        print(f"Failed to read logo from {logo_full_path}. Ensure it's a valid image format.")
+        print(f"Failed to read logo from {
+              logo_full_path}. Ensure it's a valid image format.")
         return back(False)
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -132,7 +136,8 @@ def add_watermark(logo_full_path: str, filename, outputname: str, position="bott
 
     filename = pathlib.Path(filename)
     compress_image(image=filename)
-    if filename.suffix.lower() not in current_app.config.get("IMAGE_EXT_SAVE", []):
+    if filename.suffix.lower() not in current_app.config\
+            .get("IMAGE_EXT_SAVE", []):
         print("invalid image extension")
         return back(False)
 
@@ -156,7 +161,8 @@ def add_watermark(logo_full_path: str, filename, outputname: str, position="bott
     # Resize the logo and its mask
     logo = original_logo.resize((new_logo_width, new_logo_height))
     if logo_mask_original:
-        logo_mask = logo_mask_original.resize((new_logo_width, new_logo_height))
+        logo_mask = logo_mask_original.resize(
+            (new_logo_width, new_logo_height))
     else:
         logo_mask = None
 
@@ -169,9 +175,12 @@ def add_watermark(logo_full_path: str, filename, outputname: str, position="bott
     elif position == 'bottomleft':
         paste_x, paste_y = padding, imageHeight - new_logo_height - padding
     elif position == 'bottomright':
-        paste_x, paste_y = imageWidth - new_logo_width - padding, imageHeight - new_logo_height - padding
+        paste_x, paste_y = imageWidth - new_logo_width - \
+            padding, imageHeight - new_logo_height - padding
     elif position == 'center':
-        paste_x, paste_y = (imageWidth - new_logo_width) // 2, (imageHeight - new_logo_height) // 2
+        paste_x, paste_y = (
+            imageWidth - new_logo_width) // 2, \
+            (imageHeight - new_logo_height) // 2
 
     try:
         image.paste(logo, (paste_x, paste_y), logo_mask)
@@ -185,8 +194,9 @@ def add_watermark(logo_full_path: str, filename, outputname: str, position="bott
 
     filenames = []
     IMAGEquality = 95
-    uniqueCode = uuid.uuid4().hex + uuid.uuid4().hex
-    for h, w in [[128, 64], [256, 128], [480, 256], [640, 480], [720, 640], [1080, 720], [1920, 1080], [3000, 2000]]:
+    # uniqueCode = uuid.uuid4().hex + uuid.uuid4().hex
+    for h, w in [[128, 64], [256, 128], [480, 256], [640, 480], [720, 640],
+                 [1080, 720], [1920, 1080], [3000, 2000]]:
         new_image = image.resize((h, w))
         name = f'{w}x{h}-{outputname}'
         save_path = current_app.config.get("PRODUCT_IMAGE_STORAGE") / name
@@ -199,12 +209,14 @@ def add_watermark(logo_full_path: str, filename, outputname: str, position="bott
 
     return pickle.dumps(filenames)
 
+
 class TimeStamp:
     """
         a base class for working with time&times in app
         ~!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~
         #todo :
-            add some utils for calculate and some stuff like that on date and times
+            add some utils for calculate and some
+            stuff like that on date and times
     """
 
     __now_gregorian = None
@@ -269,7 +281,7 @@ class TimeStamp:
         if len(date) == 3:
             try:
                 khayyam.JalaliDate(year=date[0], month=date[1], day=date[2])
-            except Exception as e:
+            except Exception:
                 return False
             else:
                 return True
@@ -278,20 +290,25 @@ class TimeStamp:
 
     def convert_jlj2_georgian_d(self, value: khayyam.JalaliDate):
         """
-            this method get a khayyam date<jalali> and convert it to gregorian object datetime.date
+            this method get a khayyam date<jalali>
+            and convert it to gregorian object datetime.date
         """
         if not isinstance(value, khayyam.JalaliDate):
-            raise ValueError(f"input {value} must be a khayyam.JalaliDate instance")
+            raise ValueError(
+                f"input {value} must be a khayyam.JalaliDate instance")
         year, month, day = value.year, value.month, value.day
         date = self._jalali_to_gregorian(year, month, day)
         return datetime.date(year=date[0], month=date[1], day=date[2])
 
     def convert_grg2_jalali_d(self, value: datetime.date):
         """
-            this method get a datetime.date object and convert it o khayyam object
+            this method get a datetime.date
+            object and convert it o khayyam object
         """
         if not isinstance(value, datetime.date):
-            raise ValueError(f"input {value} - {type(value)} must be a Datetime.Date instance")
+            raise ValueError(
+                f"input {value} - {type(value)} \
+                    must be a Datetime.Date instance")
 
         year, month, day = value.year, value.month, value.day
         date = self._gregorian_to_jalali(year, month, day)
@@ -299,23 +316,31 @@ class TimeStamp:
 
     def convert_jlj2_georgian_dt(self, value: khayyam.JalaliDatetime):
         """
-            this method get a khayyam date<jalali> and convert it to gregorian object datetime.datetime
+            this method get a khayyam date<jalali> and
+            convert it to gregorian object datetime.datetime
         """
         if not isinstance(value, khayyam.JalaliDatetime):
             raise ValueError("input must be a khayyam.JalaliDatetime instance")
 
-        year, month, day, hour, minute, second, microsecond = value.year, value.month, value.day, value.hour, value.minute, value.second, value.microsecond
+        year, month, day, hour, minute, second, microsecond = value.year, \
+            value.month, value.day, value.hour, \
+            value.minute, value.second, value.microsecond
         date = self._jalali_to_gregorian(year, month, day)
-        return datetime.datetime(year=date[0], month=date[1], day=date[2], hour=hour, minute=minute, second=second,
+        return datetime.datetime(year=date[0], month=date[1], day=date[2],
+                                 hour=hour, minute=minute, second=second,
                                  microsecond=microsecond)
 
     def convert_grg2_jalali_dt(self, value: datetime.datetime):
         """
-            this method get a datetime.date object and convert it o khayyam.KhayyamDatetime object
+        this method get a datetime.date object and convert
+        it o khayyam.KhayyamDatetime object
         """
-        year, month, day, hour, minute, second, microsecond = value.year, value.month, value.day, value.hour, value.minute, value.second, value.microsecond
+        year, month, day, hour, minute, second, microsecond = value.year, \
+            value.month, value.day, value.hour, value.minute, \
+            value.second, value.microsecond
         date = self._gregorian_to_jalali(year, month, day)
-        return khayyam.JalaliDatetime(year=date[0], month=date[1], day=date[2], hour=hour, minute=minute, second=second,
+        return khayyam.JalaliDatetime(year=date[0], month=date[1], day=date[2],
+                                      hour=hour, minute=minute, second=second,
                                       microsecond=microsecond)
 
     def _gregorian_to_jalali(self, gy, gm, gd):
@@ -328,7 +353,8 @@ class TimeStamp:
             gy2 = gy + 1
         else:
             gy2 = gy
-        days = 355666 + (365 * gy) + ((gy2 + 3) // 4) - ((gy2 + 99) // 100) + ((gy2 + 399) // 400) + gd + g_d_m[gm - 1]
+        days = 355666 + (365 * gy) + ((gy2 + 3) // 4) - ((gy2 + 99) // 100) \
+            + ((gy2 + 399) // 400) + gd + g_d_m[gm - 1]
         jy = -1595 + (33 * (days // 12053))
         days %= 12053
         jy += 4 * (days // 1461)
@@ -350,7 +376,8 @@ class TimeStamp:
             https://jdf.scr.ir/
         """
         jy += 1595
-        days = -355668 + (365 * jy) + ((jy // 33) * 8) + (((jy % 33) + 3) // 4) + jd
+        days = -355668 + (365 * jy) + ((jy // 33) * 8) \
+            + (((jy % 33) + 3) // 4) + jd
         if (jm < 7):
             days += (jm - 1) * 31
         else:
@@ -382,7 +409,8 @@ class TimeStamp:
 
     def convert_string_jalali2_dateD(self, value: str) -> datetime.date:
         """
-            this Method converts a string (Persian Date) to datetime.date object
+            this Method converts a string (Persian Date)
+              to datetime.date object
         """
         if not self.is_persian_date(value):
             raise ValueError("Input is not a valid date format YYYY/MM/DD")
