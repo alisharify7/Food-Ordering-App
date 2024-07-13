@@ -8,6 +8,7 @@ from Auth.model import User
 from Core.extensions import db
 from Core.utils import get_next_page
 
+
 @auth.route("/notifications/", methods=["GET"])
 def notifications() -> str:
     """Notification Messages view
@@ -87,7 +88,6 @@ def login_post() -> str:
         flash(message="حساب کاربری مورد نظر غیرفعال می باشد", category='error')
         return render_template("login.html", form=form)
 
-
     login_user_flask_login(user=user_result, remember=remember_me)
     next_page = get_next_page(fall_back_url=url_for("user.index_get"))
     return redirect(next_page)
@@ -123,7 +123,8 @@ def reset_password_post() -> str:
 
     user_result = db.session.execute(statement=query).scalar_one_or_none()
 
-    ctx["message"] = "در صورتی که کاربری با مشخصات وارد شما در سیستم ثبت شده باشد <br> پیامک بازنشانی گذرواژه برای حساب مورد ارسال خواهد شد"
+    ctx[
+        "message"] = "در صورتی که کاربری با مشخصات وارد شما در سیستم ثبت شده باشد <br> پیامک بازنشانی گذرواژه برای حساب مورد ارسال خواهد شد"
     flash(message=ctx["message"], category='success')
 
     if not user_result:

@@ -76,6 +76,7 @@ class UserRole(BaseModel):
     def __repr__(self):
         return self.__str__()
 
+
 User2Role = sa.Table(
     BaseModel.SetTableName("users_2_roles"),
     BaseModel.metadata,
@@ -132,18 +133,21 @@ class User(BaseModel, UserMixin):
 
             return True
 
-    def gravatar(self, size:int) -> str:
+    def gravatar(self, size: int) -> str:
         """return's users profile image url on gravatar service
+            users email should be lowercase for hashing
         Params:
-        size:int = size of image
+            size:int = size of image
+        Return:
+            string: url of users avatar
 
+        https://docs.gravatar.com/api/avatars/images/
+        https://docs.gravatar.com/api/avatars/hash/
         """
         user_email = self.email_address or ""
-        hashed_email_address = sha256(user_email.encode()).hexdigest()
+        hashed_email_address = sha256(user_email.lower().encode()).hexdigest()
         size = f"?size={size}" if size else None or ""
         return f"https://gravatar.com/avatar/{hashed_email_address}/{size}"
-
-
 
     def set_password(self, password: str) -> None:
         """Set Hash Password For admin"""
