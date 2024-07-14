@@ -11,6 +11,7 @@ from Config import Setting
 from .utils import TimeStamp
 from .extensions import db
 
+
 class BaseModel(db.Model):
     """
     Base model class for all models
@@ -27,6 +28,7 @@ class BaseModel(db.Model):
     # }
 
     id: so.Mapped[int] = so.mapped_column(sa.INTEGER, primary_key=True)
+
     @staticmethod
     def SetTableName(name):
         """Use This Method For setting a table name"""
@@ -58,13 +60,13 @@ class BaseModel(db.Model):
         else:
             return True
 
-    public_key: so.Mapped[str] = so.mapped_column(sa.String(36), nullable=False, unique=True)
+    public_key: so.Mapped[str] = so.mapped_column(
+        sa.String(36), nullable=False, unique=True)
     created_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(sa.DateTime,
-                                                                           default=datetime.datetime.now)
+                                                                            default=datetime.datetime.now)
     modified_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(sa.DateTime,
-                                                                              onupdate=datetime.datetime.now,
-                                                                              default=datetime.datetime.now)
-
+                                                                             onupdate=datetime.datetime.now,
+                                                                             default=datetime.datetime.now)
 
     @staticmethod
     def shamsi(obj):

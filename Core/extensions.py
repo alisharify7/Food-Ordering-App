@@ -12,13 +12,16 @@ from sms_ir import SmsIr
 from Config import Setting
 
 
-debugger = DebugToolbarExtension()
 login_manager = LoginManager()
-SmsServer = SmsIr(api_key=Setting.SMS_API_KEY, linenumber=Setting.SMS_LINE_NUMBER)
 RedisServer = Setting.REDIS_DEFAULT_INTERFACE
-db = SQLAlchemy()
 babel = Babel()
+db = SQLAlchemy()
+ServerMail = Mail()
 csrf = CSRFProtect()
 ServerSession = Session()
 ServerMigrate = Migrate()
-ServerMail = Mail()
+debugger = DebugToolbarExtension()
+SmsServer = SmsIr(
+    api_key=Setting.SMS_API_KEY,
+    linenumber=Setting.SMS_LINE_NUMBER
+)
