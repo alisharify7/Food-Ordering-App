@@ -35,9 +35,9 @@
                     <li class="nav-item d-none d-md-block"> <a href="#" class="nav-link">سفارش</a> </li>
                 </ul> <!--end::Start Navbar Links--> <!--begin::End Navbar Links-->
                 <ul class="navbar-nav ms-auto"> <!--begin::Navbar Search-->
-                    <li class="nav-item dropdown user-menu"> <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"> <img src="https://pbs.twimg.com/profile_images/1747602653498982400/r88CyEPj_400x400.jpg" class="user-image rounded-circle shadow" alt="User Image"> <span class="d-none d-md-inline">{{ current_user.full_name() }}</span> </a>
+                    <li class="nav-item dropdown user-menu"> <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"> <img src="{{ current_user.gravatar()}}" class="user-image rounded-circle shadow" alt="User Image"> <span class="d-none d-md-inline">{{ current_user.full_name() }}</span> </a>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end"> <!--begin::User Image-->
-                            <li class="user-header text-bg-primary"> <img src="https://pbs.twimg.com/profile_images/1747602653498982400/r88CyEPj_400x400.jpg" class="rounded-circle shadow" alt="User Image">
+                            <li class="user-header text-bg-primary"> <img src="{{ current_user.gravatar()}}" class="rounded-circle shadow" alt="User Image">
                                 <p>
                                     {{ current_user.full_name()}}
                                     <small>{{ current_user.created_time }}</small>
@@ -65,7 +65,7 @@
         <main class="app-main"> <!--begin::App Content Header-->
             <div class="app-content-header"> <!--begin::Container-->
                 <div class="container-fluid"> <!--begin::Row-->
-                    <div class="row" dir="ltr">
+                    <div class="row justify-content-center align-items-center" dir="ltr">
                         {% block content %}
                         {% endblock content %}
                     </div> <!--end::Row-->

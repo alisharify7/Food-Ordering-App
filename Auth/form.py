@@ -75,3 +75,4 @@ class ResetPasswordForm(FlaskForm):
                              "class": "btn btn-primary w-100 fs-5 my-3",
                              "value": "بازنشانی گذرواژه"
                          })
+

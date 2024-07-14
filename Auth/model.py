@@ -95,7 +95,6 @@ class User(BaseModel, UserMixin):
 
     username: so.Mapped[str] = so.mapped_column(sa.String(USERNAME_LENGTH), unique=True, nullable=False)
     password: so.Mapped[str] = so.mapped_column(sa.String(162), unique=True, nullable=False)
-    avatar: so.Mapped[str] = so.mapped_column(sa.String(256), unique=True, nullable=True)
     first_name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True, unique=False)
     last_name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True, unique=False)
     phone_number: so.Mapped[str] = so.mapped_column(sa.String(11), unique=True, nullable=True)
@@ -133,9 +132,11 @@ class User(BaseModel, UserMixin):
 
             return True
 
-    def gravatar(self, size: int) -> str:
-        """return's users profile image url on gravatar service
+    def gravatar(self, size: int|None=None) -> str:
+        """
+        return's users profile image url on gravatar service
             users email should be lowercase for hashing
+
         Params:
             size:int = size of image
         Return:

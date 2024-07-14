@@ -34,16 +34,13 @@ class UserPanelEmailForm(FlaskForm):
 
 
 class UserProfileForm(FlaskForm):
-    username = StringField(render_kw={"disabled: true"})
-    password = StringField()
-    avatar = ""
-    first_name = StringField()
-    last_name = StringField()
-    phone_number = StringField()
-    national_code = StringField()
-    employee_code = StringField()
-    status = StringField()
-    email_address = StringField()
-    last_login_time = StringField()
-    work_section = StringField()
-
+    username = StringField(validators=[DataRequired()], render_kw={'placeholder': 'نام کاربری'})
+    first_name = StringField(validators=[DataRequired()], render_kw={'placeholder': 'نام کاربری'})
+    last_name = StringField(validators=[DataRequired()])
+    phone_number = StringField(validators=[DataRequired()])
+    national_code = StringField(validators=[DataRequired()])
+    employee_code = StringField(validators=[DataRequired()])
+    status = StringField(validators=[DataRequired()])
+    email_address = StringField(validators=[DataRequired()])
+    work_section = StringField(validators=[DataRequired()])
+    access_level = StringField(validators=[DataRequired()])

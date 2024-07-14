@@ -1,7 +1,8 @@
 from User import user
 from flask import render_template
 from User import form as UserForm
-from flask_login import login_required
+from flask_login import login_required, current_user
+from User.form import UserProfileForm
 
 @user.route("", methods=["GET"])
 @login_required
@@ -27,6 +28,7 @@ def history_get():
 @user.route("/profile", methods=["GET"])
 @login_required
 def profile_get():
+    form = UserProfileForm()
     return render_template("user/profile.html")
 
 

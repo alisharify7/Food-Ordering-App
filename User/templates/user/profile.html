@@ -5,15 +5,28 @@
 
 {% block content %}
     <div class="col-12 d-flex flex-column justify-content-center align-items-center">
-        <img class="rounded-circle p-1 border border-primary shadow border-1" style="width: 340px" src="{{ current_user.avatar }}">
+        <img class="rounded-circle p-1 border border-primary shadow border-1" style="width: 340px" src="{{ current_user.gravatar(size=340) }}">
         <p class="m-0 mt-2">{{ current_user.username }}</p>
         <small>{{ current_user.created_time }}</small>
         <small>{{ current_user.shamsi(current_user.created_time) }}</small>
     </div>
 
-    <div class="col-md-6 col-12 card">
+    <div class="col-md-10 card my-2" dir="rtl">
         <div class="card-header">اطلاعت کارمندی</div>
         <div class="card-body">
+
+            <label class="w-100">
+                <span class="fs-4">نام کاربری:</span>
+                <input dir="ltr" class="w-100 p-1 fs-4"  disabled value="{{ current_user.username or 'تنظیم نشده است' }}">
+            </label>
+            <label class="w-100">
+                <span class="fs-4">نام:</span>
+                <input dir="ltr" class="w-100 p-1 fs-4"  disabled value="{{ current_user.first_name  or 'تنظیم نشده است'}}">
+            </label>
+            <label class="w-100">
+                <span class="fs-4">نام خانوادگ::</span>
+                <input dir="ltr" class="w-100 p-1 fs-4"  disabled value="{{ current_user.last_name }}">
+            </label>
 
         </div>
         <div class="card-footer"></div>
