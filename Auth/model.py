@@ -46,6 +46,11 @@ class WorkSection(BaseModel):
 
         db.session.commit()
 
+    users = so.relationship("User", backref='work_section', lazy='joined')
+
+    def __str__(self):
+        return f"<WorkSection {self.name}-{self.id}>"
+
 
 class UserRole(BaseModel):
     __tablename__ = BaseModel.SetTableName("user_roles")
@@ -132,7 +137,7 @@ class User(BaseModel, UserMixin):
 
             return True
 
-    def gravatar(self, size: int|None=None) -> str:
+    def gravatar(self, size: int | None = None) -> str:
         """
         return's users profile image url on gravatar service
             users email should be lowercase for hashing

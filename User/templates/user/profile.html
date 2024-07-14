@@ -1,36 +1,103 @@
 {% extends 'user/base.html' %}
 
-{% block title %} پرووفایل کاربری {% endblock title %}
+{% block title %} پروفایل کاربری {% endblock title %}
 {% block style %}{% endblock style %}
 
 {% block content %}
-    <div class="col-12 d-flex flex-column justify-content-center align-items-center">
-        <img class="rounded-circle p-1 border border-primary shadow border-1" style="width: 340px" src="{{ current_user.gravatar(size=340) }}">
-        <p class="m-0 mt-2">{{ current_user.username }}</p>
-        <small>{{ current_user.created_time }}</small>
-        <small>{{ current_user.shamsi(current_user.created_time) }}</small>
-    </div>
+<div class="col-12 d-flex flex-column justify-content-center align-items-center">
+    <img class="rounded-circle p-1 border border-primary shadow border-1" src="{{ current_user.gravatar(size=340) }}"
+         style="width: 340px">
+    <!--        <p class="m-0 mt-2">{{ current_user.username }}</p>-->
+    <!--        <small>{{ current_user.created_time }}</small>-->
+    <!--        <small>{{ current_user.shamsi(current_user.created_time) }}</small>-->
+</div>
 
-    <div class="col-md-10 card my-2" dir="rtl">
-        <div class="card-header">اطلاعت کارمندی</div>
-        <div class="card-body">
+<div class="col-md-10 card my-2 px-0 mx-" dir="rtl">
+    <div class="card-header">اطلاعت حساب کاربری</div>
+    <form action="{{form.action}}" method="post">
+        <div class="card-body fs-09">
+            {{ form.csrf_token }}
+            <label class="w-100 my-2">
+                <span class="">نام کاربری</span>
+                {{form.username}}
+                {% if form.username.errors %}
+                    <ul>
+                        {% for err in form.username.errors %}
+                            <li class="text-danger">{{err}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif%}
+            </label>
+            <label class="w-100 my-2">
+                <span class="">نام</span>
+                {{form.first_name}}
+                {% if form.first_name.errors %}
+                    <ul>
+                        {% for err in form.first_name.errors %}
+                            <li class="text-danger">{{err}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif%}
 
-            <label class="w-100">
-                <span class="fs-4">نام کاربری:</span>
-                <input dir="ltr" class="w-100 p-1 fs-4"  disabled value="{{ current_user.username or 'تنظیم نشده است' }}">
             </label>
-            <label class="w-100">
-                <span class="fs-4">نام:</span>
-                <input dir="ltr" class="w-100 p-1 fs-4"  disabled value="{{ current_user.first_name  or 'تنظیم نشده است'}}">
+            <label class="w-100 my-2">
+                <span class="">نام خانوادگی</span>
+                {{form.last_name}}
+                {% if form.last_name.errors %}
+                    <ul>
+                        {% for err in form.last_name.errors %}
+                            <li class="text-danger">{{err}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif%}
             </label>
-            <label class="w-100">
-                <span class="fs-4">نام خانوادگ::</span>
-                <input dir="ltr" class="w-100 p-1 fs-4"  disabled value="{{ current_user.last_name }}">
+
+            <label class="w-100 my-2">
+                <span class="">آدرس ایمیل</span>
+                {{form.email_address}}
+                {% if form.email_address.errors %}
+                    <ul>
+                        {% for err in form.email_address.errors %}
+                            <li class="text-danger">{{err}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif%}
+
+            </label>
+
+            <label class="w-100 my-2">
+                <span class="">شماره تماس</span>
+                {{form.phone_number}}
+
+            </label>
+            <label class="w-100 my-2">
+                <span class="">کد ملی</span>
+                {{form.national_code}}
+
+            </label>
+            <label class="w-100 my-2">
+                <span class="">کد کارمندی</span>
+                {{form.employee_code}}
+
+            </label>
+            <label class="w-100 my-2">
+                <span class="">وضعیت حساب کاربری</span>
+                {{form.status}}
+
+            </label>
+
+            <label class="w-100 my-2">
+                <span class="">بخش کاری</span>
+                {{form.work_section}}
+
             </label>
 
         </div>
-        <div class="card-footer"></div>
-    </div>
+        <div class="card-footer">
+            <button class="btn btn-success" type="submit">بروزرسانی</button>
+        </div>
+    </form>
+</div>
 
 
 {% endblock content %}
