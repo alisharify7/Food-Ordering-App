@@ -1,15 +1,22 @@
 {% extends 'user/base.html' %}
 
 {% block title %} پروفایل کاربری {% endblock title %}
-{% block style %}{% endblock style %}
+{% block style %}
+<style>
+    /* user avatar responsive size mobile */
+    @media (max-width: 700px){
+
+        .user-avatar{
+            width: 80% !important
+        }
+    }
+</style>
+{% endblock style %}
 
 {% block content %}
 <div class="col-12 d-flex flex-column justify-content-center align-items-center">
-    <img class="rounded-circle p-1 border border-primary shadow border-1" src="{{ current_user.gravatar(size=340) }}"
+    <img class="rounded-circle p-1 border border-primary shadow border-1 user-avatar" src="{{ current_user.gravatar(size=340) }}"
          style="width: 340px">
-    <!--        <p class="m-0 mt-2">{{ current_user.username }}</p>-->
-    <!--        <small>{{ current_user.created_time }}</small>-->
-    <!--        <small>{{ current_user.shamsi(current_user.created_time) }}</small>-->
 </div>
 
 <div class="col-md-10 card my-2 px-0 mx-" dir="rtl">
