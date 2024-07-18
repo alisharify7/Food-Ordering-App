@@ -36,7 +36,7 @@ def order_get():
 @user.route("/history", methods=["GET"])
 @login_required
 def history_get():
-    return render_template("user/order.html")
+    return render_template("user/history.html")
 
 
 @user.route("/profile", methods=["GET"])
@@ -56,9 +56,6 @@ def profile_post():
         flash('خطایی هنگام ارسال درخواست رخ داد', 'error')
         return redirect(url_for('user.profile_get'))
 
-    data = form.data
-    data.pop("csrf_token")
-    current_user.update_fields(kwdata=data, fields=['first_name', 'last_name'])
 
     if form.email_address.data:
         if not UserProfileForm.validate_email(form.email_address.data):

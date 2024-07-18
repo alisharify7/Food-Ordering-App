@@ -13,7 +13,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a href="#" class="nav-link "> <i class="nav-icon bi bi-clock-history"></i>
+        <a href="{{ url_for('user.history_get') }}" class="nav-link {{ 'active' if request.path == url_for('user.history_get') }}"> <i class="nav-icon bi bi-clock-history"></i>
             <p>سابقه سفارشات</p>
         </a>
     </li>

@@ -138,7 +138,7 @@ class User(BaseModel, UserMixin):
 
     def full_name(self):
         """concat first name and last name"""
-        return f"{self.username} - {self.username}"
+        return f"{self.first_name} {self.last_name}"
 
     def set_username(self, username: str) -> bool:
         """ Set Unique Username for admin """
