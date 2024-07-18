@@ -64,7 +64,6 @@ def login_post() -> str:
 
     if not form.validate():
         flash(message="اعتبار سنجی درخواست نادرست می باشد", category='error')  # TODO: add form errors to html
-        print(form.errors)
         return render_template("login.html", form=form)
 
     remember_me, username, password = bool(form.remember_me.data), form.username.data, form.password.data

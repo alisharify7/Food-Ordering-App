@@ -42,6 +42,9 @@ def get_next_page(fall_back_url: str = '') -> str:
     validate http url args next=some url
     """
     next_page = request.args.get("next", False)
+    print(request.args)
+    print(request.path)
+    print(next_page)
     if not next_page or url_parse(next_page).netloc != "":
         next_page = fall_back_url
 
