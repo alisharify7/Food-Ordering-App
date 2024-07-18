@@ -1,7 +1,46 @@
 {% extends 'user/base.html' %}
 
 {% block title %} سفارش غذا{% endblock title %}
-{% block style %}{% endblock style %}
+{% block style %}
+<style>
+    .food-image{
+        width: 100%;
+        height: 380px !important;
+    }
+    /* user avatar responsive size mobile */
+    @media (max-width: 1280px){
+       .food-image{
+            height: 300px !important;
+        }
+    }
+    @media (max-width: 770px){
+       .food-image{
+            height: 100% !important;
+        }
+    }
+</style>
+{% endblock style %}
 
-{% block content %}{% endblock content %}
+{% block content %}
+
+    <div class="col-12 my-2 pe-0 pe-md-5">
+        <h1 class="">سفارش</h1>
+        <p class="muted">لیست غذا های روز <span dir="rtl"> {{ today() }}</span> </p>
+    </div>
+
+    {% for food in foods %}
+        <div class="card col-11 col-sm-5 col-lg-3 px-0 shadow my-2 mx-1">
+          <img src="{{food.image}}" class="card-img-top food-image" alt="...">
+            <div class="card-body">
+                <p class="h3 m-0 border-bottom border-primary pb-2">{{food.name}}</p>
+                <br>
+                {{food.description}}
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary">سفارش</button>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock content %}
 {% block script %}{% endblock script %}

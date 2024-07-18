@@ -1,5 +1,5 @@
 from flask import current_app, url_for
-
+import khayyam
 
 def StorageUrl(path: str):
     """
@@ -24,7 +24,9 @@ templatesFilters = {
 
 
 def contexts():
-
-    ctx = {"current_app": current_app}
+    ctx = {
+        "current_app": current_app,
+        "today": lambda : str(khayyam.JalaliDate.today()).replace('-', '/')
+    }
 
     return ctx
