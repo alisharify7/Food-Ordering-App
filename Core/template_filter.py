@@ -24,5 +24,7 @@ templatesFilters = {
 
 
 def contexts():
-    ctx = {}
+
+    ctx = {"current_app": current_app}
+
     return ctx

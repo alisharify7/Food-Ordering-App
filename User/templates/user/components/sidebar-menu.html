@@ -24,9 +24,12 @@
         </a>
     </li>
 
-<li class="nav-item mt-auto"> <a href="./docs/introduction.html" class="nav-link"> <i class="nav-icon bi bi-download"></i>
-    <p>Installation</p>
-</a> </li>
+<li dir="ltr" class="nav-item mt-auto">
+    <a role="button" class="nav-link ">
+        <i class="nav-icon bi bi-git text-warning"></i>
+        <p class="m-0 mt-1 px-1">version: {{ current_app.config.get('APP_VERSION') }}</p>
+    </a>
+</li>
 
 
 </ul> <!--end::Sidebar Menu-->

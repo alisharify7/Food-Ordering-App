@@ -45,6 +45,7 @@ class Setting:
 
     USERS_AVATARS = STORAGE_DIR / 'avatars'
     make_sure_directory_exists(USERS_AVATARS)
+    APP_VERSION = os.environ.get("APP_VERSION", "0.0.0")
 
     MAX_CONTENT_LENGTH = 1024 * 1024 * 50  # global upload max size 50 MB
 
