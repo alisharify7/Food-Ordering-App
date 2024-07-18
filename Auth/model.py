@@ -120,6 +120,22 @@ class User(BaseModel, UserMixin):
     logs = so.relationship("UserLog", backref='user', lazy='dynamic')
     roles = so.relationship(UserRole, secondary=User2Role, backref="users", lazy='joined')
 
+
+    def update_fields(self, kwdata: typing.Dict, fields: typing.List) -> None:
+        """update user models base on input fields args
+
+        Inputs:
+            kwdata: dict: key,value pare of properties
+            fields: iterable: list of valid fields that can change without
+                 effecting of other parts
+        Return:
+            None
+        """
+        for key in kwdata:
+            if key in fields:
+                setattr(self, key, kwdata[key])
+
+
     def full_name(self):
         """concat first name and last name"""
         return f"{self.username} - {self.username}"
@@ -134,7 +150,6 @@ class User(BaseModel, UserMixin):
                 self.username = username
             except Exception as e:
                 return False
-
             return True
 
     def gravatar(self, size: int | None = None) -> str:
@@ -163,20 +178,9 @@ class User(BaseModel, UserMixin):
         """Check Password with Hashed Password in db"""
         return check_password_hash(self.password, password)
 
-    def set_email_address(self, email: str) -> None:
-        """Set Unique Email for admin"""
-        if self.query.filter_by(email_address=email).first():
-            return False
-        else:
-            try:  # check validator well
-                self.email_address = email
-            except Exception as e:
-                return False
 
-            return True
-
-    def set_phone_number(self, phone: str) -> None:
-        """ Set Unique Phone For admin  """
+    def set_phone_number(self, phone: str) -> bool:
+        """ Set Unique Phone number  """
         if self.query.filter_by(phone_number=phone).first():
             return False
         else:

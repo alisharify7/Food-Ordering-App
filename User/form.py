@@ -1,10 +1,18 @@
 from flask import current_app, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, EmailField
-from wtforms.validators import DataRequired, Email
-
+from email_validator import validate_email as email_validator_func
+from email_validator.exceptions_types import EmailNotValidError
 
 class UserProfileForm(FlaskForm):
+
+    @staticmethod
+    def validate_email(email: str) -> bool:
+        try:
+            email_validator_func(email, check_deliverability=False)
+            return True
+        except EmailNotValidError:
+            return False
 
     @property
     def action(self):
@@ -14,7 +22,6 @@ class UserProfileForm(FlaskForm):
         default = ""
         placeholder = {'placeholder': "تنظیم نشده است"}
         self.username.data = obj.username or default
-        self.username.render_kw.update(placeholder if not obj.username else {})
 
         self.first_name.data = obj.first_name or default
         self.first_name.render_kw.update(placeholder if not obj.first_name else {})
@@ -29,13 +36,12 @@ class UserProfileForm(FlaskForm):
         self.status.data = 'فعال' if obj.status else 'غیرفعال'
         self.work_section.data = obj.work_section.name or default
 
-    username = StringField(validators=[DataRequired()], render_kw={"class": "form-control"})
-    first_name = StringField(validators=[DataRequired()], render_kw={"class": "form-control"})
-    last_name = StringField(validators=[DataRequired()], render_kw={"class": "form-control"})
-    email_address = EmailField(validators=[DataRequired(), Email()],
-                               render_kw={"class": "form-control"})
-    phone_number = StringField(validators=[DataRequired()], render_kw={"disabled": "true", "class": "form-control"})
-    national_code = StringField(validators=[DataRequired()], render_kw={"disabled": "true", "class": "form-control"})
-    employee_code = StringField(validators=[DataRequired()], render_kw={"disabled": "true", "class": "form-control"})
-    status = StringField(validators=[DataRequired()], render_kw={"disabled": "true", "class": "form-control"})
-    work_section = StringField(validators=[DataRequired()], render_kw={"disabled": "true", "class": "form-control"})
+    username = StringField(validators=[], render_kw={"class": "form-control", "disabled": "true",})
+    first_name = StringField(validators=[], render_kw={"class": "form-control"})
+    last_name = StringField(validators=[], render_kw={"class": "form-control"})
+    email_address = EmailField(validators=[], render_kw={"class": "form-control"})
+    phone_number = StringField(validators=[], render_kw={"disabled": "true", "class": "form-control"})
+    national_code = StringField(validators=[], render_kw={"disabled": "true", "class": "form-control"})
+    employee_code = StringField(validators=[], render_kw={"disabled": "true", "class": "form-control"})
+    status = StringField(validators=[], render_kw={"disabled": "true", "class": "form-control"})
+    work_section = StringField(validators=[], render_kw={"disabled": "true", "class": "form-control"})
