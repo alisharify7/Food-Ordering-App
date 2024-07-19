@@ -64,6 +64,9 @@ class Setting:
     REDIS_DEFAULT_URL = os.environ.get("REDIS_DEFAULT_URI")
     REDIS_DEFAULT_INTERFACE = redis.Redis().from_url(REDIS_DEFAULT_URL)
 
+    # Flask-resx
+    ERROR_404_HELP = False
+
     # session cookie setting
     SESSION_TYPE = "redis"
     SESSION_PERMANENT = False
@@ -78,9 +81,9 @@ class Setting:
 
     # flask debugger config
     # https://flask-debugtoolbar.readthedocs.io/en/0.15.1/index.html
-    DEBUG_TB_ENABLED = False
+    DEBUG_TB_ENABLED = True
     DEBUG_TB_PROFILER_ENABLED = False
-    DEBUG_TB_TEMPLATE_EDITOR_ENABLED = False
+    DEBUG_TB_TEMPLATE_EDITOR_ENABLED = True
 
     # Recaptcha Config <Flask-captcha2>
     GOOGLE_CAPTCHA_V2_CONF = {

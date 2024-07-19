@@ -1,5 +1,15 @@
+"""
+ * food models with related models(type, day of reserved , ...)
+ * author: @alisharify7
+ * Copyleft 2023-2024. under GPL-3.0 license
+ * https://github.com/alisharify7/Food-Ordering-App
+"""
 import json
+import datetime
 
+from flask import current_app
+
+import khayyam
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
@@ -22,14 +32,39 @@ class FoodReserveDay(BaseModel):
     dayEN: so.Mapped[str] = so.mapped_column(sa.String(64), nullable=False, unique=True)
 
     # backreference for getting foods = foods_list
+    @classmethod
+    def init_days(cls):
+        print(" [] Start adding days to FoodReserveDay Model")
+        db = current_app.extensions['sqlalchemy']
+        start_date = datetime.datetime.strptime('2024-10-19', "%Y-%m-%d")
+
+        for i in range(7):
+            jalali_date = khayyam.JalaliDate(start_date + datetime.timedelta(days=i))
+            en = jalali_date.strftime("%E")
+            fa = jalali_date.strftime("%A")
+            query = db.select(FoodReserveDay).filter_by(dayEN=en)
+            result = db.session.execute(query).scalar_one_or_none()
+            if not result:
+                new_day = cls()
+                new_day.dayFA = fa
+                new_day.dayEN = en
+                new_day.set_public_key()
+                if new_day.save():
+                    print(f"new day added, {en} - {fa}")
+
+        print(" [X] ending of adding days to FoodReserveDay Model")
 
 
 class FoodType(BaseModel):
     __tablename__ = BaseModel.SetTableName("food_menu_type")
     name: so.Mapped[str] = so.mapped_column(sa.String(256), unique=True, nullable=False)
+    foods = so.relationship("Food", backref="type", lazy="dynamic")
 
     def __str__(self):
         return f"<FoodType {self.id} - {self.name}>"
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class Food(BaseModel):
@@ -38,8 +73,8 @@ class Food(BaseModel):
     name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=False, unique=True)
     description: so.Mapped[str] = so.mapped_column(sa.String(2048), nullable=False, unique=False)
     images: so.Mapped[sa.JSON] = so.mapped_column(sa.JSON, default=json.dumps([]), nullable=False, unique=False)
-    food_type: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(FoodType.id), unique=False)
-
+    type_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(FoodType.id, ondelete="SET NULL"),
+                                               unique=False, nullable=True)
     reserve_days = so.relationship(FoodReserveDay, secondary=Food2ReserveDay, backref="foods_list", lazy="dynamic")
     prices = so.relationship("FoodPrice", backref="food", lazy="dynamic")
 
@@ -49,7 +84,10 @@ class Food(BaseModel):
         return latest_price.price if latest_price else 0
 
     def __str__(self):
-        return f"<FoodType {self.id} - {self.name}>"
+        return f"<Food {self.id} - {self.name} | Type {self.type}>"
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class FoodPrice(BaseModel):

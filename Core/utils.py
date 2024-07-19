@@ -422,6 +422,8 @@ class TimeStamp:
         jDate = khayyam.JalaliDate(year=value[0], month=value[1], day=value[2])
         return self.convert_jlj2_georgian_d(jDate)
 
+
+
     def bigger_date(self, date1, date2):
         """
            this method takes two dates and returns the biggest date
@@ -451,3 +453,6 @@ class TimeStamp:
             return date2
         else:
             return True
+
+
+

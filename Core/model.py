@@ -1,3 +1,10 @@
+"""
+ * main base abstract model for all other models
+ * author: @alisharify7
+ * Copyleft 2023-2024. under GPL-3.0 license
+ * https://github.com/alisharify7/Food-Ordering-App
+"""
+
 import uuid
 import datetime
 from typing import Optional
@@ -61,7 +68,7 @@ class BaseModel(db.Model):
             return True
 
     public_key: so.Mapped[str] = so.mapped_column(
-        sa.String(36), nullable=False, unique=True)
+        sa.String(36), nullable=False, unique=True, index=True)  # unique key for each element <usually used in frontend>
     created_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(sa.DateTime,
                                                                             default=datetime.datetime.now)
     modified_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(sa.DateTime,

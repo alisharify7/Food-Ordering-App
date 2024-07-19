@@ -5,3 +5,4 @@
  * https://github.com/alisharify7/Food-Ordering-App
 */
 
+window.addEventListiner

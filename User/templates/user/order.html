@@ -22,10 +22,15 @@
 {% endblock style %}
 
 {% block content %}
-
-    <div class="col-12 my-2 pe-0 pe-md-5">
+    {# TODO: Use a frontend lib for date and time like moment js #}
+    <div class="col-12 my-2 pe-0 pe-md-5 text-center">
         <h1 class="">سفارش</h1>
-        <p class="muted">لیست غذا های روز <span dir="rtl"> {{ today() }}</span> </p>
+        <p class="text-muted">با انتخاب بر روی تاریخ مورد نظر میتوانید افدام به ثبت سفارش غذا برای روز مورد نظر کنید</p>
+        <div class="d-flex justify-content-center align-items-center flex-wrap">
+            {% for i in range(5) %}
+                <button class="btn btn-{{'warning' if loop.index==1 else 'success'}} m-1">{{today()}}</button>
+            {% endfor %}
+        </div>
     </div>
 
     {% for food in foods %}
@@ -37,10 +42,44 @@
                 {{food.description}}
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary">سفارش</button>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary submitOrderBtn" data-food-id="{{ loop.index }}" data-bs-toggle="modal" data-bs-target="#orderFoodModal">
+                   سفارش
+                </button>
+
             </div>
         </div>
     {% endfor %}
 
+
+
+<!-- Modal -->
+<div class="modal fade" id="orderFoodModal" dir="rtl" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between align-items-center">
+        <h1 class="modal-title fs-5" >آیا از ثبت سفارش فوق اطمینان دارد؟</h1>
+        <button type="button" class="btn-close m-0 p-2" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <h3></h3>
+        <div class=" px-0  my-2 mx-1">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/640px-Eq_it-na_pizza-margherita_sep2005_sml.jpg" class="card-img-top food-image rounded shadow" alt="...">
+            <div class="card-body">
+                <p class="h3 m-0 border-bottom border-primary py-2">برگر امریکایی</p>
+                <br>
+                300 گرم گوشت مرغ همراه با دوغ و نوشابه به همراه نون و نمک
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">بستن</button>
+        <button type="button" class="btn btn-success">ثبت سفارش</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
-{% block script %}{% endblock script %}
+{% block script %}
+    <script src="{{ 'order/js/order.js' | StorageUrl }}"></script>
+{% endblock script %}

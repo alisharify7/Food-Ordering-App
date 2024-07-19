@@ -5,16 +5,16 @@
  * https://github.com/alisharify7/Food-Ordering-App
 """
 
-from flask import Flask
+from flask import Flask, Blueprint
 from flask_captcha2 import FlaskCaptcha
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from Config import Setting
 from Auth.utils import load_user
-from Core.urls import urlpatterns
+from Core.urls import urlpatterns as ssr_urlpatterns
+from Core.api_urls import urlpatterns as api_urlpatterns
 from Core.extensions import (db, ServerSession, ServerMigrate, ServerMail,
-                         csrf, SmsServer, login_manager, debugger)
-# from Core.utils import celery_init_app
+                         csrf, SmsServer, FlaskLoginManager, Debugger, ApiManager)
 
 
 
@@ -36,22 +36,22 @@ def create_app(setting: Setting) -> Flask:
     ServerMigrate.init_app(db=db, app=app)  # migrate
     # celery = celery_init_app(app=app)  # celery
     ServerSession.init_app(app=app)  # session
-    login_manager.init_app(app=app)  # flask-login
-    debugger.init_app(app)  # flask_debugger tol
+    FlaskLoginManager.init_app(app=app)  # flask-login
+    Debugger.init_app(app)  # flask_debugger tol
     app.extensions['sms'] = SmsServer
 
-    login_manager.user_loader(load_user)
-    login_manager.login_message = "برای دسترسی به بخش مورد نظر  \
-        ورود به حساب کاربری الزامی می باشد"
-    login_manager.login_message_category = "error"
-    login_manager.login_view = "auth.login_get"
+    apiBluePrint = Blueprint('api-blueprint', __name__)
+    ApiManager.init_app(apiBluePrint)
+    csrf.exempt(apiBluePrint)
+    app.register_blueprint(apiBluePrint, url_prefix='')
 
-    # babel.init_app(  # babel
-    #     app=app,
-    #     locale_selector=userLocalSelector,
-    #     default_translation_directories=str((Setting.BASE_DIR /\
-    #     "translations").absolute())
-    # )
+
+    FlaskLoginManager.user_loader(load_user)
+    FlaskLoginManager.login_message = "برای دسترسی به بخش مورد نظر  \
+        ورود به حساب کاربری الزامی می باشد"
+    FlaskLoginManager.login_message_category = "error"
+    FlaskLoginManager.login_view = "auth.login_get"
+
 
     # captcha config
     ServerCaptchaMaster = FlaskCaptcha(app=app)
@@ -66,8 +66,12 @@ def create_app(setting: Setting) -> Flask:
     app.extensions['captcha3'] = ServerCaptcha3
 
     # Register apps:
-    for each in urlpatterns:
+    for each in ssr_urlpatterns:
         app.register_blueprint(each['obj'], url_prefix=each['prefix'])
+
+    # Register apis:
+    for each in api_urlpatterns:
+        ApiManager.add_namespace(each['obj'], path=each['prefix'])
 
     # template filters and contexts
     from .template_filter import contexts, templatesFilters
