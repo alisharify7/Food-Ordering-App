@@ -1,17 +1,21 @@
+"""
+ * flask app factory function init flask app creation
+ * author: @alisharify7
+ * Copyleft 2023-2024. under GPL-3.0 license
+ * https://github.com/alisharify7/Food-Ordering-App
+"""
+
 from flask import Flask
 from flask_captcha2 import FlaskCaptcha
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from Config import Setting
-
-from .urls import urlpatterns
-# from .utils import celery_init_app
-
-from .extensions import (db, ServerSession, ServerMigrate, ServerMail,
-                         csrf, SmsServer, login_manager, debugger)
-
-
 from Auth.utils import load_user
+from Core.urls import urlpatterns
+from Core.extensions import (db, ServerSession, ServerMigrate, ServerMail,
+                         csrf, SmsServer, login_manager, debugger)
+# from Core.utils import celery_init_app
+
 
 
 def create_app(setting: Setting) -> Flask:

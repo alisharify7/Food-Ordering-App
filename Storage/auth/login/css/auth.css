@@ -1,3 +1,12 @@
+/*
+ * login css styles
+ * author: @alisharify7
+ * Copyleft 2023-2024. under GPL-3.0 license
+ * https://github.com/alisharify7/Food-Ordering-App
+*/
+
+
+
 .login-image-container{
    background: linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.1),rgba(0,0,0,0.1), rgba(0,0,0,0.8)),url("/Storage/auth/media/image6.jpg");
     background-position: center;
