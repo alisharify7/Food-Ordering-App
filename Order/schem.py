@@ -5,8 +5,8 @@
  * https://github.com/alisharify7/Food-Ordering-App
 """
 
-from flask_restx import fields
 from Order import food_blp
+from flask_restx import fields
 
 
 
@@ -16,16 +16,9 @@ FoodReserveDayScheme = food_blp.model("FoodReserveDayScheme", {
     "dayEN": fields.String(),
 })
 
-
-ResponseSpecificFoodScheme = food_blp.model("FoodScheme", {
+FoodScheme = food_blp.model("FoodScheme", {
     "name": fields.String(),
     "images": fields.String(),
     "description": fields.String(),
     "reserve_days": fields.List(fields.Nested(FoodReserveDayScheme))
 })
-
-
-RequestSpecificFoodScheme = food_blp.model("RequestSpecificFoodScheme", {
-    "day": fields.String(default='شنبه یا یکشنبه یا ...')
-})
-
