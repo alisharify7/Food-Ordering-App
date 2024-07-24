@@ -81,7 +81,7 @@ class Setting:
 
     # flask debugger config
     # https://flask-debugtoolbar.readthedocs.io/en/0.15.1/index.html
-    DEBUG_TB_ENABLED = True
+    DEBUG_TB_ENABLED = False
     DEBUG_TB_PROFILER_ENABLED = False
     DEBUG_TB_TEMPLATE_EDITOR_ENABLED = True
 
