@@ -94,7 +94,6 @@ class FoodPrice(BaseModel):
     __tablename__ = BaseModel.SetTableName("menu_prices")
     price: so.Mapped[int] = so.mapped_column(sa.BIGINT, unique=False, nullable=False)
     food_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(Food.id), nullable=False)
-
     def __str__(self):
         return f"<FoodPrice {self.id} - {self.price}>"
 
@@ -102,16 +101,14 @@ class FoodPrice(BaseModel):
 Order2FoodPrice = sa.Table(
     BaseModel.SetTableName("order-2-food-price"),
     BaseModel.metadata,
-    sa.Column("food_menu_id", sa.INTEGER, sa.ForeignKey(Food.id), nullable=False),
-    sa.Column("food_price_id", sa.INTEGER, sa.ForeignKey(FoodPrice.id), nullable=False),
-    sa.Column("order_id", sa.INTEGER, sa.ForeignKey(BaseModel.SetTableName("orders") + ".id"), nullable=False)
+      sa.Column("food_price_id", sa.INTEGER, sa.ForeignKey(FoodPrice.id), nullable=False),
+      sa.Column("order_id", sa.INTEGER, sa.ForeignKey(BaseModel.SetTableName("orders") + ".id"), nullable=False)
 )
-
 
 class Order(BaseModel):
     __tablename__ = BaseModel.SetTableName("orders")
     user_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(User.id, ondelete='SET NULL'), nullable=True)
-    foods = so.relationship(Food, secondary=Order2FoodPrice, backref="orders", lazy="dynamic")
+    prices = so.relationship(FoodPrice, secondary=Order2FoodPrice, backref='orders', lazy="dynamic")
 
     def __str__(self):
         return f"<Order {self.id} - {self.food_id}>"
