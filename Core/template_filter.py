@@ -59,7 +59,7 @@ class ShamsiUrlDateConverter(BaseConverter):
     def to_python(self, value):
         try:
             value = datetime.datetime.strptime(value, "%Y-%m-%d")
-            return khayyam.JalaliDatetime(value)
+            return khayyam.JalaliDatetime(value).strftime("%A")
         except Exception:
             abort(404)
     def to_url(self, value):

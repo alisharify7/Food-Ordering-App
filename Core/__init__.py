@@ -11,6 +11,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 from Config import Setting
 from Auth.utils import load_user
+from Core.template_filter import ShamsiUrlDateConverter
 from Core.urls import urlpatterns as ssr_urlpatterns
 from Core.api_urls import urlpatterns as api_urlpatterns
 from Core.extensions import (db, ServerSession, ServerMigrate, ServerMail,
@@ -28,6 +29,7 @@ def create_app(setting: Setting) -> Flask:
     )
 
     app.config.from_object(setting)
+    app.url_map.converters['date'] = ShamsiUrlDateConverter
 
     # register extensions
     db.init_app(app=app)  # db
@@ -83,6 +85,8 @@ def create_app(setting: Setting) -> Flask:
     app.wsgi_app = ProxyFix(  # tell flask in behind a reverse proxy
         app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
     )
+
+
     return app
 
 
