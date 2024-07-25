@@ -4,14 +4,13 @@
  * Copyleft 2023-2024. under GPL-3.0 license
  * https://github.com/alisharify7/Food-Ordering-App
 """
-import json
 import datetime
-
-from flask import current_app
+import json
 
 import khayyam
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from flask import current_app
 
 from Auth.model import User
 from Core.model import BaseModel
@@ -83,6 +82,15 @@ class Food(BaseModel):
         latest_price = self.prices.order_by(FoodPrice.id.desc()).limit(1).first()
         return latest_price.price if latest_price else 0
 
+    def add_image(self, image: str):
+        self.images = json.dumps(json.loads(self.images).append(image))
+
+    def first_image(self, image: str):
+        images = json.loads(self.images)
+        if len(images) >= 1:
+            return images[0]
+        return ""
+
     def __str__(self):
         return f"<Food {self.id} - {self.name} | Type {self.type}>"
 
@@ -94,6 +102,7 @@ class FoodPrice(BaseModel):
     __tablename__ = BaseModel.SetTableName("menu_prices")
     price: so.Mapped[int] = so.mapped_column(sa.BIGINT, unique=False, nullable=False)
     food_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(Food.id), nullable=False)
+
     def __str__(self):
         return f"<FoodPrice {self.id} - {self.price}>"
 
@@ -101,9 +110,10 @@ class FoodPrice(BaseModel):
 Order2FoodPrice = sa.Table(
     BaseModel.SetTableName("order-2-food-price"),
     BaseModel.metadata,
-      sa.Column("food_price_id", sa.INTEGER, sa.ForeignKey(FoodPrice.id), nullable=False),
-      sa.Column("order_id", sa.INTEGER, sa.ForeignKey(BaseModel.SetTableName("orders") + ".id"), nullable=False)
+    sa.Column("food_price_id", sa.INTEGER, sa.ForeignKey(FoodPrice.id), nullable=False),
+    sa.Column("order_id", sa.INTEGER, sa.ForeignKey(BaseModel.SetTableName("orders") + ".id"), nullable=False)
 )
+
 
 class Order(BaseModel):
     __tablename__ = BaseModel.SetTableName("orders")

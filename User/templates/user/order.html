@@ -26,10 +26,8 @@
     <div class="col-12 my-2 pe-0 pe-md-5 text-center">
         <h1 class="">سفارش</h1>
         <p class="text-muted">با انتخاب بر روی تاریخ مورد نظر میتوانید افدام به ثبت سفارش غذا برای روز مورد نظر کنید</p>
-        <div class="d-flex justify-content-center align-items-center flex-wrap">
-            {% for i in range(5) %}
-                <button class="btn btn-{{'warning' if loop.index==1 else 'success'}} m-1">{{today()}}</button>
-            {% endfor %}
+        <div class="d-flex justify-content-center align-items-center flex-wrap order-button-container">
+
         </div>
     </div>
 

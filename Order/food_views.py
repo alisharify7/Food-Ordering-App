@@ -40,7 +40,7 @@ class TodayFoods(Resource):
         return result.foods_list
 
 
-@food_blp.route("/date/<date:day_string>")
+@food_blp.route("/date/<string:day_string>")
 class SpecificDayFood(Resource):
     @login_required
     # @rate_limiter TODO:
