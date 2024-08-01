@@ -18,7 +18,7 @@ FoodReserveDayScheme = food_blp.model("FoodReserveDayScheme", {
 
 FoodScheme = food_blp.model("FoodScheme", {
     "name": fields.String(),
-    "images": fields.String(),
+    "images": fields.List(fields.String()),
     "description": fields.String(),
     "reserve_days": fields.List(fields.Nested(FoodReserveDayScheme))
 })
