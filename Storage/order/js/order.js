@@ -115,16 +115,18 @@ async function submitOrder(food_key) {
     */
     const option = {
         method: "POST",
-        body: {"food-key": food_key}
+        body: JSON.stringify({"food-key": food_key}),
+        headers: {'Content-Type': 'application/json'}
     }
+    console.log(option)
 
     const serverResponse = await fetch('/order/', option);
     const jsonData = await serverResponse.json();
-    alert(jsonData)
+    console.log(jsonData)
     if (serverResponse.status === 200) {
-        // show success message
+        alert("سفارش با موفقیت ثبت شد")
     } else {
-        // show error message
+        alert("خخطایی رخ داد")
     }
 }
 
