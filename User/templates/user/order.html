@@ -5,19 +5,19 @@
 <style>
     .food-image{
         width: 100%;
-        height: 380px !important;
+        {#height: 380px !important;#}
     }
-    /* user avatar responsive size mobile */
-    @media (max-width: 1280px){
-       .food-image{
-            height: 300px !important;
-        }
-    }
-    @media (max-width: 770px){
-       .food-image{
-            height: 100% !important;
-        }
-    }
+    {#/* user avatar responsive size mobile */#}
+    {#@media (max-width: 1280px){#}
+    {#   .food-image{#}
+    {#        height: 300px !important;#}
+    {#    }#}
+    {#}#}
+    {#@media (max-width: 770px){#}
+    {#   .food-image{#}
+    {#        height: 100% !important;#}
+    {#    }#}
+    {#}#}
 </style>
 {% endblock style %}
 
@@ -32,22 +32,7 @@
     </div>
 
     <div class="container-fluid row justify-content-center align-items-center food-container">
-{#    {% for food in foods %}#}
-{#        <div class="card col-11 col-sm-5 col-lg-3 px-0 shadow my-2 mx-1">#}
-{#          <img src="{{food.image}}" class="card-img-top food-image" alt="...">#}
-{#            <div class="card-body">#}
-{#                <p class="h3 m-0 border-bottom border-primary pb-2">{{food.name}}</p>#}
-{#                <br>#}
-{#                {{food.description}}#}
-{#            </div>#}
-{#            <div class="card-footer">#}
-{#                <!-- Button trigger modal -->#}
-{#                <button type="button" class="btn btn-primary submitOrderBtn" data-food-id="{{ loop.index }}" data-bs-toggle="modal" data-bs-target="#orderFoodModal">#}
-{#                   سفارش#}
-{#                </button>#}
-{#            </div>#}
-{#        </div>#}
-{#    {% endfor %}#}
+
     <div>
 
 
@@ -78,7 +63,9 @@
     </div>
   </div>
 </div>
+
 {% endblock content %}
 {% block script %}
     <script src="{{ 'order/js/order.js' | StorageUrl }}"></script>
 {% endblock script %}
+

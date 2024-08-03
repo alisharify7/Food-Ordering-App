@@ -12,14 +12,17 @@ window.document.addEventListener("DOMContentLoaded", async event => {
     push_foods_into_container(today_orders)
 })
 
-function push_foods_into_container(foods){
+function push_foods_into_container(foods) {
     let container = document.querySelector(".food-container");
     container.innerHTML = "";
 
-    foods.forEach(each=>{
+    foods.forEach(each => {
         let foodCard = createFoodCard(each);
         container.appendChild(foodCard)
     })
+
+    addEventOnOrderBtn();
+
 }
 
 function create_order_btn(word, date, active) {
@@ -45,7 +48,6 @@ function make_days_button() {
     for (let i = 0; i < target; i++) {
         m.add(1, 'day')
         days.push({word: m.format('dddd'), date: m.format('YYYY-MM-DD'), active: false})
-        console.log(m.format('DD'))
 
     }
     days.forEach(each => {
@@ -66,9 +68,12 @@ function add_event_on_food_menu_button() {
     const buttons = document.querySelectorAll('.food-menu-day-button');
     buttons.forEach(async each => {
         each.addEventListener('click', async e => {
+            clear_btn_selected(e.currentTarget);
+            e.currentTarget.className = 'food-menu-day-button d-flex flex-column justify-content-center align-items-center btn m-1 btn-success';
             const clicked_day = e.currentTarget.dataset.day;
             let specific_day_foods = await get_specific_day_food(clicked_day);
-            push_foods_into_container(specific_day_foods)
+            push_foods_into_container(specific_day_foods);
+            addEventOnOrderBtn();
         })
     })
 }
@@ -80,6 +85,15 @@ async function get_specific_day_food(day) {
     return await response.json()
 }
 
+function clear_btn_selected(clicked_btn) {
+    document.querySelectorAll(".food-menu-day-button").forEach(btn => {
+        if (btn.classList.contains("btn-success")) {
+            btn.classList.remove("btn-success")
+            btn.classList.add("btn-primary")
+        }
+    })
+
+}
 
 function addEventOnOrderBtn() {
     /* 
@@ -88,24 +102,25 @@ function addEventOnOrderBtn() {
     */
     document.querySelectorAll(".submitOrderBtn").forEach(btn => {
         btn.addEventListener("click", async event => {
-            const orderKey = event.target.dataset.foodId;
+            const orderKey = event.target.dataset.foodKey;
             await submitOrder(orderId = orderKey);
         });
     })
 }
 
-async function submitOrder(orderId) {
+async function submitOrder(food_key) {
     /*
         this function take a food id and submit it to server
         for making an order for user
     */
     const option = {
-        "method": "POST",
-        headers: {"orderId": orderId}
+        method: "POST",
+        body: {"food-key": food_key}
     }
 
-    const serverResponse = await fetch(url, option);
+    const serverResponse = await fetch('/order/', option);
     const jsonData = await serverResponse.json();
+    alert(jsonData)
     if (serverResponse.status === 200) {
         // show success message
     } else {
@@ -116,8 +131,11 @@ async function submitOrder(orderId) {
 
 function createFoodCard(food) {
     // Create the main card element
-    const card = document.createElement('div');
-    card.classList.add('card', 'col-11', 'col-sm-5', 'col-lg-3', 'px-0', 'shadow', 'my-2', 'mx-1');
+    const parent = document.createElement('div');
+    parent.classList.add('col-11', 'col-sm-5', 'col-lg-3', 'p-1', 'p-lg-3', 'my-2');
+    const card = document.createElement("div");
+    card.classList.add('card', 'shadow')
+
 
     // Create the image element
     const image = document.createElement('img');
@@ -131,17 +149,16 @@ function createFoodCard(food) {
 
     // Create the title element
     const title = document.createElement('p');
-    title.classList.add('h3', 'm-0', 'border-bottom', 'border-primary', 'pb-2');
+    title.classList.add('h3', 'm-0', 'border-bottom', 'border-primary', 'pb-3');
     title.textContent = food.name;  // Set the title text from the food object
 
     // Create the description element
-    const br = document.createElement('br');  // Line break for spacing
     const description = document.createElement('p');  // Line break for spacing
     description.textContent = food.description;  // Set the description text from the food object
+    description.classList.add('m-0', 'text-muted', 'pt-3');
 
     // Append title and description to card body
     cardBody.appendChild(title);
-    cardBody.appendChild(br);
     cardBody.appendChild(description);
 
     // Create the card footer element
@@ -152,9 +169,7 @@ function createFoodCard(food) {
     const orderButton = document.createElement('button');
     orderButton.classList.add('btn', 'btn-primary', 'submitOrderBtn');
     orderButton.type = 'button';
-    orderButton.dataset.foodId = 1;  // Assuming `loop.index` is available for indexing
-    orderButton.dataset.bsToggle = 'modal';
-    orderButton.dataset.bsTarget = '#orderFoodModal';
+    orderButton.setAttribute("data-food-key", food.public_key)  // Assuming `loop.index` is available for indexing
     orderButton.textContent = 'سفارش';  // Set the button text ("سفارش" in Arabic)
 
     // Append button to card footer
@@ -164,7 +179,8 @@ function createFoodCard(food) {
     card.appendChild(image);
     card.appendChild(cardBody);
     card.appendChild(cardFooter);
+    parent.appendChild(card)
 
-    return card;
+    return parent;
 }
 
