@@ -38,23 +38,31 @@ def generate_random_string(length: int = 6, punctuation: bool = True) -> str:
 
 
 def get_next_page(fall_back_url: str = "") -> str:
-    """
+    """getting next page from url
+
     use this method for validating next params in url
     validate http url args next=some url
+
+    :param fall_back_url: if next page was not given in url, use this params as next page
+    :type fall_back_url: str
+
+    :return: next page
+    :rtype: str
     """
     next_page = request.args.get("next", False)
-    print(request.args)
-    print(request.path)
-    print(next_page)
     if not next_page or url_parse(next_page).netloc != "":
         next_page = fall_back_url
 
     return next_page
 
 
-def userLocalSelector():
-    """
+def userLocalSelector() -> str:
+    """select user's local
     this function select user local base on session
+
+    :return: user's local's
+    :rtype: str
+
     """
     try:
         return session.get("language", "fa")
@@ -62,9 +70,18 @@ def userLocalSelector():
         return "en"
 
 
-def make_file_name_secure(name: str, round: int = 3):
+def make_file_name_secure(name: str, round: int = 3) -> str:
     """This function make sure a file name is secure
     remove dangerous characters and add  uuid to first of file name
+
+    :param name: name of the file
+    :type name: str
+
+    :param round: number of uuid in the first of the file name
+    :type round: int
+
+    :return: file name
+    :rtype: str
     """
     name = name.replace(" ", "")
     name = werkzeug_secure_filename(name)
@@ -84,16 +101,23 @@ def celery_init_app(app: Flask) -> Celery:
 
     celery_app = Celery(app.name, task_cls=FlaskTask)
     celery_app.config_from_object(app.config["CELERY"])
-    celery_app.Task = FlaskTask
+    # celery_app.Task = FlaskTask
     celery_app.set_default()
     app.extensions["celery"] = celery_app
     return celery_app
 
 
-def compress_image(image, quality: int = 50):
-    """
-    compress image size
-    Args:
+def compress_image(image, quality: int = 50) -> bool:
+    """compress image
+
+    :param image: image object
+    :type image: PIL.Image
+
+    :param quality: compression quality
+    :type quality: int
+
+    :return: status of the compression
+    :rtype: bool
     """
     if not os.path.exists(image):
         return False
