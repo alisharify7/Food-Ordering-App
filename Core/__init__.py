@@ -1,6 +1,7 @@
 """
- * flask app factory function init flask app creation
- * author: @alisharify7
+ * Food Ordering Application
+ * author: github.com/alisharify7
+ * email: alisharifyofficial@gmail.com
  * Copyleft 2023-2024. under GPL-3.0 license
  * https://github.com/alisharify7/Food-Ordering-App
 """
@@ -14,14 +15,22 @@ from Auth.utils import load_user
 from Core.template_filter import ShamsiUrlDateConverter
 from Core.urls import urlpatterns as ssr_urlpatterns
 from Core.api_urls import urlpatterns as api_urlpatterns
-from Core.extensions import (db, ServerSession, ServerMigrate, ServerMail,
-                         csrf, SmsServer, FlaskLoginManager, Debugger, ApiManager)
-
+from Core.extensions import (
+    db,
+    ServerSession,
+    ServerMigrate,
+    ServerMail,
+    csrf,
+    SmsServer,
+    FlaskLoginManager,
+    Debugger,
+    ApiManager,
+)
 
 
 def create_app(setting: Setting) -> Flask:
     """
-        Factory Function For creating FlaskApp
+    Factory Function For creating FlaskApp
     """
     app = Flask(
         __name__,
@@ -29,24 +38,23 @@ def create_app(setting: Setting) -> Flask:
     )
 
     app.config.from_object(setting)
-    app.url_map.converters['date'] = ShamsiUrlDateConverter
+    app.url_map.converters["date"] = ShamsiUrlDateConverter
 
     # register extensions
-    db.init_app(app=app)  # db
-    csrf.init_app(app=app)  # csrf token
-    ServerMail.init_app(app=app)  # mail
-    ServerMigrate.init_app(db=db, app=app)  # migrate
-    # celery = celery_init_app(app=app)  # celery
-    ServerSession.init_app(app=app)  # session
-    FlaskLoginManager.init_app(app=app)  # flask-login
-    Debugger.init_app(app)  # flask_debugger tol
-    app.extensions['sms'] = SmsServer
+    db.init_app(app=app)
+    csrf.init_app(app=app)
+    ServerMail.init_app(app=app)
+    ServerMigrate.init_app(db=db, app=app)
+    # celery = celery_init_app(app=app)
+    ServerSession.init_app(app=app)
+    FlaskLoginManager.init_app(app=app)
+    Debugger.init_app(app)
+    app.extensions["sms"] = SmsServer
 
-    apiBluePrint = Blueprint('api-blueprint', __name__)
+    apiBluePrint = Blueprint("api-blueprint", __name__)
     ApiManager.init_app(apiBluePrint)
     csrf.exempt(apiBluePrint)
-    app.register_blueprint(apiBluePrint, url_prefix='')
-
+    app.register_blueprint(apiBluePrint, url_prefix="")
 
     FlaskLoginManager.user_loader(load_user)
     FlaskLoginManager.login_message = "برای دسترسی به بخش مورد نظر  \
@@ -54,29 +62,29 @@ def create_app(setting: Setting) -> Flask:
     FlaskLoginManager.login_message_category = "error"
     FlaskLoginManager.login_view = "auth.login_get"
 
-
-    # captcha config
+    # flask-captcha2 config
     ServerCaptchaMaster = FlaskCaptcha(app=app)
     ServerCaptcha2 = ServerCaptchaMaster.getGoogleCaptcha2(
-        name='captcha2',
-        conf=Setting.GOOGLE_CAPTCHA_V2_CONF)
+        name="captcha2", conf=Setting.GOOGLE_CAPTCHA_V2_CONF
+    )
     ServerCaptcha3 = ServerCaptchaMaster.getGoogleCaptcha3(
-        name='captcha3',
-        conf=Setting.GOOGLE_CAPTCHA_V3_CONF)
-    app.extensions['master-captcha'] = ServerCaptchaMaster
-    app.extensions['captcha2'] = ServerCaptcha2
-    app.extensions['captcha3'] = ServerCaptcha3
+        name="captcha3", conf=Setting.GOOGLE_CAPTCHA_V3_CONF
+    )
+    app.extensions["master-captcha"] = ServerCaptchaMaster
+    app.extensions["captcha2"] = ServerCaptcha2
+    app.extensions["captcha3"] = ServerCaptcha3
 
-    # Register apps:
+    # Register ssr apps:
     for each in ssr_urlpatterns:
-        app.register_blueprint(each['obj'], url_prefix=each['prefix'])
+        app.register_blueprint(each["obj"], url_prefix=each["prefix"])
 
-    # Register apis:
+    # Register csr apis:
     for each in api_urlpatterns:
-        ApiManager.add_namespace(each['obj'], path=each['prefix'])
+        ApiManager.add_namespace(each["obj"], path=each["prefix"])
 
     # template filters and contexts
     from .template_filter import contexts, templatesFilters
+
     app.context_processor(contexts)
 
     for each in templatesFilters:
@@ -85,7 +93,6 @@ def create_app(setting: Setting) -> Flask:
     app.wsgi_app = ProxyFix(  # tell flask in behind a reverse proxy
         app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
     )
-
 
     return app
 

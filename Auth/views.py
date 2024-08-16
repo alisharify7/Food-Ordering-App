@@ -1,6 +1,17 @@
 import sqlalchemy as sa
-from flask import render_template, flash, redirect, url_for, get_flashed_messages, make_response, current_app
-from flask_login import login_user as login_user_flask_login, logout_user as logout_user_flask_login
+from flask import (
+    render_template,
+    flash,
+    redirect,
+    url_for,
+    get_flashed_messages,
+    make_response,
+    current_app,
+)
+from flask_login import (
+    login_user as login_user_flask_login,
+    logout_user as logout_user_flask_login,
+)
 
 import Auth.form as AuthForm
 from Auth import auth
@@ -33,9 +44,9 @@ def notifications() -> str:
         flashes.append(temp)
 
     response = make_response(flashes)
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = '0'
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
     return response
 
 
@@ -43,7 +54,7 @@ def notifications() -> str:
 def logout_user() -> str:
     """logout user view"""
     logout_user_flask_login()
-    return redirect(url_for('web.index_view'))
+    return redirect(url_for("web.index_view"))
 
 
 @auth.route("/login/", methods=["GET"])
@@ -58,33 +69,39 @@ def login_post() -> str:
     """login page -> post"""
 
     form = AuthForm.LoginForm()
-    if not current_app.extensions['captcha3'].is_verify():
+    if not current_app.extensions["captcha3"].is_verify():
         flash(message="اعتبار سنجی کپچا نادرست می باشد", category="error")
         return render_template("login.html", form=form)
 
     if not form.validate():
-        flash(message="اعتبار سنجی درخواست نادرست می باشد", category='error')  # TODO: add form errors to html
+        flash(
+            message="اعتبار سنجی درخواست نادرست می باشد", category="error"
+        )  # TODO: add form errors to html
         return render_template("login.html", form=form)
 
-    remember_me, username, password = bool(form.remember_me.data), form.username.data, form.password.data
+    remember_me, username, password = (
+        bool(form.remember_me.data),
+        form.username.data,
+        form.password.data,
+    )
 
     query = db.select(User).filter_by(username=username)
     user_result = db.session.execute(query).unique().scalar_one_or_none()
 
     if not user_result:
-        flash(message="اعتبار سنجی نادرست می باشد", category='error')
+        flash(message="اعتبار سنجی نادرست می باشد", category="error")
         return render_template("login.html", form=form)
 
     if not user_result.check_password(password):
-        flash(message="اعتبار سنجی نادرست می باشد", category='error')
+        flash(message="اعتبار سنجی نادرست می باشد", category="error")
         return render_template("login.html", form=form)
 
     if not any(user_result.roles):
-        flash(message="کاربر مورد نظر دسترسی مورد نیاز را ندارد", category='error')
+        flash(message="کاربر مورد نظر دسترسی مورد نیاز را ندارد", category="error")
         return render_template("login.html", form=form)
 
     if not user_result.status:
-        flash(message="حساب کاربری مورد نظر غیرفعال می باشد", category='error')
+        flash(message="حساب کاربری مورد نظر غیرفعال می باشد", category="error")
         return render_template("login.html", form=form)
 
     login_user_flask_login(user=user_result, remember=remember_me)
@@ -96,35 +113,42 @@ def login_post() -> str:
 def reset_password_get() -> str:
     """render login page"""
     form = AuthForm.ResetPasswordForm()
-    ctx = {'message': False}
+    ctx = {"message": False}
     return render_template("reset_password.html", form=form)
 
 
 @auth.route("/reset-password/", methods=["POST"])
 def reset_password_post() -> str:
     """render login page"""
-    ctx = {'message': False}
+    ctx = {"message": False}
     form = AuthForm.ResetPasswordForm()
 
-    if not current_app.extensions['captcha3'].is_verify():
+    if not current_app.extensions["captcha3"].is_verify():
         flash(message="اعتبار سنجی کپچا نادرست می باشد", category="error")
         return render_template("reset_password.html", form=form, ctx=ctx)
 
     if not form.validate():
-        flash(message="اعتبار سنجی درخواست نادرست می باشد", category='error')
+        flash(message="اعتبار سنجی درخواست نادرست می باشد", category="error")
         return render_template("reset_password.html", form=form, ctx=ctx)
 
     field_data = form.username.data
 
-    db = current_app.extensions['sqlalchemy']
+    db = current_app.extensions["sqlalchemy"]
     query = db.session.select(User).filter(
-        sa.or_(username=field_data, email_address=field_data, national_code=field_data, phone_number=field_data))
+        sa.or_(
+            username=field_data,
+            email_address=field_data,
+            national_code=field_data,
+            phone_number=field_data,
+        )
+    )
 
     user_result = db.session.execute(statement=query).scalar_one_or_none()
 
-    ctx[
-        "message"] = "در صورتی که کاربری با مشخصات وارد شما در سیستم ثبت شده باشد <br> پیامک بازنشانی گذرواژه برای حساب مورد ارسال خواهد شد"
-    flash(message=ctx["message"], category='success')
+    ctx["message"] = (
+        "در صورتی که کاربری با مشخصات وارد شما در سیستم ثبت شده باشد <br> پیامک بازنشانی گذرواژه برای حساب مورد ارسال خواهد شد"
+    )
+    flash(message=ctx["message"], category="success")
 
     if not user_result:
         return render_template("reset_password.html", form=form, ctx=ctx)

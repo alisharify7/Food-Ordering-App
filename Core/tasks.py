@@ -23,23 +23,19 @@ def send_reset_password_sms(phone_number: str, token: str, user_object: object) 
 
     """
     params = [
-        {
-            "name": "EMPLOYEE_NAME",
-            "value": user_object.full_name()
-        },
-        {
-            "name": "EMPLOYEE_CODE",
-            "value": user_object.employee_code
-        }
+        {"name": "EMPLOYEE_NAME", "value": user_object.full_name()},
+        {"name": "EMPLOYEE_CODE", "value": user_object.employee_code},
     ]
-    return SmsServer.send_verify_code(phone_number=phone_number, parameters=[params], \
-        template_id=current_app.config.get('SMS_IR_TEMPLATES')['RESET-PASSWORD']
+    return SmsServer.send_verify_code(
+        phone_number=phone_number,
+        parameters=[params],
+        template_id=current_app.config.get("SMS_IR_TEMPLATES")["RESET-PASSWORD"],
     )
 
 
-def send_reset_password_email(email_address: str, token: str,
-                              user_object: object) -> bool:
-    ...
+def send_reset_password_email(
+    email_address: str, token: str, user_object: object
+) -> bool: ...
 
 
 def async_send_email_thread(app, msg):
@@ -59,21 +55,29 @@ def async_send_email_celery(msg):
     ServerMail.send(msg)
 
 
-def send_email(recipients, subject, sender, text_body="", html_body="",
-               attachments=None, async_thread=False,
-               async_celery=False, language: str = "en"):
+def send_email(
+    recipients,
+    subject,
+    sender,
+    text_body="",
+    html_body="",
+    attachments=None,
+    async_thread=False,
+    async_celery=False,
+    language: str = "en",
+):
     """
-        this function send mail via flask-mail
+    this function send mail via flask-mail
 
-        recipients = recipient of email (user's email address)
-        subject = subject of email to send
-        sender = sender email address
-        text_body = email body
-        html_body = if you want to send html email to can pass raw html
-        attachments = attachment files to be attached in email
-        async_thread : send email asynchronously using threading
-        async_celery : send email asynchronously using celery
-        without this parameter this function send email sync
+    recipients = recipient of email (user's email address)
+    subject = subject of email to send
+    sender = sender email address
+    text_body = email body
+    html_body = if you want to send html email to can pass raw html
+    attachments = attachment files to be attached in email
+    async_thread : send email asynchronously using threading
+    async_celery : send email asynchronously using celery
+    without this parameter this function send email sync
     """
 
     msg = Message(subject=subject, sender=sender, recipients=recipients)
@@ -85,19 +89,27 @@ def send_email(recipients, subject, sender, text_body="", html_body="",
             msg.attach(*attachment)
 
     if async_thread:
-        current_app.logger.info(f"\n[{Fore.RED}Thread{Fore.RESET}{Fore.RED} \
-                                 Async{Fore.RESET}] Mail Sending {recipients}")
-        Thread(target=async_send_email_thread, args=(
-            current_app._get_current_object(), msg)).start()
+        current_app.logger.info(
+            f"\n[{Fore.RED}Thread{Fore.RESET}{Fore.RED} \
+                                 Async{Fore.RESET}] Mail Sending {recipients}"
+        )
+        Thread(
+            target=async_send_email_thread,
+            args=(current_app._get_current_object(), msg),
+        ).start()
 
     elif async_celery:
-        current_app.logger.info(f"\n[{Fore.GREEN}Celery{Fore.RESET}{Fore.RED}\
-                                 Async{Fore.RESET}] Mail Sending {recipients}")
+        current_app.logger.info(
+            f"\n[{Fore.GREEN}Celery{Fore.RESET}{Fore.RED}\
+                                 Async{Fore.RESET}] Mail Sending {recipients}"
+        )
         async_send_email_celery.delay(pickle.dumps(msg))
 
     else:
-        current_app.logger.info(f"\n[{Fore.YELLOW}Normal{Fore.RESET}{Fore.RED}\
-                                 Sync{Fore.RESET}] Mail Sending {recipients}")
+        current_app.logger.info(
+            f"\n[{Fore.YELLOW}Normal{Fore.RESET}{Fore.RED}\
+                                 Sync{Fore.RESET}] Mail Sending {recipients}"
+        )
         ServerMail.send(msg)
 
 
@@ -110,20 +122,26 @@ def sendActivAccounteMail(context: dict, recipients: list, **kwargs):
             token: slug url for activate user Account
     """
 
-    template = render_template("Mail/Auth/ActivateAccount.html", **context,
-                               **{"ActivateLink": url_for(
-                                   "auth.active_account",
-                                   token=context['token'],
-                                   # send user's language to endpoint as well
-                                   language=request.current_language,
-                                   _external=True)})
+    template = render_template(
+        "Mail/Auth/ActivateAccount.html",
+        **context,
+        **{
+            "ActivateLink": url_for(
+                "auth.active_account",
+                token=context["token"],
+                # send user's language to endpoint as well
+                language=request.current_language,
+                _external=True,
+            )
+        },
+    )
 
     send_email(
-        subject='فعال سازی حساب کاربری',
+        subject="فعال سازی حساب کاربری",
         sender=("", current_app.config.get("MAIL_DEFAULT_SENDER", ":)")),
         recipients=recipients,
         html_body=template,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -136,20 +154,26 @@ def sendResetPasswordMail(context: dict, recipients: list, **kwargs):
             token: slug url for reset user Account
     """
 
-    template = render_template("Mail/Auth/ResetPassword.html", **context,
-                               **{"ActivateLink": url_for(
-                                   "auth.check_reset_password",
-                                   token=context['token'],
-                                   # send user's language to endpoint as well
-                                   language=request.current_language,
-                                   _external=True)})
+    template = render_template(
+        "Mail/Auth/ResetPassword.html",
+        **context,
+        **{
+            "ActivateLink": url_for(
+                "auth.check_reset_password",
+                token=context["token"],
+                # send user's language to endpoint as well
+                language=request.current_language,
+                _external=True,
+            )
+        },
+    )
 
     send_email(
-        subject='بازنشانی گذرواژه',
+        subject="بازنشانی گذرواژه",
         sender=("", current_app.config.get("MAIL_DEFAULT_SENDER", ":)")),
         recipients=recipients,
         html_body=template,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -161,18 +185,24 @@ def sendNewsLetterMail(context: dict, recipients: list, **kwargs):
         values:
             token: slug url for reset user Account
     """
-    template = render_template("Mail/NewsLetter/Confirm.html", **context,
-                               **{"ActivateLink": url_for(
-                                   "web.confirm_news_letter_get",
-                                   token=context['token'],
-                                   # send user's language to endpoint as well
-                                   language=request.current_language,
-                                   _external=True)})
+    template = render_template(
+        "Mail/NewsLetter/Confirm.html",
+        **context,
+        **{
+            "ActivateLink": url_for(
+                "web.confirm_news_letter_get",
+                token=context["token"],
+                # send user's language to endpoint as well
+                language=request.current_language,
+                _external=True,
+            )
+        },
+    )
 
     send_email(
-        subject='تایید عضویت',
+        subject="تایید عضویت",
         sender=("", current_app.config.get("MAIL_DEFAULT_SENDER", ":)")),
         recipients=recipients,
         html_body=template,
-        **kwargs
+        **kwargs,
     )

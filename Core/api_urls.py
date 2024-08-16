@@ -5,4 +5,3 @@ urlpatterns = [
     {"prefix": "/order/", "obj": order_blp},
     {"prefix": "/foods/", "obj": food_blp},
 ]
-

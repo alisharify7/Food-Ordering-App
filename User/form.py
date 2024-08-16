@@ -4,6 +4,7 @@ from wtforms import StringField, EmailField
 from email_validator import validate_email as email_validator_func
 from email_validator.exceptions_types import EmailNotValidError
 
+
 class UserProfileForm(FlaskForm):
 
     @staticmethod
@@ -16,7 +17,7 @@ class UserProfileForm(FlaskForm):
 
     @property
     def action(self):
-        return url_for('user.profile_post')
+        return url_for("user.profile_post")
 
     def fill_with(self, obj):
         default = ""
@@ -27,15 +28,35 @@ class UserProfileForm(FlaskForm):
         self.phone_number.data = obj.phone_number or default
         self.national_code.data = obj.national_code or default
         self.employee_code.data = obj.employee_code or default
-        self.status.data = 'فعال' if obj.status else 'غیرفعال'
+        self.status.data = "فعال" if obj.status else "غیرفعال"
         self.work_section.data = obj.work_section.name or default
 
-    username = StringField(validators=[], render_kw={"class": "form-control", "disabled": "true",})
-    first_name = StringField(validators=[], render_kw={"disabled": "true","class": "form-control"})
-    last_name = StringField(validators=[], render_kw={"disabled": "true","class": "form-control"})
+    username = StringField(
+        validators=[],
+        render_kw={
+            "class": "form-control",
+            "disabled": "true",
+        },
+    )
+    first_name = StringField(
+        validators=[], render_kw={"disabled": "true", "class": "form-control"}
+    )
+    last_name = StringField(
+        validators=[], render_kw={"disabled": "true", "class": "form-control"}
+    )
     email_address = EmailField(validators=[], render_kw={"class": "form-control"})
-    phone_number = StringField(validators=[], render_kw={"disabled": "true", "class": "form-control"})
-    national_code = StringField(validators=[], render_kw={"disabled": "true", "class": "form-control"})
-    employee_code = StringField(validators=[], render_kw={"disabled": "true", "class": "form-control"})
-    status = StringField(validators=[], render_kw={"disabled": "true", "class": "form-control"})
-    work_section = StringField(validators=[], render_kw={"disabled": "true", "class": "form-control"})
+    phone_number = StringField(
+        validators=[], render_kw={"disabled": "true", "class": "form-control"}
+    )
+    national_code = StringField(
+        validators=[], render_kw={"disabled": "true", "class": "form-control"}
+    )
+    employee_code = StringField(
+        validators=[], render_kw={"disabled": "true", "class": "form-control"}
+    )
+    status = StringField(
+        validators=[], render_kw={"disabled": "true", "class": "form-control"}
+    )
+    work_section = StringField(
+        validators=[], render_kw={"disabled": "true", "class": "form-control"}
+    )

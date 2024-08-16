@@ -4,7 +4,7 @@ web = Blueprint(
     name="web",
     import_name=__name__,
     static_folder="static/web",
-    template_folder="templates/web"
+    template_folder="templates/web",
 )
 
 import Web.views

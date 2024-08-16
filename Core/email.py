@@ -42,22 +42,30 @@ def async_send_email_celery(msg):
     MailServer.send(msg)
 
 
-def send_email(recipients, subject, sender, text_body="", html_body="",
-               attachments=None, async_thread=False, async_celery=False):
+def send_email(
+    recipients,
+    subject,
+    sender,
+    text_body="",
+    html_body="",
+    attachments=None,
+    async_thread=False,
+    async_celery=False,
+):
     """
-        this function send mail via flask-mail
+    this function send mail via flask-mail
 
-        recipients:list =  (user's email address)
-        subject:sre = subject of email to send
-        sender:str = sender email address
-        text_body:str = email body
-        html_body:str= if you want to send html email to can pass raw html
-        attachments:byte = attachment files to be attached in email
+    recipients:list =  (user's email address)
+    subject:sre = subject of email to send
+    sender:str = sender email address
+    text_body:str = email body
+    html_body:str= if you want to send html email to can pass raw html
+    attachments:byte = attachment files to be attached in email
 
-        sending methods:
-            async_thread:bool : send email asynchronously using threading
-            async_celery:bool : send email asynchronously using celery
-        without this parameter this function send email in sync mode
+    sending methods:
+        async_thread:bool : send email asynchronously using threading
+        async_celery:bool : send email asynchronously using celery
+    without this parameter this function send email in sync mode
     """
 
     msg = Message(subject=subject, sender=sender, recipients=recipients)
@@ -70,8 +78,10 @@ def send_email(recipients, subject, sender, text_body="", html_body="",
 
     if async_thread:
         current_app.logger.info(f"\n[Thread Async] Mail Address: {recipients}")
-        Thread(target=async_send_email_thread, args=(
-            current_app._get_current_object(), msg)).start()
+        Thread(
+            target=async_send_email_thread,
+            args=(current_app._get_current_object(), msg),
+        ).start()
 
     elif async_celery:
         current_app.logger.info(f"\n[Celery Async] Mail Address: {recipients}")
@@ -91,15 +101,22 @@ def sendActivAccounteMail(context: dict, recipients: list, **kwargs):
             token: slug url for activate user Account
     """
 
-    template = Template(
-        ReadTemplateContent(templates["activeAccount"])
-    ).render(**context, **{"ActivateLink": url_for("auth.active_account", token=context['token'], _external=True)})
+    template = Template(ReadTemplateContent(templates["activeAccount"])).render(
+        **context,
+        **{
+            "ActivateLink": url_for(
+                "auth.active_account", token=context["token"], _external=True
+            )
+        },
+    )
 
     send_email(
         subject="Active Account",
-        sender=(('فعال سازی حساب کاربری'), current_app.config.get(
-            "MAIL_DEFAULT_SENDER", ":)")),
+        sender=(
+            ("فعال سازی حساب کاربری"),
+            current_app.config.get("MAIL_DEFAULT_SENDER", ":)"),
+        ),
         recipients=recipients,
         html_body=template,
-        **kwargs
+        **kwargs,
     )

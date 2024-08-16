@@ -13,8 +13,11 @@
 #
 from flask_restx import Namespace
 
-food_blp = Namespace(name='food', description="Operation on foods", )
-order_blp = Namespace(name='order',description="Operation on orders")
+food_blp = Namespace(
+    name="food",
+    description="Operation on foods",
+)
+order_blp = Namespace(name="order", description="Operation on orders")
 
 import Order.order_views
 import Order.food_views

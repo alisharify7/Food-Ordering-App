@@ -5,7 +5,7 @@ auth = Blueprint(
     import_name=__name__,
     static_folder="static/auth",
     template_folder="templates/auth",
-    static_url_path="AuthStorage"
+    static_url_path="AuthStorage",
 )
 
 import Auth.views

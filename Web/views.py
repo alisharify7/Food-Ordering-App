@@ -11,9 +11,10 @@ def index_view():
     """
     return render_template("index.html")
 
+
 @web.route("/page-not-found/")
 def PageNotFound():
     """
-        return Page Not found 404 Error
+    return Page Not found 404 Error
     """
     abort(404)

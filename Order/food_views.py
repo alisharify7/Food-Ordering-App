@@ -14,8 +14,8 @@ class SpecificFood(Resource):
     # @rate_limiter TODO:
     @food_blp.marshal_with(FoodScheme, code=200)
     def get(self, food_name: str):
-        """get food base on the given food name """
-        db = current_app.extensions['sqlalchemy']
+        """get food base on the given food name"""
+        db = current_app.extensions["sqlalchemy"]
         query = db.select(FoodModel).filter_by(name=food_name)
         result = db.session.execute(query).scalar_one_or_none()
         if not result:
@@ -32,7 +32,7 @@ class TodayFoods(Resource):
     def get(self):
         """return's today foods"""
         today = khayyam.JalaliDate.today().strftime("%A")
-        db = current_app.extensions['sqlalchemy']
+        db = current_app.extensions["sqlalchemy"]
         query = db.select(FoodReserveDay).filter_by(dayFA=today)
         result = db.session.execute(query).scalar_one_or_none()
         if not result:
@@ -47,7 +47,7 @@ class SpecificDayFood(Resource):
     @food_blp.marshal_with(FoodScheme, code=200)
     def get(self, day_string):
         """return's Specific Day foods"""
-        db = current_app.extensions['sqlalchemy']
+        db = current_app.extensions["sqlalchemy"]
         query = db.select(FoodReserveDay).filter_by(dayFA=day_string)
         result = db.session.execute(query).scalar_one_or_none()
         if not result:

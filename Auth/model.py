@@ -29,14 +29,16 @@ class WorkSection(BaseModel):
         (R_AND_D, "تحقیق و توسعه"),
     )
 
-    name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=False, unique=False)
+    name: so.Mapped[str] = so.mapped_column(
+        sa.String(256), nullable=False, unique=False
+    )
     description: so.Mapped[str] = so.mapped_column(sa.Text, nullable=True, unique=False)
 
     # default work station for site admin is admin_website
 
     @classmethod
     def init_sections(cls):
-        db = current_app.extensions['sqlalchemy']
+        db = current_app.extensions["sqlalchemy"]
         for role_id, role_name in cls.ROLES_CHOICES:
             query = db.select(WorkSection).filter_by(id=role_id)
             if not (db.session.execute(query).scalar_one_or_none()):
@@ -46,7 +48,7 @@ class WorkSection(BaseModel):
 
         db.session.commit()
 
-    users = so.relationship("User", backref='work_section', lazy='joined')
+    users = so.relationship("User", backref="work_section", lazy="joined")
 
     def __str__(self):
         return f"<WorkSection {self.name}-{self.id}>"
@@ -65,7 +67,7 @@ class UserRole(BaseModel):
 
     @classmethod
     def init_roles(cls):
-        db = current_app.extensions['sqlalchemy']
+        db = current_app.extensions["sqlalchemy"]
         for role_id, role_name in cls.ROLES_CHOICES:
             query = db.select(UserRole).filter_by(id=role_id)
             if not (db.session.execute(query).scalar_one_or_none()):
@@ -85,10 +87,20 @@ class UserRole(BaseModel):
 User2Role = sa.Table(
     BaseModel.SetTableName("users_2_roles"),
     BaseModel.metadata,
-    sa.Column("role_id", sa.Integer, sa.ForeignKey(BaseModel.SetTableName("user_roles") + ".id", ondelete="CASCADE"),
-              unique=False, nullable=False),
-    sa.Column("user_id", sa.Integer, sa.ForeignKey(BaseModel.SetTableName("users") + ".id", ondelete="CASCADE"),
-              unique=False, nullable=False),
+    sa.Column(
+        "role_id",
+        sa.Integer,
+        sa.ForeignKey(BaseModel.SetTableName("user_roles") + ".id", ondelete="CASCADE"),
+        unique=False,
+        nullable=False,
+    ),
+    sa.Column(
+        "user_id",
+        sa.Integer,
+        sa.ForeignKey(BaseModel.SetTableName("users") + ".id", ondelete="CASCADE"),
+        unique=False,
+        nullable=False,
+    ),
 )
 
 
@@ -98,28 +110,57 @@ class User(BaseModel, UserMixin):
     PHONE_NUMBER_LENGTH = 11
     EMAIL_LENGTH = 320
 
-    username: so.Mapped[str] = so.mapped_column(sa.String(USERNAME_LENGTH), unique=True, nullable=False)
-    password: so.Mapped[str] = so.mapped_column(sa.String(162), unique=True, nullable=False)
-    first_name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True, unique=False)
-    last_name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=True, unique=False)
-    phone_number: so.Mapped[str] = so.mapped_column(sa.String(11), unique=True, nullable=True)
+    username: so.Mapped[str] = so.mapped_column(
+        sa.String(USERNAME_LENGTH), unique=True, nullable=False
+    )
+    password: so.Mapped[str] = so.mapped_column(
+        sa.String(162), unique=True, nullable=False
+    )
+    first_name: so.Mapped[str] = so.mapped_column(
+        sa.String(256), nullable=True, unique=False
+    )
+    last_name: so.Mapped[str] = so.mapped_column(
+        sa.String(256), nullable=True, unique=False
+    )
+    phone_number: so.Mapped[str] = so.mapped_column(
+        sa.String(11), unique=True, nullable=True
+    )
 
-    national_code: so.Mapped[str] = so.mapped_column(sa.String(PHONE_NUMBER_LENGTH), unique=True, nullable=True)
-    employee_code: so.Mapped[int] = so.mapped_column(sa.INTEGER, unique=True, nullable=False)
+    national_code: so.Mapped[str] = so.mapped_column(
+        sa.String(PHONE_NUMBER_LENGTH), unique=True, nullable=True
+    )
+    employee_code: so.Mapped[int] = so.mapped_column(
+        sa.INTEGER, unique=True, nullable=False
+    )
 
-    status: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False, nullable=False, unique=False)
-    email_address: so.Mapped[str] = so.mapped_column(sa.String(EMAIL_LENGTH), nullable=True, unique=False)
-    max_try_number: so.Mapped[int] = so.mapped_column(sa.Integer, default=10, unique=False, nullable=False)
-    try_number: so.Mapped[int] = so.mapped_column(sa.Integer, default=0, unique=False, nullable=False)
+    status: so.Mapped[bool] = so.mapped_column(
+        sa.Boolean, default=False, nullable=False, unique=False
+    )
+    email_address: so.Mapped[str] = so.mapped_column(
+        sa.String(EMAIL_LENGTH), nullable=True, unique=False
+    )
+    max_try_number: so.Mapped[int] = so.mapped_column(
+        sa.Integer, default=10, unique=False, nullable=False
+    )
+    try_number: so.Mapped[int] = so.mapped_column(
+        sa.Integer, default=0, unique=False, nullable=False
+    )
 
-    last_login_time: so.Mapped[sa.DateTime] = so.mapped_column(sa.DateTime, onupdate=datetime.datetime.utcnow,
-                                                               default=datetime.datetime.utcnow)
-    work_section_id: so.Mapped[int] = so.mapped_column(sa.Integer, sa.ForeignKey(WorkSection.id, ondelete='SET NULL'),
-                                                       nullable=True, unique=False, default=0)
+    last_login_time: so.Mapped[sa.DateTime] = so.mapped_column(
+        sa.DateTime, onupdate=datetime.datetime.utcnow, default=datetime.datetime.utcnow
+    )
+    work_section_id: so.Mapped[int] = so.mapped_column(
+        sa.Integer,
+        sa.ForeignKey(WorkSection.id, ondelete="SET NULL"),
+        nullable=True,
+        unique=False,
+        default=0,
+    )
 
-    logs = so.relationship("UserLog", backref='user', lazy='dynamic')
-    roles = so.relationship(UserRole, secondary=User2Role, backref="users", lazy='joined')
-
+    logs = so.relationship("UserLog", backref="user", lazy="dynamic")
+    roles = so.relationship(
+        UserRole, secondary=User2Role, backref="users", lazy="joined"
+    )
 
     def update_fields(self, kwdata: typing.Dict, fields: typing.List) -> None:
         """update user models base on input fields args
@@ -135,13 +176,12 @@ class User(BaseModel, UserMixin):
             if key in fields:
                 setattr(self, key, kwdata[key])
 
-
     def full_name(self):
         """concat first name and last name"""
         return f"{self.first_name} {self.last_name}"
 
     def set_username(self, username: str) -> bool:
-        """ Set Unique Username for admin """
+        """Set Unique Username for admin"""
 
         if self.query.filter_by(username=username).first():
             return False
@@ -178,9 +218,8 @@ class User(BaseModel, UserMixin):
         """Check Password with Hashed Password in db"""
         return check_password_hash(self.password, password)
 
-
     def set_phone_number(self, phone: str) -> bool:
-        """ Set Unique Phone number  """
+        """Set Unique Phone number"""
         if self.query.filter_by(phone_number=phone).first():
             return False
         else:
@@ -215,7 +254,13 @@ class User(BaseModel, UserMixin):
 class UserLog(BaseModel):
     __tablename__ = BaseModel.SetTableName("users_log")
 
-    ip_address: so.Mapped[str] = so.mapped_column(sa.String(15), nullable=False, unique=False)
+    ip_address: so.Mapped[str] = so.mapped_column(
+        sa.String(15), nullable=False, unique=False
+    )
     action: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False, unique=False)
-    user_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(User.id, ondelete="SET NULL"), nullable=True,
-                                               unique=False)
+    user_id: so.Mapped[int] = so.mapped_column(
+        sa.INTEGER,
+        sa.ForeignKey(User.id, ondelete="SET NULL"),
+        nullable=True,
+        unique=False,
+    )

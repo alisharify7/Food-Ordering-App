@@ -25,6 +25,7 @@ class BaseModel(db.Model):
      ~~~~~~~~~~~~~~ abstract model ~~~~~~~~~~~~~~~
 
     """
+
     T = TimeStamp()
 
     __abstract__ = True
@@ -43,7 +44,7 @@ class BaseModel(db.Model):
         return f"{Setting.DATABASE_TABLE_PREFIX_NAME}{name}".lower()
 
     def set_public_key(self):
-        """ This Method Set a Unique PublicKey """
+        """This Method Set a Unique PublicKey"""
         while True:
             token = uuid.uuid4().hex
             if self.query.filter_by(public_key=token).first():
@@ -54,7 +55,7 @@ class BaseModel(db.Model):
 
     def save(self, show_traceback: bool = True):
         """
-         combination of two steps, add and commit session
+        combination of two steps, add and commit session
         """
         try:
             db.session.add(self)
@@ -68,12 +69,14 @@ class BaseModel(db.Model):
             return True
 
     public_key: so.Mapped[str] = so.mapped_column(
-        sa.String(36), nullable=False, unique=True, index=True)  # unique key for each element <usually used in frontend>
-    created_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(sa.DateTime,
-                                                                            default=datetime.datetime.now)
-    modified_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(sa.DateTime,
-                                                                             onupdate=datetime.datetime.now,
-                                                                             default=datetime.datetime.now)
+        sa.String(36), nullable=False, unique=True, index=True
+    )  # unique key for each element <usually used in frontend>
+    created_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(
+        sa.DateTime, default=datetime.datetime.now
+    )
+    modified_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(
+        sa.DateTime, onupdate=datetime.datetime.now, default=datetime.datetime.now
+    )
 
     @staticmethod
     def shamsi(obj):

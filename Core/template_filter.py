@@ -5,6 +5,7 @@ from flask import current_app, url_for, abort
 
 import khayyam
 
+
 def StorageUrl(path: str):
     """
     This template filter generate dynamic urls base of app.debug mode
@@ -22,39 +23,36 @@ def StorageUrl(path: str):
         return f"/Storage/{path}"  # Nginx Serve Files
 
 
-templatesFilters = {
-    "StorageUrl": StorageUrl
-}
+templatesFilters = {"StorageUrl": StorageUrl}
 
 
 def today(only_str=False, only_date=True, only_date_and_time=False):
-    #TODO: refactor this function and make it a class with required methods
+    # TODO: refactor this function and make it a class with required methods
     now = khayyam.JalaliDatetime.now()
-    if (only_str):
+    if only_str:
         return now.strftime("%A")
     elif only_date:
-        return str(now.date().today()).replace('-', '/')
+        return str(now.date().today()).replace("-", "/")
     else:
         return str(now)
 
+
 def contexts():
-    ctx = {
-        "current_app": current_app,
-        "today": today
-    }
+    ctx = {"current_app": current_app, "today": today}
 
     return ctx
 
 
-
 # base url convertor
+
 
 class ShamsiUrlDateConverter(BaseConverter):
     """
     Extracts a ISO8601 date from the path and validates it.
     https://stackoverflow.com/questions/31669864/date-in-flask-url
     """
-    regex = r'\d{4}-\d{2}-\d{2}'
+
+    regex = r"\d{4}-\d{2}-\d{2}"
 
     def to_python(self, value):
         try:
@@ -62,5 +60,6 @@ class ShamsiUrlDateConverter(BaseConverter):
             return khayyam.JalaliDatetime(value).strftime("%A")
         except Exception:
             abort(404)
+
     def to_url(self, value):
-        return value.strftime('%Y-%m-%d')
+        return value.strftime("%Y-%m-%d")

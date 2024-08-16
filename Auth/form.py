@@ -1,6 +1,12 @@
 import flask
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, SelectMultipleField, widgets
+from wtforms import (
+    StringField,
+    PasswordField,
+    SubmitField,
+    SelectMultipleField,
+    widgets,
+)
 from wtforms.validators import InputRequired, DataRequired
 
 
@@ -13,7 +19,7 @@ class LoginForm(FlaskForm):
 
     @property
     def action(self):
-        return flask.url_for('auth.login_get')
+        return flask.url_for("auth.login_get")
 
     username = StringField(
         label="نام کاربری",
@@ -21,11 +27,7 @@ class LoginForm(FlaskForm):
             InputRequired(message="وارد کردن داده در این فیلد الزامی است"),
             DataRequired(message="وارد کردن داده در این فیلد الزامی است "),
         ],
-        render_kw={
-            "class": "form-control",
-            "placeholder": "username",
-            "dir": "ltr"
-        }
+        render_kw={"class": "form-control", "placeholder": "username", "dir": "ltr"},
     )
 
     password = PasswordField(
@@ -34,28 +36,24 @@ class LoginForm(FlaskForm):
             InputRequired(message="وارد کردن داده در این فیلد الزامی است"),
             DataRequired(message="وارد کردن داده در این فیلد الزامی است "),
         ],
-        render_kw={
-            "class": "form-control",
-            "placeholder": "password",
-            "dir": "ltr"
-        }
+        render_kw={"class": "form-control", "placeholder": "password", "dir": "ltr"},
     )
 
-    remember_me = MultiCheckboxField(choices=['مرا به خاطر داشته باش'],
-                                     render_kw={"class": "list-unstyled m-0 text-muted"})
+    remember_me = MultiCheckboxField(
+        choices=["مرا به خاطر داشته باش"],
+        render_kw={"class": "list-unstyled m-0 text-muted"},
+    )
 
     submit = SubmitField(
-        render_kw={
-            "class": "btn btn-primary w-100 fs-5 ",
-            "value": "ورود"
-        })
+        render_kw={"class": "btn btn-primary w-100 fs-5 ", "value": "ورود"}
+    )
 
 
 class ResetPasswordForm(FlaskForm):
 
     @property
     def action(self):
-        return flask.url_for('auth.reset_password_get')
+        return flask.url_for("auth.reset_password_get")
 
     username = StringField(
         label="نام کاربری یا کد ملی یا شماره تماس یا ایمیل",
@@ -66,13 +64,14 @@ class ResetPasswordForm(FlaskForm):
         render_kw={
             "class": "form-control",
             "placeholder": "username or email address or national code or phone number",
-            "dir": "ltr"
-        }
+            "dir": "ltr",
+        },
     )
 
-    submit = SubmitField(validators=[InputRequired()],
-                         render_kw={
-                             "class": "btn btn-primary w-100 fs-5 my-3",
-                             "value": "بازنشانی گذرواژه"
-                         })
-
+    submit = SubmitField(
+        validators=[InputRequired()],
+        render_kw={
+            "class": "btn btn-primary w-100 fs-5 my-3",
+            "value": "بازنشانی گذرواژه",
+        },
+    )

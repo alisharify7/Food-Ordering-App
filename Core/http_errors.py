@@ -19,46 +19,31 @@ errors = {
 
 @app.errorhandler(CSRFError)
 def error_CSRFError(e):
-    ctx = {
-        "error": "403",
-        "error_description": errors["csrf_error"]
-    }
+    ctx = {"error": "403", "error_description": errors["csrf_error"]}
     return render_template("errors/BaseError.html", ctx=ctx), 403
 
 
 # 4xx Errors
 @app.errorhandler(401)
 def error_401(e):
-    ctx = {
-        "error": 401,
-        "error_description": errors["401"]
-    }
+    ctx = {"error": 401, "error_description": errors["401"]}
     return render_template("errors/BaseError.html", ctx=ctx), 401
 
 
 @app.errorhandler(404)
 def error_404(e):
-    ctx = {
-        "error": 404,
-        "error_description": errors["404"]
-    }
+    ctx = {"error": 404, "error_description": errors["404"]}
     return render_template("errors/BaseError.html", ctx=ctx), 404
 
 
 # 5xx Errors
 @app.errorhandler(500)
 def error_500(e):
-    ctx = {
-        "error": 500,
-        "error_description": errors["500"]
-    }
+    ctx = {"error": 500, "error_description": errors["500"]}
     return render_template("errors/BaseError.html", ctx=ctx), 500
 
 
 @app.errorhandler(503)
 def error_503(e):
-    ctx = {
-        "error": 503,
-        "error_description": errors["500"]
-    }
+    ctx = {"error": 503, "error_description": errors["500"]}
     return render_template("errors/BaseError.html", ctx=ctx), 500

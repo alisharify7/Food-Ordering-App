@@ -16,6 +16,6 @@ class Order(Resource):
     def post(self):
         """register an order for a user"""
         payload = order_blp.payload
-        food_key = payload.get('food_key')
+        food_key = payload.get("food_key")
 
         return "IJ"
