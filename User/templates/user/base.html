@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="title" content="{% block title %}{% endblock title %}">
+    <title>{{ self.title() }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="title" content="food-ordering-app">
     <meta name="author" content="alisharify7">
@@ -114,7 +115,7 @@
                             <li class="user-footer"> <a href="{{url_for('user.profile_get')}}" class="btn btn-default btn-flat">Profile</a> <a href="{{ url_for('auth.logout_user') }}" class="btn btn-default btn-flat float-end">Sign out</a> </li> <!--end::Menu Footer-->
                         </ul>
                     </li> <!--end::User Menu Dropdown-->
-                </ul> <!--end::End Navbar Links-->  
+                </ul> <!--end::End Navbar Links-->
             </div> <!--end::Container-->
         </nav> <!--end::Header--> <!--begin::Sidebar-->
         <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark"> <!--begin::Sidebar Brand-->
