@@ -1,6 +1,8 @@
 """
- * main base abstract model for all other models
- * author: @alisharify7
+ * Food Ordering Application
+ * global base models
+ * author: github.com/alisharify7
+ * email: alisharifyofficial@gmail.com
  * Copyleft 2023-2024. under GPL-3.0 license
  * https://github.com/alisharify7/Food-Ordering-App
 """
@@ -23,7 +25,6 @@ class BaseModel(db.Model):
     """
     Base model class for all models
      ~~~~~~~~~~~~~~ abstract model ~~~~~~~~~~~~~~~
-
     """
 
     T = TimeStamp()

@@ -1,3 +1,12 @@
+"""
+ * Food Ordering Application
+ * core <global> template filter and ocntexts
+ * author: github.com/alisharify7
+ * email: alisharifyofficial@gmail.com
+ * Copyleft 2023-2024. under GPL-3.0 license
+ * https://github.com/alisharify7/Food-Ordering-App
+"""
+
 import datetime
 
 from werkzeug.routing import BaseConverter, ValidationError
@@ -6,19 +15,25 @@ from flask import current_app, url_for, abort
 import khayyam
 
 
-def StorageUrl(path: str):
+def StorageUrl(path: str) -> str:
     """
     This template filter generate dynamic urls base of app.debug mode
     for serving statics via flask or nginx in production or development
     if debug mode is on this filter redirect users to flask.serve function
     but in production mode this filter redirect users to serve static via nginx
+
+    :param path: path of the file
+    :type path: str
+
+    :return: static url path
+    :rtype: str
+
     """
     if path[0] == "/":
         path = path[1:]
 
     if current_app.debug:
-        # flask serve
-        return url_for("ServeStorageFiles", path=path, _external=True)
+        return url_for("ServeStorageFiles", path=path, _external=True)  # flask serve
     else:
         return f"/Storage/{path}"  # Nginx Serve Files
 
@@ -39,11 +54,7 @@ def today(only_str=False, only_date=True, only_date_and_time=False):
 
 def contexts():
     ctx = {"current_app": current_app, "today": today}
-
     return ctx
-
-
-# base url convertor
 
 
 class ShamsiUrlDateConverter(BaseConverter):

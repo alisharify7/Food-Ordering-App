@@ -1,3 +1,12 @@
+"""
+ * Food Ordering Application
+ * core <global> utils
+ * author: github.com/alisharify7
+ * email: alisharifyofficial@gmail.com
+ * Copyleft 2023-2024. under GPL-3.0 license
+ * https://github.com/alisharify7/Food-Ordering-App
+"""
+
 import uuid
 import pickle
 import pathlib

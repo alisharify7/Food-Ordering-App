@@ -1,10 +1,19 @@
+"""
+ * Food Ordering Application
+ * global tasks
+ * author: github.com/alisharify7
+ * email: alisharifyofficial@gmail.com
+ * Copyleft 2023-2024. under GPL-3.0 license
+ * https://github.com/alisharify7/Food-Ordering-App
+"""
+
 import pickle
 from threading import Thread
-from colorama import Fore
-from celery import shared_task
 
 from flask import current_app, url_for, request, render_template
 from flask_mail import Message
+from colorama import Fore
+from celery import shared_task
 
 from Core.extensions import ServerMail, SmsServer
 

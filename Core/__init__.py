@@ -100,3 +100,4 @@ def create_app(setting: Setting) -> Flask:
 app = create_app(Setting)
 
 import Core.baseView
+import Core.http_errors

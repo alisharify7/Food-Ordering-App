@@ -1,5 +1,5 @@
-import datetime
 import os
+import datetime
 from pathlib import Path
 
 import redis
@@ -11,7 +11,14 @@ load_dotenv()
 
 
 def make_sure_directory_exists(path: os.path) -> None:
-    """This function make sure a directory is exists"""
+    """This function make sure a directory exists and if not exists its created
+
+    :param path: The path of the directory
+    :type path: str
+
+    :return: None
+    :rtype: None
+    """
     if not os.path.exists(path):
         os.mkdir(path)
 
@@ -26,17 +33,16 @@ class Setting:
             "SECRET_KEY was not found in .env file, fall back into generate_random_string() function. "
         )
 
-    SECRET_KEY = os.environ.get("APP_SECRET_KEY", generate_random_string())
+    SECRET_KEY = os.environ.get("APP_SECRET_KEY", generate_random_string(length=128))
 
     ADMIN_LOGIN_TOKEN = os.environ.get("ADMIN_LOGIN_TOKEN", "123654")
 
-    APP_DEBUG_STATUS = os.environ.get("APP_DEBUG", "") == "True"
-    DEBUG = APP_DEBUG_STATUS
-    FLASK_DEBUG = APP_DEBUG_STATUS
+    DEBUG = os.environ.get("APP_DEBUG", "") == "True"
+    FLASK_DEBUG = DEBUG
 
-    SERVER_NAME = os.environ.get("SERVER_NAME", "")
+    SERVER_NAME = os.environ.get("SERVER_NAME", "127.0.0.1")
 
-    # SMS panel config
+    # SMS.ir config
     SMS_LINE_NUMBER = os.environ.get("SMS_LINE_NUMBER", "")
     SMS_API_KEY = os.environ.get("SMS_API_KEY", "")
 
@@ -45,9 +51,13 @@ class Setting:
     STORAGE_DIR = BASE_DIR / "Storage"
     make_sure_directory_exists(STORAGE_DIR)
 
-    USERS_AVATARS = STORAGE_DIR / "avatars"
-    make_sure_directory_exists(USERS_AVATARS)
-    APP_VERSION = os.environ.get("APP_VERSION", "0.0.0")
+    # api configuration
+    API_NAME = os.environ.get('API_NAME', 'food-ordering-app')
+    API_SHORT_VERSION = os.environ.get('API_SHORT_VERSION', '1')
+    API_ABSOLUTE_VERSION = os.environ.get('API_ABSOLUTE_VERSION', '1.0.0')
+    API_BASE_URL = f"{os.environ.get('API_BASE_URL', '/api/v')}{API_SHORT_VERSION}/"
+    API_DOCS_URL = os.environ.get('API_DOCS_URL', '/docs/')
+
 
     MAX_CONTENT_LENGTH = 1024 * 1024 * 50  # global upload max size 50 MB
 
@@ -67,7 +77,9 @@ class Setting:
     REDIS_DEFAULT_INTERFACE = redis.Redis().from_url(REDIS_DEFAULT_URL)
 
     # Flask-resx
+    # https: // flask - restx.readthedocs.io / en / latest /
     ERROR_404_HELP = False
+
 
     # session cookie setting
     SESSION_TYPE = "redis"
