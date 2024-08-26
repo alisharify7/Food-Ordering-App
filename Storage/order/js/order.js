@@ -7,11 +7,16 @@
 
 import {html, render, useEffect, useState} from 'https://esm.sh/htm/preact/standalone';
 
+
+const todayFoodsApi = axios.create({
+    'baseURL': "/foods/today/"
+})
 async function getTodayFoods() {
-    // getting today foods
-    let response = await fetch("/foods/today/", {method: "GET"});
-    let json_response = await response.json();
-    return json_response;
+    /*
+    * this function gets today food from server
+    * */
+    let response = await todayFoodsApi.get();
+    return response.data;
 }
 
 
