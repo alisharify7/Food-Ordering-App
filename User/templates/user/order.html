@@ -2,6 +2,7 @@
 
 {% block title %}ثبت سفارش غذا{% endblock title %}
 {% block style %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.5/axios.min.js" integrity="sha512-01Pe9P3mJM/4c80VuoYEGHlspKGbd9uWQe9HtdLsdTqV0CS1kz8ca44sinVEXEvlZNciMmsAjeEbm5ZxHC7yYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock style %}
 
 {% block content %}
@@ -14,10 +15,9 @@
         </div>
     </div>
 
-    <div class="container-fluid row justify-content-center align-items-center food-container">
+    <div class="container-fluid row justify-content-center align-items-center food-container" id="app">
 
     <div>
-
 
 
     <!-- Modal -->
@@ -52,6 +52,5 @@
 {% endblock content %}
 {% block script %}
     <script src="https://cdn.jsdelivr.net/npm/jalali-moment@3.3.11/dist/jalali-moment.browser.min.js"></script>
-    <script src="{{ 'order/js/order.js' | StorageUrl }}"></script>
+    <script type="module" src="{{ 'order/js/order.js' | StorageUrl }}"></script>
 {% endblock script %}
-
