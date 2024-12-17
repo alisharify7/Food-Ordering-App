@@ -15,11 +15,15 @@ from Config import Setting
 db = SQLAlchemy()
 csrf = CSRFProtect()
 babel = Babel()
+
 api_manager = Api(
     title="Food-web-app-api",
     description="Foody_web_app api docs",
     version="1.0.0",
-    doc="/doc/",
+    doc="/docs/",
+    terms_url="/terms/",
+    contact="example@yahoo.com",
+    license="all rights reserved for github.com/alisharify7 OSS",
 )
 flask_login_manager = LoginManager()
 redis_server = Setting.REDIS_DEFAULT_INTERFACE

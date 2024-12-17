@@ -26,6 +26,7 @@ from Core.extensions import (
     flask_debugger_tool_bar,
     api_manager,
 )
+from Core.utils import celery_init_app
 
 
 def create_app(setting: Setting) -> Flask:
@@ -45,16 +46,16 @@ def create_app(setting: Setting) -> Flask:
     csrf.init_app(app=app)
     server_mail.init_app(app=app)
     server_migrate.init_app(db=db, app=app)
-    # celery = celery_init_app(app=app)
+    celery = celery_init_app(app=app)
     server_session.init_app(app=app)
     flask_login_manager.init_app(app=app)
     flask_debugger_tool_bar.init_app(app)
     app.extensions["sms"] = sms_server
 
-    apiBluePrint = Blueprint("api-blueprint", __name__)
-    api_manager.init_app(apiBluePrint)
-    csrf.exempt(apiBluePrint)
-    app.register_blueprint(apiBluePrint, url_prefix="")
+    api_blue_print = Blueprint("api-blueprint", __name__)
+    api_manager.init_app(api_blue_print)
+    csrf.exempt(api_blue_print)
+    app.register_blueprint(api_blue_print, url_prefix="")
 
     flask_login_manager.user_loader(load_user)
     flask_login_manager.login_message = "برای دسترسی به بخش مورد نظر  \
