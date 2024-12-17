@@ -17,14 +17,14 @@ from Core.urls import urlpatterns as ssr_urlpatterns
 from Core.api_urls import urlpatterns as api_urlpatterns
 from Core.extensions import (
     db,
-    ServerSession,
-    ServerMigrate,
-    ServerMail,
+    server_session,
+    server_migrate,
+    server_mail,
     csrf,
-    SmsServer,
-    FlaskLoginManager,
-    Debugger,
-    ApiManager,
+    sms_server,
+    flask_login_manager,
+    flask_debugger_tool_bar,
+    api_manager,
 )
 
 
@@ -43,24 +43,24 @@ def create_app(setting: Setting) -> Flask:
     # register extensions
     db.init_app(app=app)
     csrf.init_app(app=app)
-    ServerMail.init_app(app=app)
-    ServerMigrate.init_app(db=db, app=app)
+    server_mail.init_app(app=app)
+    server_migrate.init_app(db=db, app=app)
     # celery = celery_init_app(app=app)
-    ServerSession.init_app(app=app)
-    FlaskLoginManager.init_app(app=app)
-    Debugger.init_app(app)
-    app.extensions["sms"] = SmsServer
+    server_session.init_app(app=app)
+    flask_login_manager.init_app(app=app)
+    flask_debugger_tool_bar.init_app(app)
+    app.extensions["sms"] = sms_server
 
     apiBluePrint = Blueprint("api-blueprint", __name__)
-    ApiManager.init_app(apiBluePrint)
+    api_manager.init_app(apiBluePrint)
     csrf.exempt(apiBluePrint)
     app.register_blueprint(apiBluePrint, url_prefix="")
 
-    FlaskLoginManager.user_loader(load_user)
-    FlaskLoginManager.login_message = "برای دسترسی به بخش مورد نظر  \
+    flask_login_manager.user_loader(load_user)
+    flask_login_manager.login_message = "برای دسترسی به بخش مورد نظر  \
         ورود به حساب کاربری الزامی می باشد"
-    FlaskLoginManager.login_message_category = "error"
-    FlaskLoginManager.login_view = "auth.login_get"
+    flask_login_manager.login_message_category = "error"
+    flask_login_manager.login_view = "auth.login_get"
 
     # flask-captcha2 config
     ServerCaptchaMaster = FlaskCaptcha(app=app)
@@ -80,7 +80,7 @@ def create_app(setting: Setting) -> Flask:
 
     # Register csr apis:
     for each in api_urlpatterns:
-        ApiManager.add_namespace(each["obj"], path=each["prefix"])
+        api_manager.add_namespace(each["obj"], path=each["prefix"])
 
     # template filters and contexts
     from .template_filter import contexts, templatesFilters

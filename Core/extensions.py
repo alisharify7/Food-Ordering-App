@@ -15,16 +15,16 @@ from Config import Setting
 db = SQLAlchemy()
 csrf = CSRFProtect()
 babel = Babel()
-ApiManager = Api(
+api_manager = Api(
     title="Food-web-app-api",
     description="Foody_web_app api docs",
     version="1.0.0",
     doc="/doc/",
 )
-FlaskLoginManager = LoginManager()
-RedisServer = Setting.REDIS_DEFAULT_INTERFACE
-ServerMail = Mail()
-ServerSession = Session()
-ServerMigrate = Migrate()
-Debugger = DebugToolbarExtension()
-SmsServer = SmsIr(api_key=Setting.SMS_API_KEY, linenumber=Setting.SMS_LINE_NUMBER)
+flask_login_manager = LoginManager()
+redis_server = Setting.REDIS_DEFAULT_INTERFACE
+server_mail = Mail()
+server_session = Session()
+server_migrate = Migrate()
+flask_debugger_tool_bar = DebugToolbarExtension()
+sms_server = SmsIr(api_key=Setting.SMS_API_KEY, linenumber=Setting.SMS_LINE_NUMBER)

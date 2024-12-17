@@ -15,7 +15,7 @@ from flask_mail import Message
 from colorama import Fore
 from celery import shared_task
 
-from Core.extensions import ServerMail, SmsServer
+from Core.extensions import server_mail, sms_server
 
 
 def send_reset_password_sms(phone_number: str, token: str, user_object: object) -> bool:
@@ -35,7 +35,7 @@ def send_reset_password_sms(phone_number: str, token: str, user_object: object) 
         {"name": "EMPLOYEE_NAME", "value": user_object.full_name()},
         {"name": "EMPLOYEE_CODE", "value": user_object.employee_code},
     ]
-    return SmsServer.send_verify_code(
+    return sms_server.send_verify_code(
         phone_number=phone_number,
         parameters=[params],
         template_id=current_app.config.get("SMS_IR_TEMPLATES")["RESET-PASSWORD"],
@@ -52,7 +52,7 @@ def async_send_email_thread(app, msg):
     Sending email asynchronously using threading
     """
     with app.app_context():
-        ServerMail.send(msg)
+        server_mail.send(msg)
 
 
 @shared_task(ignore_result=True)
@@ -61,7 +61,7 @@ def async_send_email_celery(msg):
     Sending email asynchronously using celery
     """
     msg = pickle.loads(msg)
-    ServerMail.send(msg)
+    server_mail.send(msg)
 
 
 def send_email(
@@ -119,7 +119,7 @@ def send_email(
             f"\n[{Fore.YELLOW}Normal{Fore.RESET}{Fore.RED}\
                                  Sync{Fore.RESET}] Mail Sending {recipients}"
         )
-        ServerMail.send(msg)
+        server_mail.send(msg)
 
 
 def sendActivAccounteMail(context: dict, recipients: list, **kwargs):
