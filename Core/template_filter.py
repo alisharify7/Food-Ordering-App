@@ -38,9 +38,6 @@ def StorageUrl(path: str) -> str:
         return f"/Storage/{path}"  # Nginx Serve Files
 
 
-templatesFilters = {"StorageUrl": StorageUrl}
-
-
 def today(only_str=False, only_date=True, only_date_and_time=False):
     # TODO: refactor this function and make it a class with required methods
     now = khayyam.JalaliDatetime.now()
@@ -52,9 +49,6 @@ def today(only_str=False, only_date=True, only_date_and_time=False):
         return str(now)
 
 
-def contexts():
-    ctx = {"current_app": current_app, "today": today}
-    return ctx
 
 
 class ShamsiUrlDateConverter(BaseConverter):
@@ -74,3 +68,11 @@ class ShamsiUrlDateConverter(BaseConverter):
 
     def to_url(self, value):
         return value.strftime("%Y-%m-%d")
+
+
+
+templatesFilters = {"StorageUrl": StorageUrl}
+def contexts():
+    ctx = {"current_app": current_app, "today": today}
+    return ctx
+
