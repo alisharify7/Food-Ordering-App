@@ -35,16 +35,29 @@ class BaseModel(db.Model):
         'mysql_collate': 'utf8_persian_ci'
     }
 
-    id: so.Mapped[int] = so.mapped_column(sa.INTEGER, primary_key=True)
+    id: so.Mapped[int] = so.mapped_column(sa.BigInteger(), primary_key=True)
+
+    public_key: so.Mapped[str] = so.mapped_column(
+        sa.String(36), nullable=False, unique=True, index=True
+    )  # unique key for each element <usually used in frontend>
+
+    created_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(
+        sa.DateTime, default=datetime.datetime.now
+    )
+    modified_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(
+        sa.DateTime, onupdate=datetime.datetime.now, default=datetime.datetime.now
+    )
 
     @staticmethod
-    def set_table_name(name):
+    def set_table_name(name) -> str:
         """Use This Method For setting a table name"""
         name = name.replace("-", "_").replace(" ", "")
         return f"{Setting.DATABASE_TABLE_PREFIX_NAME}{name}".lower()
 
-    def set_public_key(self):
-        """This Method Set a Unique PublicKey"""
+    def set_public_key(self) -> None:
+        """This Method Set a Unique PublicKey
+        TODO: add limit round
+        """
         while True:
             token = uuid.uuid4().hex
             if self.query.filter_by(public_key=token).first():
@@ -53,7 +66,7 @@ class BaseModel(db.Model):
                 self.public_key = token
                 break
 
-    def save(self, show_traceback: bool = True):
+    def save(self, show_traceback: bool = True) -> bool:
         """
         combination of two steps, add and commit session
         """
@@ -68,15 +81,7 @@ class BaseModel(db.Model):
         else:
             return True
 
-    public_key: so.Mapped[str] = so.mapped_column(
-        sa.String(36), nullable=False, unique=True, index=True
-    )  # unique key for each element <usually used in frontend>
-    created_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(
-        sa.DateTime, default=datetime.datetime.now
-    )
-    modified_time: so.Mapped[Optional[datetime.datetime]] = so.mapped_column(
-        sa.DateTime, onupdate=datetime.datetime.now, default=datetime.datetime.now
-    )
+
 
     @staticmethod
     def shamsi(obj):
@@ -84,24 +89,3 @@ class BaseModel(db.Model):
             c = khayyam.JalaliDatetime(obj)
             return f"{str(c.date())} {c.time()}"
         return obj
-
-
-# class SettingAttributeType(enum.Enum):
-#     json = 1
-#     string = 2
-#     integer = 3
-#     float = 4
-#
-#
-# class SettingAttribute(BaseModel):
-#     __tablename__ = BaseModel.SetTableName("setting_attribute")
-#
-#     name: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=False, unique=True)
-#     value = so.relationship("SettingAttributeValue", backref="setting_attribute", lazy="dynamic")
-#
-#
-# class SettingAttributesValue(BaseModel):
-#     __tablename__ = BaseModel.SetTableName("setting_attribute_value")
-#
-#     value: so.Mapped[str] = so.mapped_column(sa.Text, nullable=False, unique=False)
-#     setting_attribute_id: so.Mapped[int] = so.mapped_column(sa.INTEGER, sa.ForeignKey(SettingAttribute.id, ondelete='SET NULL'), nullable=True, unique=True) # one to one
