@@ -30,16 +30,15 @@ class BaseModel(db.Model):
     T = TimeStamp()
 
     __abstract__ = True
-    # __table_args__ = {
-    #     # 'mysql_engine': 'InnoDB',
-    #     # 'mysql_charset': 'utf8',
-    #     # 'mysql_collate': 'utf8_persian_ci'
-    # }
+    __table_args__ = {
+        'mysql_charset': 'utf8',
+        'mysql_collate': 'utf8_persian_ci'
+    }
 
     id: so.Mapped[int] = so.mapped_column(sa.INTEGER, primary_key=True)
 
     @staticmethod
-    def SetTableName(name):
+    def set_table_name(name):
         """Use This Method For setting a table name"""
         name = name.replace("-", "_").replace(" ", "")
         return f"{Setting.DATABASE_TABLE_PREFIX_NAME}{name}".lower()

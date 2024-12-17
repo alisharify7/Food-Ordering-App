@@ -15,7 +15,7 @@ from Core.model import BaseModel
 
 
 class WorkSection(BaseModel):
-    __tablename__ = BaseModel.SetTableName("work_section")
+    __tablename__ = BaseModel.set_table_name("work_section")
     MANAGEMENT = 1
     OFFICE = 2
     STORE = 3
@@ -55,7 +55,7 @@ class WorkSection(BaseModel):
 
 
 class UserRole(BaseModel):
-    __tablename__ = BaseModel.SetTableName("user_roles")
+    __tablename__ = BaseModel.set_table_name("user_roles")
     USER = 1
     ADMIN = 2
     ROLES_CHOICES = (
@@ -85,19 +85,19 @@ class UserRole(BaseModel):
 
 
 User2Role = sa.Table(
-    BaseModel.SetTableName("users_2_roles"),
+    BaseModel.set_table_name("users_2_roles"),
     BaseModel.metadata,
     sa.Column(
         "role_id",
         sa.Integer,
-        sa.ForeignKey(BaseModel.SetTableName("user_roles") + ".id", ondelete="CASCADE"),
+        sa.ForeignKey(BaseModel.set_table_name("user_roles") + ".id", ondelete="CASCADE"),
         unique=False,
         nullable=False,
     ),
     sa.Column(
         "user_id",
         sa.Integer,
-        sa.ForeignKey(BaseModel.SetTableName("users") + ".id", ondelete="CASCADE"),
+        sa.ForeignKey(BaseModel.set_table_name("users") + ".id", ondelete="CASCADE"),
         unique=False,
         nullable=False,
     ),
@@ -105,7 +105,7 @@ User2Role = sa.Table(
 
 
 class User(BaseModel, UserMixin):
-    __tablename__ = BaseModel.SetTableName("users")
+    __tablename__ = BaseModel.set_table_name("users")
     USERNAME_LENGTH = 256
     PHONE_NUMBER_LENGTH = 11
     EMAIL_LENGTH = 320
@@ -252,7 +252,7 @@ class User(BaseModel, UserMixin):
 
 
 class UserLog(BaseModel):
-    __tablename__ = BaseModel.SetTableName("users_log")
+    __tablename__ = BaseModel.set_table_name("users_log")
 
     ip_address: so.Mapped[str] = so.mapped_column(
         sa.String(15), nullable=False, unique=False
